@@ -2,27 +2,27 @@
 
 ## Current Feature
 
-`riot-id-search-input`
+`riot-api-integration`
 
 ## Current Task
 
-`999-verify-feature-completion` in `docs/features/riot-id-search-input/tasks/999-verify-feature-completion.md`
+`004-implement-riot-api-client-adapter` in `docs/features/riot-api-integration/tasks/004-implement-riot-api-client-adapter.md`
 
 ## Current Task Plan
 
-`docs/features/riot-id-search-input/task-plans/999-verify-feature-completion-plan.md`
+`docs/features/riot-api-integration/task-plans/004-implement-riot-api-client-adapter-plan.md`
 
 ## Current Execution Report
 
-`docs/features/riot-id-search-input/executions/999-verify-feature-completion-execution.md`
+`docs/features/riot-api-integration/executions/004-implement-riot-api-client-adapter-execution.md`
 
 ## Current Status
 
-Implemented
+In Progress
 
 ## Last Completed Step
 
-Successfully executed Vitest unit tests, verified Vite production build compiling without errors, performed manual visual and interactive walkthrough of the search form component, updated tasks 001-005 to Done, and updated task 999 to Implemented.
+Successfully initialized the execution report and verified the initial build state before making code changes.
 
 ## Current Blocker
 
@@ -30,15 +30,15 @@ None
 
 ## Required Next Action
 
-None (All tasks for the current feature have been implemented)
+Implement custom domain exceptions, port interface, DTOs, mappers, and the RiotApiClientAdapter.
 
 ## Safe Resume Point
 
-Feature execution complete
+Ready to write the custom domain exceptions.
 
 ## Last Updated
 
-2026-06-06T02:34:00-03:00
+2026-06-06T03:04:30-03:00
 
 ## Notes
 
