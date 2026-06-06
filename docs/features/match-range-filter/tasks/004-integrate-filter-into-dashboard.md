@@ -2,7 +2,7 @@
 
 ## Status
 
-Depends on Previous Task
+Implemented
 
 ## Task ID
 
@@ -51,9 +51,9 @@ None
 
 ## Acceptance Criteria
 
-- [ ] `DashboardPage` successfully mounts and compiles with `DashboardProvider`.
-- [ ] Dropdown seletor is visible in the page header.
-- [ ] Changing dropdown selection updates the context provider state without errors.
+- [x] `DashboardPage` successfully mounts and compiles with `DashboardProvider`.
+- [x] Dropdown seletor is visible in the page header.
+- [x] Changing dropdown selection updates the context provider state without errors.
 
 ## Implementation Notes
 

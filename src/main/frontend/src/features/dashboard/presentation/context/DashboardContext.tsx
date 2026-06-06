@@ -1,5 +1,6 @@
-import React, { createContext, useState, useMemo, useContext, ReactNode } from 'react';
-import { MatchSummary } from '../../domain/MatchSummary';
+import React, { createContext, useState, useMemo, useContext } from 'react';
+import type { ReactNode } from 'react';
+import type { MatchSummary } from '../../domain/MatchSummary';
 
 export interface DashboardContextProps {
   rawData: MatchSummary[];
