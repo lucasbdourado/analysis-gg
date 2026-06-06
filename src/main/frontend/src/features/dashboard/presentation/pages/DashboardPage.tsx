@@ -3,6 +3,9 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { DashboardProvider } from '../context/DashboardContext';
 import { MatchRangeFilter } from '../components/MatchRangeFilter';
 import { usePlayerAnalytics } from '../hooks/usePlayerAnalytics';
+import { WeekdayWinRateChart } from '../components/WeekdayWinRateChart';
+import { DailyPerformanceGrid } from '../components/DailyPerformanceGrid';
+import { TopChampionsTable } from '../components/TopChampionsTable';
 import styles from './DashboardPage.module.css';
 
 export const DashboardPage: React.FC = () => {
@@ -55,12 +58,13 @@ export const DashboardPage: React.FC = () => {
         </header>
         
         <main className={styles.mainContent}>
-          <section className={styles.placeholderWidget}>
-            <h2>Profile Analysis Loaded</h2>
-            <p>
-              Ingested {data.matches.length} ranked matches from Riot Games API. Range filter is fully integrated.
-            </p>
-          </section>
+          <div className={styles.topWidgetsGrid}>
+            <WeekdayWinRateChart />
+            <DailyPerformanceGrid />
+          </div>
+          <div className={styles.bottomWidgetRow}>
+            <TopChampionsTable />
+          </div>
         </main>
       </div>
     </DashboardProvider>

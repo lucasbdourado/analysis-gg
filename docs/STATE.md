@@ -6,15 +6,15 @@
 
 ## Current Task
 
-`004-integrate-filter-into-dashboard` in `docs/features/match-range-filter/tasks/004-integrate-filter-into-dashboard.md`
+`005-optimize-widgets-memoization` in `docs/features/match-range-filter/tasks/005-optimize-widgets-memoization.md`
 
 ## Current Task Plan
 
-`docs/features/match-range-filter/task-plans/004-integrate-filter-into-dashboard-plan.md`
+`docs/features/match-range-filter/task-plans/005-optimize-widgets-memoization-plan.md`
 
 ## Current Execution Report
 
-`docs/features/match-range-filter/executions/004-integrate-filter-into-dashboard-execution.md`
+`docs/features/match-range-filter/executions/005-optimize-widgets-memoization-execution.md`
 
 ## Current Status
 
@@ -22,7 +22,7 @@ Implemented
 
 ## Last Completed Step
 
-Successfully integrated the range filter into the Dashboard page, created the client-side DTO mapping, created the fetch helper and hook, styled the page with dark Obsidian themes, fixed type imports for verbatimModuleSyntax compatibility, and verified builds with Maven and npm test runs.
+Successfully implemented WeekdayWinRateChart, DailyPerformanceGrid, and TopChampionsTable. Memoized calculations with React useMemo hooks depending on filteredMatches from useDashboard(). Custom tooltips and responsive styling implemented. Restored pruned test dependencies in package.json and validated code with full test suite passes and Maven builds.
 
 ## Current Blocker
 
@@ -30,15 +30,15 @@ None
 
 ## Required Next Action
 
-Proceed to the next task: `005-integrate-filter-into-widgets.md`.
+Proceed to the next task: `006-add-filter-unit-tests.md` in `docs/features/match-range-filter/tasks/006-add-filter-unit-tests.md`.
 
 ## Safe Resume Point
 
-DashboardPage successfully mounts and works with DashboardProvider and MatchRangeFilter dropdown. Ready for dashboard widget optimizations.
+DashboardPage successfully renders win rate chart, daily performance grid, and top champions table. Range filtering updates all widgets. Compiles cleanly.
 
 ## Last Updated
 
-2026-06-06T12:20:00-03:00
+2026-06-06T12:35:00-03:00
 
 ## Notes
 

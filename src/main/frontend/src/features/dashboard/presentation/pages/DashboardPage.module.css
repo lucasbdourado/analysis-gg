@@ -142,3 +142,20 @@
   transform: translateY(-2px);
   opacity: 0.9;
 }
+
+.topWidgetsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .topWidgetsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bottomWidgetRow {
+  width: 100%;
+}
+

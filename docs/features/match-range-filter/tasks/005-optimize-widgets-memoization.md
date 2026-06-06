@@ -2,7 +2,7 @@
 
 ## Status
 
-Depends on Previous Task
+Implemented
 
 ## Task ID
 
@@ -51,9 +51,9 @@ None
 
 ## Acceptance Criteria
 
-- [ ] All three target widgets (win rate chart, performance grid, champions table) calculate their statistics based on the active range-filtered list.
-- [ ] Calculations are wrapped in `useMemo` and do not execute unless the active filtered match list changes.
-- [ ] Changing range dropdown filter instantly updates the statistics display in all widgets.
+- [x] All three target widgets (win rate chart, performance grid, champions table) calculate their statistics based on the active range-filtered list.
+- [x] Calculations are wrapped in `useMemo` and do not execute unless the active filtered match list changes.
+- [x] Changing range dropdown filter instantly updates the statistics display in all widgets.
 
 ## Implementation Notes
 

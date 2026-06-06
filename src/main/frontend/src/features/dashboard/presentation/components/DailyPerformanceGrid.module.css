@@ -1,0 +1,141 @@
+.gridCard {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  padding: 1.5rem;
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.gridHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.gridTitle {
+  font-family: var(--heading);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-h);
+}
+
+.legend {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text);
+  align-items: center;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.gridContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.cell {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+  box-sizing: border-box;
+}
+
+.cell:hover {
+  transform: scale(1.15);
+  filter: brightness(1.25);
+  z-index: 10;
+}
+
+/* Colors for cells */
+.win {
+  background-color: var(--accent-emerald);
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.2);
+}
+
+.loss {
+  background-color: var(--error-red);
+  box-shadow: 0 0 6px rgba(244, 63, 94, 0.2);
+}
+
+.tie {
+  background-color: hsl(210, 20%, 35%);
+}
+
+.none {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+/* Tooltip styles */
+.cell[data-tooltip]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background-color: hsl(220, 25%, 7%);
+  color: var(--text-h);
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--card-border);
+  z-index: 100;
+  font-family: var(--sans);
+}
+
+.cell[data-tooltip]:hover::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.gridTimeline {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text);
+  font-family: var(--sans);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  padding-top: 0.75rem;
+}
+
+.emptyState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: var(--text);
+  font-size: 1rem;
+  font-family: var(--sans);
+  border: 1px dashed var(--card-border);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.01);
+}

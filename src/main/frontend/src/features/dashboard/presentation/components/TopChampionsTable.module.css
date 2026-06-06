@@ -1,0 +1,108 @@
+.tableCard {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  padding: 1.5rem;
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.tableTitle {
+  font-family: var(--heading);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+  color: var(--text-h);
+  text-align: left;
+}
+
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  color: var(--text);
+  text-align: center;
+}
+
+.table thead tr {
+  border-bottom: 1px solid var(--card-border);
+}
+
+.table th {
+  font-weight: 600;
+  color: var(--text-h);
+  padding: 0.75rem 1rem;
+}
+
+.thLeft {
+  text-align: left;
+}
+
+.tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  transition: background-color 0.15s ease;
+}
+
+.tr:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.tr:last-child {
+  border-bottom: none;
+}
+
+.table td {
+  padding: 0.85rem 1rem;
+  vertical-align: middle;
+}
+
+.tdLeft {
+  text-align: left;
+}
+
+.tdCenter {
+  text-align: center;
+}
+
+.championNameCell {
+  font-weight: 700;
+  color: var(--text-h);
+}
+
+.kdaCell {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+
+.highWinRate {
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+.recordDetail {
+  font-size: 0.75rem;
+  color: var(--text);
+  margin-left: 0.25rem;
+}
+
+.emptyState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: var(--text);
+  font-size: 1rem;
+  font-family: var(--sans);
+  border: 1px dashed var(--card-border);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.01);
+}
