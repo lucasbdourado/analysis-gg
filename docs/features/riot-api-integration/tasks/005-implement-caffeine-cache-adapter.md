@@ -2,7 +2,7 @@
 
 ## Status
 
-Depends on Previous Task
+Implemented
 
 ## Task ID
 
@@ -53,10 +53,10 @@ None
 
 ## Acceptance Criteria
 
-- [ ] Caffeine configurations build caches with proper eviction constraints (15 minutes for profile, 24 hours for matches).
-- [ ] `PlayerProfileCachePort` defined under `application.port`.
-- [ ] `CaffeineCacheAdapter` implemented under `adapter.out.cache` and annotated as a Spring Component.
-- [ ] Cache hit/miss operations are covered by unit/integration tests.
+- [x] Caffeine configurations build caches with proper eviction constraints (15 minutes for profile, 24 hours for matches).
+- [x] `PlayerProfileCachePort` defined under `application.port`.
+- [x] `CaffeineCacheAdapter` implemented under `adapter.out.cache` and annotated as a Spring Component.
+- [x] Cache hit/miss operations are covered by unit/integration tests.
 
 ## Implementation Notes
 
