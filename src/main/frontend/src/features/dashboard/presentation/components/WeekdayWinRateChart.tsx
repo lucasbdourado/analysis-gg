@@ -61,7 +61,7 @@ export const WeekdayWinRateChart: React.FC = () => {
       }
     });
 
-    return days.map(day => {
+    const dayDataList = days.map(day => {
       const total = day.wins + day.losses;
       const winRate = total > 0 ? Math.round((day.wins / total) * 100) : 0;
       return {
@@ -69,6 +69,8 @@ export const WeekdayWinRateChart: React.FC = () => {
         winRate,
       };
     });
+
+    return [...dayDataList.slice(1), dayDataList[0]];
   }, [filteredMatches]);
 
   const hasMatches = filteredMatches.length > 0;
