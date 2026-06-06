@@ -2,7 +2,7 @@
 
 ## Status
 
-Depends on Previous Task
+Implemented
 
 ## Task ID
 
@@ -53,9 +53,9 @@ None
 
 ## Acceptance Criteria
 
-- [ ] All written unit tests execute and pass successfully.
-- [ ] Test coverage includes 0 matches, fewer matches than filter limit, and more matches than filter limit.
-- [ ] Dropdown label formatting logic is covered under multiple scenarios.
+- [x] All written unit tests execute and pass successfully.
+- [x] Test coverage includes 0 matches, fewer matches than filter limit, and more matches than filter limit.
+- [x] Dropdown label formatting logic is covered under multiple scenarios.
 
 ## Implementation Notes
 
