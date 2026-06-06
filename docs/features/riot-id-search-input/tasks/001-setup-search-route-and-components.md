@@ -2,7 +2,7 @@
 
 ## Status
 
-Ready
+Implemented
 
 ## Task ID
 
@@ -56,9 +56,9 @@ None
 
 ## Acceptance Criteria
 
-- [ ] React application router has `/` mapping to `SearchLandingPage`.
-- [ ] Application compiles successfully with new component skeletons.
-- [ ] Scaffolding folders and files match the Clean Architecture layout.
+- [x] React application router has `/` mapping to `SearchLandingPage`.
+- [x] Application compiles successfully with new component skeletons.
+- [x] Scaffolding folders and files match the Clean Architecture layout.
 
 ## Implementation Notes
 

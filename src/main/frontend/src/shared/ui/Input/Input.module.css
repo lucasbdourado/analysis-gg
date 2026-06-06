@@ -1,0 +1,17 @@
+/* Input styling will go here in future tasks */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  /* skeleton styles */
+}
+
+.error {
+  /* error styles */
+}
+
+.errorText {
+  /* error text styles */
+}
