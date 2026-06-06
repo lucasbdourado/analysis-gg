@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Input } from '../../../../shared/ui/Input';
 import { Select } from '../../../../shared/ui/Select';
 import { Button } from '../../../../shared/ui/Button';
 import { validateRiotId } from '../../../../shared/lib/validation/riotId';
+import { REGIONS } from '../../../../shared/lib/validation/regions';
 import styles from './SearchForm.module.css';
 
 export const SearchForm: React.FC = () => {
-  const dummyRegions = [
-    { value: 'NA1', label: 'North America' },
-    { value: 'EUW1', label: 'Europe West' },
-    { value: 'EUNE1', label: 'Europe Nordic & East' },
-    { value: 'KR', label: 'Korea' },
-    { value: 'BR1', label: 'Brazil' },
-  ];
-
+  const navigate = useNavigate();
   const [riotId, setRiotId] = useState('');
+  const [region, setRegion] = useState('BR1');
   const [error, setError] = useState<string | undefined>(undefined);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,8 +43,13 @@ export const SearchForm: React.FC = () => {
       return;
     }
     setError(undefined);
-    console.log('Validation passed. Riot ID:', riotId);
-    // Redirection will be implemented in Task 004
+    
+    const [gameName, tagLine] = riotId.split('#');
+    const name = encodeURIComponent(gameName.trim());
+    const tag = encodeURIComponent(tagLine.trim());
+    const lowerRegion = region.toLowerCase();
+    
+    navigate(`/dashboard?name=${name}&tag=${tag}&region=${lowerRegion}`);
   };
 
   return (
@@ -63,9 +64,9 @@ export const SearchForm: React.FC = () => {
       />
       <Select 
         id="region-select"
-        options={dummyRegions}
-        value="NA1"
-        onChange={() => {}}
+        options={REGIONS}
+        value={region}
+        onChange={(e) => setRegion(e.target.value)}
       />
       <Button type="submit" id="search-submit-button">
         Analyze
@@ -73,4 +74,5 @@ export const SearchForm: React.FC = () => {
     </form>
   );
 };
+
 

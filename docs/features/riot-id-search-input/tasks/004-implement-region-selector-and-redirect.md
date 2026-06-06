@@ -2,7 +2,7 @@
 
 ## Status
 
-Depends on Previous Task
+Implemented
 
 ## Task ID
 
@@ -52,10 +52,10 @@ None
 
 ## Acceptance Criteria
 
-- [ ] Region select is populated with major platform regions (BR1, NA1, EUW1, etc.).
-- [ ] Valid form submissions parse Riot ID into name and tag parts.
-- [ ] Redirection forwards to `/dashboard?name={name}&tag={tag}&region={region}`.
-- [ ] Query parameter names match the design contract.
+- [x] Region select is populated with major platform regions (BR1, NA1, EUW1, etc.).
+- [x] Valid form submissions parse Riot ID into name and tag parts.
+- [x] Redirection forwards to `/dashboard?name={name}&tag={tag}&region={region}`.
+- [x] Query parameter names match the design contract.
 
 ## Implementation Notes
 
