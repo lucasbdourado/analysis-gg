@@ -1,17 +1,44 @@
-/* Select styling will go here in future tasks */
 .wrapper {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .select {
-  /* skeleton styles */
+  background: rgba(10, 12, 16, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: hsl(220, 10%, 90%);
+  font-family: var(--sans);
+  font-size: 16px;
+  padding: 12px 16px;
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  width: 100%;
+  box-sizing: border-box;
+  cursor: pointer;
 }
 
-.error {
-  /* error styles */
+/* Maintain native select caret/arrow rendering, but style options */
+.select option {
+  background: hsl(220, 25%, 7%);
+  color: hsl(220, 10%, 90%);
+}
+
+.select:focus {
+  border-color: var(--accent-cyan);
+  box-shadow: var(--focus-glow);
+}
+
+.select.error {
+  border-color: var(--error-red);
+  box-shadow: var(--error-glow);
 }
 
 .errorText {
-  /* error text styles */
+  color: var(--error-red);
+  font-size: 14px;
+  margin-top: 6px;
+  text-align: left;
+  font-family: var(--sans);
 }

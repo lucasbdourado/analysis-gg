@@ -1,4 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 :root {
+  /* Obsidian dark-theme design tokens */
+  --bg-obsidian-start: hsl(220, 25%, 5%);
+  --bg-obsidian-end: hsl(220, 18%, 10%);
+  --card-bg: rgba(13, 17, 23, 0.7);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --accent-cyan: hsl(180, 100%, 50%);
+  --accent-emerald: hsl(150, 100%, 45%);
+  --accent-gradient: linear-gradient(135deg, var(--accent-cyan), var(--accent-emerald));
+  --error-red: hsl(350, 80%, 55%);
+  --error-glow: 0 0 10px rgba(244, 63, 94, 0.4);
+  --focus-glow: 0 0 10px rgba(6, 182, 212, 0.4);
+
   --text: #6b6375;
   --text-h: #08060d;
   --bg: #fff;
@@ -11,8 +25,8 @@
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --sans: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
   font: 18px/145% var(--sans);

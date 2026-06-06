@@ -1,4 +1,32 @@
-/* Button styling will go here in future tasks */
 .button {
-  /* skeleton styles */
+  background: var(--accent-gradient);
+  color: #08060d;
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.1s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.button:hover:not(:disabled) {
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.6);
+  transform: translateY(-1px);
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
