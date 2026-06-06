@@ -2,7 +2,7 @@
 
 ## Status
 
-Depends on Previous Task
+Implemented
 
 ## Task ID
 
@@ -39,7 +39,7 @@ The backend must query Riot's external servers safely, injecting the `X-Riot-Tok
   - `br1`, `na1` -> `americas.api.riotgames.com`
   - `euw1`, `eune1` -> `europe.api.riotgames.com`
   - `kr` -> `asia.api.riotgames.com`
-- Map HTTP error responses (404 Not Found, 429 Rate Limit, 403 Forbidden) into domain-specific or system-specific exceptions.
+  - Map HTTP error responses (404 Not Found, 429 Rate Limit, 403 Forbidden) into domain-specific or system-specific exceptions.
 
 ## Out of Scope
 
@@ -59,11 +59,11 @@ None
 
 ## Acceptance Criteria
 
-- [ ] `RiotApiClientPort` defined under `application.port`.
-- [ ] `RiotApiClientAdapter` implemented under `adapter.out.integration`.
-- [ ] `X-Riot-Token` is dynamically appended via header customizer in `RestClient`.
-- [ ] Regional routing mapping works according to the specified rules.
-- [ ] Basic unit tests exist for endpoint mappings using mock responses.
+- [x] `RiotApiClientPort` defined under `application.port`.
+- [x] `RiotApiClientAdapter` implemented under `adapter.out.integration`.
+- [x] `X-Riot-Token` is dynamically appended via header customizer in `RestClient`.
+- [x] Regional routing mapping works according to the specified rules.
+- [x] Basic unit tests exist for endpoint mappings using mock responses.
 
 ## Implementation Notes
 
