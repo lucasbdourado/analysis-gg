@@ -2,7 +2,7 @@
 
 ## Status
 
-Depends on Previous Task
+Done
 
 ## Task ID
 
@@ -52,9 +52,9 @@ None
 
 ## Acceptance Criteria
 
-- [ ] Unit tests cover all key execution paths (empty, invalid format, valid format).
-- [ ] Mocks verify that the routing hook (`useNavigate`) is triggered with correctly formatted query paths.
-- [ ] Test commands run and pass successfully in the test environment.
+- [x] Unit tests cover all key execution paths (empty, invalid format, valid format).
+- [x] Mocks verify that the routing hook (`useNavigate`) is triggered with correctly formatted query paths.
+- [x] Test commands run and pass successfully in the test environment.
 
 ## Implementation Notes
 

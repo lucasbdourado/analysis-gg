@@ -2,7 +2,7 @@
 
 ## Status
 
-Depends on Previous Task
+Implemented
 
 ## Task ID
 
@@ -52,12 +52,12 @@ None
 
 ## Acceptance Criteria
 
-- [ ] All previous task files (001 through 005) are implemented and marked Done.
-- [ ] Riot ID input validates format (`Name#Tagline`) before allowing submit.
-- [ ] Region selection dropdown is populated with supported servers.
-- [ ] Clicking "Analyze" redirects user to `/dashboard` with query parameters.
-- [ ] Empty state input shows error tooltip when clicking "Analyze".
-- [ ] Frontend build succeeds without TypeScript or bundler errors.
+- [x] All previous task files (001 through 005) are implemented and marked Done.
+- [x] Riot ID input validates format (`Name#Tagline`) before allowing submit.
+- [x] Region selection dropdown is populated with supported servers.
+- [x] Clicking "Analyze" redirects user to `/dashboard` with query parameters.
+- [x] Empty state input shows error tooltip when clicking "Analyze".
+- [x] Frontend build succeeds without TypeScript or bundler errors.
 
 ## Implementation Notes
 
