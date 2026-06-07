@@ -43,17 +43,30 @@ public class SyncPlayerProfileUseCase {
         List<String> matchIds = riotApiClientPort.fetchMatchIds(puuid, region, count);
 
         List<Future<MatchSummary>> futures = new ArrayList<>();
+        java.util.concurrent.Semaphore semaphore = new java.util.concurrent.Semaphore(3);
         try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
             for (String matchId : matchIds) {
                 Optional<MatchSummary> cached = playerProfileCachePort.getMatchSummary(matchId, puuid, region);
                 if (cached.isPresent()) {
                     futures.add(CompletableFuture.completedFuture(cached.get()));
                 } else {
+                    if (matchIds.size() > 5) {
+                        try {
+                            Thread.sleep(100); // space out requests only for larger batches
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
                     futures.add(executor.submit(() -> {
                         try {
-                            MatchSummary summary = riotApiClientPort.fetchMatchDetail(matchId, puuid, region);
-                            playerProfileCachePort.putMatchSummary(matchId, puuid, region, summary);
-                            return summary;
+                            semaphore.acquire();
+                            try {
+                                MatchSummary summary = riotApiClientPort.fetchMatchDetail(matchId, puuid, region);
+                                playerProfileCachePort.putMatchSummary(matchId, puuid, region, summary);
+                                return summary;
+                            } finally {
+                                semaphore.release();
+                            }
                         } catch (Exception e) {
                             LOGGER.log(System.Logger.Level.WARNING, "Failed to fetch details for match " + matchId, e);
                             return null;

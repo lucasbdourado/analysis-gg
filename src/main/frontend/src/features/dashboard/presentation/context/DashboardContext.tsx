@@ -11,13 +11,23 @@ export interface DashboardContextProps {
 
 export interface DashboardProviderProps {
   rawData?: MatchSummary[];
+  activeRange?: number;
+  setActiveRange?: (range: number) => void;
   children: ReactNode;
 }
 
 export const DashboardContext = createContext<DashboardContextProps | undefined>(undefined);
 
-export const DashboardProvider: React.FC<DashboardProviderProps> = ({ rawData = [], children }) => {
-  const [activeRange, setActiveRange] = useState<number>(20);
+export const DashboardProvider: React.FC<DashboardProviderProps> = ({ 
+  rawData = [], 
+  activeRange: propActiveRange,
+  setActiveRange: propSetActiveRange,
+  children 
+}) => {
+  const [localActiveRange, localSetActiveRange] = useState<number>(20);
+
+  const activeRange = propActiveRange !== undefined ? propActiveRange : localActiveRange;
+  const setActiveRange = propSetActiveRange !== undefined ? propSetActiveRange : localSetActiveRange;
 
   const filteredMatches = useMemo(() => {
     const data = rawData || [];

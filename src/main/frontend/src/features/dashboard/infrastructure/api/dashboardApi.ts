@@ -3,14 +3,15 @@ import type { PlayerAnalyticsResponse } from './PlayerAnalyticsResponse';
 export async function fetchPlayerAnalytics(
   gameName: string,
   tagLine: string,
-  region: string
+  region: string,
+  count: number = 20
 ): Promise<PlayerAnalyticsResponse> {
   const name = encodeURIComponent(gameName.trim());
   const tag = encodeURIComponent(tagLine.trim());
   const lowerRegion = encodeURIComponent(region.toLowerCase().trim());
   
-  // Fetch maximum matches (100) to support client-side range filtering
-  const response = await fetch(`/api/summoner/${name}/${tag}?region=${lowerRegion}&count=100`);
+  // Fetch with specific count (e.g. 20, 50, 100) to optimize Riot API call volume
+  const response = await fetch(`/api/summoner/${name}/${tag}?region=${lowerRegion}&count=${count}`);
   
   if (!response.ok) {
     let errorMessage = 'Failed to fetch player data';

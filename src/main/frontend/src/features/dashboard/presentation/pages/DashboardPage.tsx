@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { DashboardProvider } from '../context/DashboardContext';
 import { MatchRangeFilter } from '../components/MatchRangeFilter';
@@ -16,7 +16,9 @@ export const DashboardPage: React.FC = () => {
   const tagLine = searchParams.get('tag') || '';
   const region = searchParams.get('region') || '';
 
-  const { data, loading, error } = usePlayerAnalytics(gameName, tagLine, region);
+  const [activeRange, setActiveRange] = useState<number>(20);
+
+  const { data, loading, error } = usePlayerAnalytics(gameName, tagLine, region, activeRange);
 
   const handleBackToSearch = () => {
     navigate('/');
@@ -46,7 +48,7 @@ export const DashboardPage: React.FC = () => {
   }
 
   return (
-    <DashboardProvider rawData={data.matches}>
+    <DashboardProvider rawData={data.matches} activeRange={activeRange} setActiveRange={setActiveRange}>
       <div className={styles.dashboardContainer} data-testid="dashboard-success">
         <header className={styles.header}>
           <div className={styles.playerTitleSection}>

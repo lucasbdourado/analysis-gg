@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { fetchPlayerAnalytics } from '../../infrastructure/api/dashboardApi';
 import type { PlayerAnalyticsResponse } from '../../infrastructure/api/PlayerAnalyticsResponse';
 
-export function usePlayerAnalytics(gameName: string, tagLine: string, region: string) {
+export function usePlayerAnalytics(gameName: string, tagLine: string, region: string, count: number = 20) {
   const [data, setData] = useState<PlayerAnalyticsResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -19,7 +19,7 @@ export function usePlayerAnalytics(gameName: string, tagLine: string, region: st
 
     let isMounted = true;
 
-    fetchPlayerAnalytics(gameName, tagLine, region)
+    fetchPlayerAnalytics(gameName, tagLine, region, count)
       .then((res) => {
         if (isMounted) {
           setData(res);
@@ -36,7 +36,7 @@ export function usePlayerAnalytics(gameName: string, tagLine: string, region: st
     return () => {
       isMounted = false;
     };
-  }, [gameName, tagLine, region]);
+  }, [gameName, tagLine, region, count]);
 
   return { data, loading, error };
 }

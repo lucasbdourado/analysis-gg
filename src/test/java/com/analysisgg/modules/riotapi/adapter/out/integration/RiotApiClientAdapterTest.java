@@ -68,7 +68,7 @@ class RiotApiClientAdapterTest {
 
     @Test
     void shouldThrowRateLimitExceptionOn429() {
-        server.expect(requestTo("https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/Lucas/BR1"))
+        server.expect(org.springframework.test.web.client.ExpectedCount.times(3), requestTo("https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/Lucas/BR1"))
                 .andRespond(withStatus(HttpStatus.TOO_MANY_REQUESTS));
 
         assertThatThrownBy(() -> adapter.resolvePuuid(new RiotId("Lucas", "BR1"), new Region("br1")))

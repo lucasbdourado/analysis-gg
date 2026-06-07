@@ -1,4 +1,7 @@
-/* SearchForm styling will go here in future tasks */
 .form {
-  /* skeleton styles */
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  box-sizing: border-box;
 }

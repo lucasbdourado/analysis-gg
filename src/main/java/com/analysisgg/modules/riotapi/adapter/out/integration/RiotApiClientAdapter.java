@@ -22,6 +22,8 @@ import org.springframework.web.client.RestClient;
 @Component
 public class RiotApiClientAdapter implements RiotApiClientPort {
 
+    private static final System.Logger LOGGER = System.getLogger(RiotApiClientAdapter.class.getName());
+
     private final RestClient restClient;
 
     public RiotApiClientAdapter(
@@ -33,94 +35,123 @@ public class RiotApiClientAdapter implements RiotApiClientPort {
                 .build();
     }
 
+    private <T> T executeWithRetry(java.util.function.Supplier<T> requestSupplier) {
+        int maxRetries = 3;
+        long delayMs = 1000;
+        for (int i = 0; i < maxRetries; i++) {
+            try {
+                return requestSupplier.get();
+            } catch (RateLimitExceededException e) {
+                if (i == maxRetries - 1) {
+                    throw e;
+                }
+                try {
+                    LOGGER.log(System.Logger.Level.WARNING, "Riot API rate limit hit, retrying in " + delayMs + " ms...");
+                    Thread.sleep(delayMs);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    throw new RiotApiException("Request interrupted during backoff", ie);
+                }
+                delayMs *= 2;
+            }
+        }
+        throw new RateLimitExceededException("Rate limit exceeded querying Riot API after retries");
+    }
+
     @Override
     public Puuid resolvePuuid(RiotId riotId, Region region) {
-        String host = resolveHost(region);
-        RiotAccountDto accountDto = restClient.get()
-                .uri("https://{host}/riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}",
-                        host, riotId.gameName(), riotId.tagLine())
-                .retrieve()
-                .onStatus(status -> status.value() == 404, (req, resp) -> {
-                    throw new PlayerNotFoundException("Player " + riotId + " not found in region " + region.value());
-                })
-                .onStatus(status -> status.value() == 429, (req, resp) -> {
-                    throw new RateLimitExceededException("Rate limit exceeded querying Riot API");
-                })
-                .onStatus(status -> status.isError(), (req, resp) -> {
-                    throw new RiotApiException("Riot API error when resolving PUUID: " + resp.getStatusCode());
-                })
-                .body(RiotAccountDto.class);
+        return executeWithRetry(() -> {
+            String host = resolveHost(region);
+            RiotAccountDto accountDto = restClient.get()
+                    .uri("https://{host}/riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}",
+                            host, riotId.gameName(), riotId.tagLine())
+                    .retrieve()
+                    .onStatus(status -> status.value() == 404, (req, resp) -> {
+                        throw new PlayerNotFoundException("Player " + riotId + " not found in region " + region.value());
+                    })
+                    .onStatus(status -> status.value() == 429, (req, resp) -> {
+                        throw new RateLimitExceededException("Rate limit exceeded querying Riot API");
+                    })
+                    .onStatus(status -> status.isError(), (req, resp) -> {
+                        throw new RiotApiException("Riot API error when resolving PUUID: " + resp.getStatusCode());
+                    })
+                    .body(RiotAccountDto.class);
 
-        if (accountDto == null || accountDto.puuid() == null) {
-            throw new RiotApiException("Invalid response from Riot API when resolving PUUID");
-        }
+            if (accountDto == null || accountDto.puuid() == null) {
+                throw new RiotApiException("Invalid response from Riot API when resolving PUUID");
+            }
 
-        return new Puuid(accountDto.puuid());
+            return new Puuid(accountDto.puuid());
+        });
     }
 
     @Override
     public List<String> fetchMatchIds(Puuid puuid, Region region, int count) {
-        String host = resolveHost(region);
+        return executeWithRetry(() -> {
+            String host = resolveHost(region);
 
-        List<String> soloDuoMatchIds = restClient.get()
-                .uri("https://{host}/lol/match/v5/matches/by-puuid/{puuid}/ids?queue=420&start=0&count={count}",
-                        host, puuid.value(), count)
-                .retrieve()
-                .onStatus(status -> status.value() == 429, (req, resp) -> {
-                    throw new RateLimitExceededException("Rate limit exceeded querying Riot API");
-                })
-                .onStatus(status -> status.isError(), (req, resp) -> {
-                    throw new RiotApiException("Riot API error when fetching Solo/Duo match IDs: " + resp.getStatusCode());
-                })
-                .body(new ParameterizedTypeReference<List<String>>() {});
+            List<String> soloDuoMatchIds = restClient.get()
+                    .uri("https://{host}/lol/match/v5/matches/by-puuid/{puuid}/ids?queue=420&start=0&count={count}",
+                            host, puuid.value(), count)
+                    .retrieve()
+                    .onStatus(status -> status.value() == 429, (req, resp) -> {
+                        throw new RateLimitExceededException("Rate limit exceeded querying Riot API");
+                    })
+                    .onStatus(status -> status.isError(), (req, resp) -> {
+                        throw new RiotApiException("Riot API error when fetching Solo/Duo match IDs: " + resp.getStatusCode());
+                    })
+                    .body(new ParameterizedTypeReference<List<String>>() {});
 
-        List<String> flexMatchIds = restClient.get()
-                .uri("https://{host}/lol/match/v5/matches/by-puuid/{puuid}/ids?queue=440&start=0&count={count}",
-                        host, puuid.value(), count)
-                .retrieve()
-                .onStatus(status -> status.value() == 429, (req, resp) -> {
-                    throw new RateLimitExceededException("Rate limit exceeded querying Riot API");
-                })
-                .onStatus(status -> status.isError(), (req, resp) -> {
-                    throw new RiotApiException("Riot API error when fetching Flex match IDs: " + resp.getStatusCode());
-                })
-                .body(new ParameterizedTypeReference<List<String>>() {});
+            List<String> flexMatchIds = restClient.get()
+                    .uri("https://{host}/lol/match/v5/matches/by-puuid/{puuid}/ids?queue=440&start=0&count={count}",
+                            host, puuid.value(), count)
+                    .retrieve()
+                    .onStatus(status -> status.value() == 429, (req, resp) -> {
+                        throw new RateLimitExceededException("Rate limit exceeded querying Riot API");
+                    })
+                    .onStatus(status -> status.isError(), (req, resp) -> {
+                        throw new RiotApiException("Riot API error when fetching Flex match IDs: " + resp.getStatusCode());
+                    })
+                    .body(new ParameterizedTypeReference<List<String>>() {});
 
-        List<String> merged = new ArrayList<>();
-        if (soloDuoMatchIds != null) {
-            merged.addAll(soloDuoMatchIds);
-        }
-        if (flexMatchIds != null) {
-            merged.addAll(flexMatchIds);
-        }
+            List<String> merged = new ArrayList<>();
+            if (soloDuoMatchIds != null) {
+                merged.addAll(soloDuoMatchIds);
+            }
+            if (flexMatchIds != null) {
+                merged.addAll(flexMatchIds);
+            }
 
-        return merged.stream()
-                .distinct()
-                .sorted(Comparator.reverseOrder())
-                .limit(count)
-                .toList();
+            return merged.stream()
+                    .distinct()
+                    .sorted(Comparator.reverseOrder())
+                    .limit(count)
+                    .toList();
+        });
     }
 
     @Override
     public MatchSummary fetchMatchDetail(String matchId, Puuid targetPuuid, Region region) {
-        String host = resolveHost(region);
+        return executeWithRetry(() -> {
+            String host = resolveHost(region);
 
-        RiotMatchDto matchDto = restClient.get()
-                .uri("https://{host}/lol/match/v5/matches/{matchId}", host, matchId)
-                .retrieve()
-                .onStatus(status -> status.value() == 429, (req, resp) -> {
-                    throw new RateLimitExceededException("Rate limit exceeded querying Riot API");
-                })
-                .onStatus(status -> status.isError(), (req, resp) -> {
-                    throw new RiotApiException("Riot API error when fetching match details: " + resp.getStatusCode());
-                })
-                .body(RiotMatchDto.class);
+            RiotMatchDto matchDto = restClient.get()
+                    .uri("https://{host}/lol/match/v5/matches/{matchId}", host, matchId)
+                    .retrieve()
+                    .onStatus(status -> status.value() == 429, (req, resp) -> {
+                        throw new RateLimitExceededException("Rate limit exceeded querying Riot API");
+                    })
+                    .onStatus(status -> status.isError(), (req, resp) -> {
+                        throw new RiotApiException("Riot API error when fetching match details: " + resp.getStatusCode());
+                    })
+                    .body(RiotMatchDto.class);
 
-        if (matchDto == null) {
-            throw new RiotApiException("Invalid match details response for match ID: " + matchId);
-        }
+            if (matchDto == null) {
+                throw new RiotApiException("Invalid match details response for match ID: " + matchId);
+            }
 
-        return RiotMatchMapper.toDomain(matchDto, targetPuuid.value());
+            return RiotMatchMapper.toDomain(matchDto, targetPuuid.value());
+        });
     }
 
     private String resolveHost(Region region) {
