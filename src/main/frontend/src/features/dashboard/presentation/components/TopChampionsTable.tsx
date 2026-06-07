@@ -16,8 +16,45 @@ interface ChampionStats {
   csMin: string;
 }
 
+interface SortConfig {
+  sortKey: 'championName' | 'gamesPlayed' | 'winRate' | 'kdaValue' | 'csMin';
+  sortDirection: 'asc' | 'desc';
+}
+
 export const TopChampionsTable: React.FC = () => {
   const { filteredMatches } = useDashboard();
+
+  const [sortConfig, setSortConfig] = React.useState<SortConfig>({
+    sortKey: 'winRate',
+    sortDirection: 'desc',
+  });
+
+  const handleSort = (key: 'championName' | 'gamesPlayed' | 'winRate' | 'kdaValue' | 'csMin') => {
+    const isCurrent = sortConfig.sortKey === key;
+    if (!isCurrent) {
+      const defaultDirection = key === 'championName' ? 'asc' : 'desc';
+      setSortConfig({ sortKey: key, sortDirection: defaultDirection });
+    } else {
+      const defaultDirection = key === 'championName' ? 'asc' : 'desc';
+      if (sortConfig.sortDirection === defaultDirection) {
+        setSortConfig({
+          sortKey: key,
+          sortDirection: defaultDirection === 'asc' ? 'desc' : 'asc',
+        });
+      } else {
+        setSortConfig({ sortKey: 'winRate', sortDirection: 'desc' });
+      }
+    }
+  };
+
+  const renderSortIndicator = (key: 'championName' | 'gamesPlayed' | 'winRate' | 'kdaValue' | 'csMin') => {
+    if (sortConfig.sortKey !== key) return null;
+    return (
+      <span className={styles.sortIndicator}>
+        {sortConfig.sortDirection === 'asc' ? ' ▲' : ' ▼'}
+      </span>
+    );
+  };
 
   const championsData = useMemo((): ChampionStats[] => {
     const agg: Record<string, {
@@ -94,7 +131,8 @@ export const TopChampionsTable: React.FC = () => {
       }
       return b.winRate - a.winRate;
     });
-  }, [filteredMatches]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredMatches, sortConfig]);
 
   const hasMatches = filteredMatches.length > 0;
 
@@ -108,11 +146,21 @@ export const TopChampionsTable: React.FC = () => {
           <table className={styles.table}>
             <thead>
               <tr>
-                <th className={styles.thLeft}>Champion</th>
-                <th>Played</th>
-                <th>Win Rate</th>
-                <th className={styles.thLeft}>KDA</th>
-                <th>CS/min</th>
+                <th className={styles.thLeft} onClick={() => handleSort('championName')}>
+                  Champion{renderSortIndicator('championName')}
+                </th>
+                <th onClick={() => handleSort('gamesPlayed')}>
+                  Played{renderSortIndicator('gamesPlayed')}
+                </th>
+                <th onClick={() => handleSort('winRate')}>
+                  Win Rate{renderSortIndicator('winRate')}
+                </th>
+                <th className={styles.thLeft} onClick={() => handleSort('kdaValue')}>
+                  KDA{renderSortIndicator('kdaValue')}
+                </th>
+                <th onClick={() => handleSort('csMin')}>
+                  CS/min{renderSortIndicator('csMin')}
+                </th>
               </tr>
             </thead>
             <tbody>
