@@ -12,8 +12,11 @@ interface ChampionStats {
   kills: number;
   deaths: number;
   assists: number;
-  kda: string;
-  csMin: string;
+  kdaValue: number;
+  isPerfectKda: boolean;
+  kdaString: string;
+  csMin: number;
+  csMinString: string;
 }
 
 interface SortConfig {
@@ -94,21 +97,22 @@ export const TopChampionsTable: React.FC = () => {
       champ.totalDurationSeconds += match.gameDuration || 0;
     });
 
-    const statsList = Object.entries(agg).map(([championName, data]) => {
+    const statsList = Object.entries(agg).map(([championName, data]): ChampionStats => {
       const gamesPlayed = data.wins + data.losses;
       const winRate = gamesPlayed > 0 ? Math.round((data.wins / gamesPlayed) * 100) : 0;
       
-      const avgK = data.kills / gamesPlayed;
-      const avgD = data.deaths / gamesPlayed;
-      const avgA = data.assists / gamesPlayed;
+      const avgK = gamesPlayed > 0 ? data.kills / gamesPlayed : 0;
+      const avgD = gamesPlayed > 0 ? data.deaths / gamesPlayed : 0;
+      const avgA = gamesPlayed > 0 ? data.assists / gamesPlayed : 0;
       
-      // KDA calculation: (Kills + Assists) / Math.max(1, Deaths)
-      const rawKda = (data.kills + data.assists) / Math.max(1, data.deaths);
-      const kdaFormatted = rawKda.toFixed(2);
-      const kdaString = `${kdaFormatted} (${avgK.toFixed(1)}/${avgD.toFixed(1)}/${avgA.toFixed(1)})`;
+      const isPerfectKda = data.deaths === 0;
+      const kdaValue = isPerfectKda ? (data.kills + data.assists) : (data.kills + data.assists) / data.deaths;
+      const kdaString = isPerfectKda
+        ? `Perfect (${avgK.toFixed(1)}/0.0/${avgA.toFixed(1)})`
+        : `${kdaValue.toFixed(2)} (${avgK.toFixed(1)}/${avgD.toFixed(1)}/${avgA.toFixed(1)})`;
 
-      const durationMinutes = data.totalDurationSeconds / 60;
-      const csMin = durationMinutes > 0 ? (data.totalCs / durationMinutes).toFixed(1) : '0.0';
+      const csMin = data.totalDurationSeconds > 0 ? data.totalCs / (data.totalDurationSeconds / 60) : 0;
+      const csMinString = csMin.toFixed(1);
 
       return {
         championName,
@@ -119,19 +123,38 @@ export const TopChampionsTable: React.FC = () => {
         kills: data.kills,
         deaths: data.deaths,
         assists: data.assists,
-        kda: kdaString,
+        kdaValue,
+        isPerfectKda,
+        kdaString,
         csMin,
+        csMinString,
       };
     });
 
-    // Sort descending by games played, then by win rate
     return statsList.sort((a, b) => {
+      const key = sortConfig.sortKey;
+      const dir = sortConfig.sortDirection;
+
+      if (key === 'championName') {
+        const comp = a.championName.localeCompare(b.championName);
+        if (comp !== 0) {
+          return dir === 'asc' ? comp : -comp;
+        }
+      } else {
+        const valA = a[key] as number;
+        const valB = b[key] as number;
+        const comp = valA - valB;
+        if (comp !== 0) {
+          return dir === 'asc' ? comp : -comp;
+        }
+      }
+
+      // Tie breaker: gamesPlayed desc, then championName asc
       if (b.gamesPlayed !== a.gamesPlayed) {
         return b.gamesPlayed - a.gamesPlayed;
       }
-      return b.winRate - a.winRate;
+      return a.championName.localeCompare(b.championName);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredMatches, sortConfig]);
 
   const hasMatches = filteredMatches.length > 0;
@@ -182,9 +205,9 @@ export const TopChampionsTable: React.FC = () => {
                       </span>
                     </td>
                     <td className={`${styles.tdLeft} ${styles.kdaCell}`}>
-                      {champ.kda}
+                      {champ.kdaString}
                     </td>
-                    <td className={styles.tdCenter}>{champ.csMin}</td>
+                    <td className={styles.tdCenter}>{champ.csMinString}</td>
                   </tr>
                 );
               })}
