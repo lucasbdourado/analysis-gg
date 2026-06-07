@@ -41,6 +41,13 @@
   font-weight: 600;
   color: var(--text-h);
   padding: 0.75rem 1rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.table th:hover {
+  background-color: rgba(255, 255, 255, 0.04);
 }
 
 .thLeft {
@@ -49,7 +56,7 @@
 
 .tr {
   border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-  transition: background-color 0.15s ease;
+  transition: background-color 0.2s ease;
 }
 
 .tr:hover {
@@ -105,4 +112,48 @@
   border: 1px dashed var(--card-border);
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.01);
+}
+
+.sortIndicator {
+  margin-left: 0.35rem;
+  color: var(--accent-cyan);
+  font-size: 0.8rem;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.championInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.championIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--card-border);
+  display: block;
+}
+
+.championFallback {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: hsl(220, 15%, 20%);
+  color: var(--text-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 1px solid var(--card-border);
+  box-sizing: border-box;
+}
+
+.championNameText {
+  color: var(--text-h);
 }
