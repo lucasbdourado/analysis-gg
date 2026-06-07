@@ -3,6 +3,8 @@ import { useDashboard } from '../context/DashboardContext';
 import type { MatchSummary } from '../../domain/MatchSummary';
 import styles from './TopChampionsTable.module.css';
 
+const CHAMPION_ASSET_VERSION = '14.11.1';
+
 interface ChampionStats {
   championName: string;
   gamesPlayed: number;
@@ -31,6 +33,12 @@ export const TopChampionsTable: React.FC = () => {
     sortKey: 'winRate',
     sortDirection: 'desc',
   });
+
+  const [failedImages, setFailedImages] = React.useState<Record<string, boolean>>({});
+
+  const handleImageError = (championName: string) => {
+    setFailedImages((prev) => ({ ...prev, [championName]: true }));
+  };
 
   const handleSort = (key: 'championName' | 'gamesPlayed' | 'winRate' | 'kdaValue' | 'csMin') => {
     const isCurrent = sortConfig.sortKey === key;
@@ -193,7 +201,24 @@ export const TopChampionsTable: React.FC = () => {
                 return (
                   <tr key={champ.championName} className={styles.tr}>
                     <td className={`${styles.tdLeft} ${styles.championNameCell}`}>
-                      {champ.championName}
+                      <div className={styles.championInfo}>
+                        {failedImages[champ.championName] ? (
+                          <div 
+                            className={styles.championFallback} 
+                            data-testid={`fallback-${champ.championName}`}
+                          >
+                            {champ.championName.charAt(0)}
+                          </div>
+                        ) : (
+                          <img
+                            src={`https://ddragon.leagueoflegends.com/cdn/${CHAMPION_ASSET_VERSION}/img/champion/${champ.championName}.png`}
+                            alt={champ.championName}
+                            className={styles.championIcon}
+                            onError={() => handleImageError(champ.championName)}
+                          />
+                        )}
+                        <span className={styles.championNameText}>{champ.championName}</span>
+                      </div>
                     </td>
                     <td className={styles.tdCenter}>{champ.gamesPlayed}</td>
                     <td className={styles.tdCenter}>
