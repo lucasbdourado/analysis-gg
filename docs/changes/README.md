@@ -6,3 +6,5 @@ This file indexes the change specs created for the project.
 |---|---|---|
 | 001 | Match Type Filtering | [change-spec.md](./001-match-type-filtering/change-spec.md) |
 | 002 | Weekday Chart and Filter Fixes | [change-spec.md](./002-weekday-chart-and-filter-fixes/change-spec.md) |
+| 003 | API-Driven Match Filtering | [change-spec.md](./003-api-driven-match-filtering/change-spec.md) |
+

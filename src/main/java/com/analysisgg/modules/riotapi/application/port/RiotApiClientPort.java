@@ -30,6 +30,18 @@ public interface RiotApiClientPort {
     List<String> fetchMatchIds(Puuid puuid, Region region, int count);
 
     /**
+     * Fetches recent match IDs for the given player filtered by queue.
+     *
+     * @param puuid the player's PUUID
+     * @param region the platform region (e.g., br1)
+     * @param count the number of matches to retrieve
+     * @param queue the queue ID to filter by (optional)
+     * @return a merged, deduplicated, and sorted list of match ID strings
+     * @throws com.analysisgg.modules.riotapi.domain.exception.RiotApiException if the external API returns an error
+     */
+    List<String> fetchMatchIds(Puuid puuid, Region region, int count, Integer queue);
+
+    /**
      * Fetches details of a specific match and maps it to a MatchSummary for the target player.
      *
      * @param matchId the match ID string

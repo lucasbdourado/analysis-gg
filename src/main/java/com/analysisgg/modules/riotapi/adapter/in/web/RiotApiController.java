@@ -27,14 +27,20 @@ public class RiotApiController {
             @PathVariable String gameName,
             @PathVariable String tagLine,
             @RequestParam String region,
-            @RequestParam(required = false, defaultValue = "20") Integer count
+            @RequestParam(required = false, defaultValue = "20") Integer count,
+            @RequestParam(required = false) Integer queue
     ) {
         RiotId riotId = new RiotId(gameName, tagLine);
         Region regionVo = new Region(region);
         
         int clampedCount = Math.max(1, Math.min(100, count != null ? count : 20));
 
-        PlayerAnalytics analytics = syncPlayerProfileUseCase.execute(riotId, regionVo, clampedCount);
+        PlayerAnalytics analytics;
+        if (queue != null) {
+            analytics = syncPlayerProfileUseCase.execute(riotId, regionVo, clampedCount, queue);
+        } else {
+            analytics = syncPlayerProfileUseCase.execute(riotId, regionVo, clampedCount);
+        }
         
         return ResponseEntity.ok(mapper.toResponse(analytics));
     }

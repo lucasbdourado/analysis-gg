@@ -149,4 +149,25 @@ class SyncPlayerProfileUseCaseTest {
         assertThat(duration).isLessThan(250);
         assertThat(analytics.matches()).containsExactlyInAnyOrder(match1, match2, match3);
     }
+
+    @Test
+    void shouldFetchMatchesFilteredByQueue() {
+        RiotId riotId = new RiotId("Faker", "T111");
+        Region region = new Region("kr");
+        Puuid puuid = new Puuid("faker-puuid");
+        RiotAccount cachedAccount = new RiotAccount(puuid.value(), riotId.gameName(), riotId.tagLine());
+        Integer queue = 420;
+
+        MatchSummary match1 = new MatchSummary("KR_1", 1800, 1000, 420, true, 1, "Jax", 5, 2, 5, 200, 20);
+
+        when(playerProfileCachePort.getProfile(riotId, region)).thenReturn(Optional.of(cachedAccount));
+        when(riotApiClientPort.fetchMatchIds(puuid, region, 1, queue)).thenReturn(List.of("KR_1"));
+        when(playerProfileCachePort.getMatchSummary("KR_1", puuid, region)).thenReturn(Optional.of(match1));
+
+        PlayerAnalytics analytics = useCase.execute(riotId, region, 1, queue);
+
+        assertThat(analytics.matches()).containsExactly(match1);
+        verify(riotApiClientPort).fetchMatchIds(puuid, region, 1, queue);
+        verifyNoMoreInteractions(riotApiClientPort);
+    }
 }

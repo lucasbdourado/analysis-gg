@@ -87,12 +87,25 @@ public class RiotApiClientAdapter implements RiotApiClientPort {
 
     @Override
     public List<String> fetchMatchIds(Puuid puuid, Region region, int count) {
+        return fetchMatchIds(puuid, region, count, null);
+    }
+
+    @Override
+    public List<String> fetchMatchIds(Puuid puuid, Region region, int count, Integer queue) {
         return executeWithRetry(() -> {
             String host = resolveHost(region);
 
+            String uriStr = "https://{host}/lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count={count}";
+            Object[] uriVars;
+            if (queue != null) {
+                uriStr += "&queue={queue}";
+                uriVars = new Object[]{host, puuid.value(), count, queue};
+            } else {
+                uriVars = new Object[]{host, puuid.value(), count};
+            }
+
             List<String> matchIds = restClient.get()
-                    .uri("https://{host}/lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count={count}",
-                            host, puuid.value(), count)
+                    .uri(uriStr, uriVars)
                     .retrieve()
                     .onStatus(status -> status.value() == 429, (req, resp) -> {
                         throw new RateLimitExceededException("Rate limit exceeded querying Riot API");

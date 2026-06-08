@@ -69,4 +69,35 @@ describe('MatchQueueFilter Component Tests', () => {
     expect(toggleQueueFilterMock).toHaveBeenCalledTimes(1);
     expect(toggleQueueFilterMock).toHaveBeenCalledWith('SOLO_DUO');
   });
+
+  it('should render Reset Filters button when selectedQueues is not empty', () => {
+    renderWithContext({
+      rawData: [{} as any],
+      selectedQueues: [],
+    });
+
+    expect(screen.queryByTestId('reset-filters-btn')).not.toBeInTheDocument();
+
+    render(
+      <DashboardContext.Provider value={{ ...defaultContextProps, rawData: [{} as any], selectedQueues: ['SOLO_DUO'] }}>
+        <MatchQueueFilter />
+      </DashboardContext.Provider>
+    );
+
+    expect(screen.getByTestId('reset-filters-btn')).toBeInTheDocument();
+  });
+
+  it('should call clearQueueFilters when Reset Filters button is clicked', () => {
+    const clearQueueFiltersMock = vi.fn();
+    renderWithContext({
+      rawData: [{} as any],
+      selectedQueues: ['SOLO_DUO'],
+      clearQueueFilters: clearQueueFiltersMock,
+    });
+
+    const resetBtn = screen.getByTestId('reset-filters-btn');
+    fireEvent.click(resetBtn);
+
+    expect(clearQueueFiltersMock).toHaveBeenCalledTimes(1);
+  });
 });

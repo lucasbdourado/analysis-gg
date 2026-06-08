@@ -9,12 +9,16 @@ export interface DashboardContextProps {
   filteredMatches: MatchSummary[];
   selectedQueues: string[];
   toggleQueueFilter: (queueKey: string) => void;
+  clearQueueFilters?: () => void;
 }
 
 export interface DashboardProviderProps {
   rawData?: MatchSummary[];
   activeRange?: number;
   setActiveRange?: (range: number) => void;
+  selectedQueues?: string[];
+  toggleQueueFilter?: (queueKey: string) => void;
+  clearQueueFilters?: () => void;
   children: ReactNode;
 }
 
@@ -32,20 +36,37 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
   rawData = [], 
   activeRange: propActiveRange,
   setActiveRange: propSetActiveRange,
+  selectedQueues: propSelectedQueues,
+  toggleQueueFilter: propToggleQueueFilter,
+  clearQueueFilters: propClearQueueFilters,
   children 
 }) => {
   const [localActiveRange, localSetActiveRange] = useState<number>(20);
-  const [selectedQueues, setSelectedQueues] = useState<string[]>([]);
+  const [localSelectedQueues, setLocalSelectedQueues] = useState<string[]>([]);
 
   const activeRange = propActiveRange !== undefined ? propActiveRange : localActiveRange;
   const setActiveRange = propSetActiveRange !== undefined ? propSetActiveRange : localSetActiveRange;
 
+  const selectedQueues = propSelectedQueues !== undefined ? propSelectedQueues : localSelectedQueues;
+
   const toggleQueueFilter = (queueKey: string) => {
-    setSelectedQueues(prev => 
-      prev.includes(queueKey) 
-        ? prev.filter(k => k !== queueKey) 
-        : [...prev, queueKey]
-    );
+    if (propToggleQueueFilter !== undefined) {
+      propToggleQueueFilter(queueKey);
+    } else {
+      setLocalSelectedQueues(prev => 
+        prev.includes(queueKey) 
+          ? prev.filter(k => k !== queueKey) 
+          : [...prev, queueKey]
+      );
+    }
+  };
+
+  const clearQueueFilters = () => {
+    if (propClearQueueFilters !== undefined) {
+      propClearQueueFilters();
+    } else {
+      setLocalSelectedQueues([]);
+    }
   };
 
   const filteredMatches = useMemo(() => {
@@ -65,7 +86,8 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
       setActiveRange, 
       filteredMatches, 
       selectedQueues, 
-      toggleQueueFilter 
+      toggleQueueFilter,
+      clearQueueFilters
     }}>
       {children}
     </DashboardContext.Provider>

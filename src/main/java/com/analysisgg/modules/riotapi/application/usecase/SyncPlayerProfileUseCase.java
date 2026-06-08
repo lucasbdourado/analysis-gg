@@ -31,6 +31,10 @@ public class SyncPlayerProfileUseCase {
     }
 
     public PlayerAnalytics execute(RiotId riotId, Region region, int count) {
+        return execute(riotId, region, count, null);
+    }
+
+    public PlayerAnalytics execute(RiotId riotId, Region region, int count, Integer queue) {
         RiotAccount profile = playerProfileCachePort.getProfile(riotId, region)
                 .orElseGet(() -> {
                     Puuid resolvedPuuid = riotApiClientPort.resolvePuuid(riotId, region);
@@ -40,7 +44,12 @@ public class SyncPlayerProfileUseCase {
                 });
 
         Puuid puuid = new Puuid(profile.puuid());
-        List<String> matchIds = riotApiClientPort.fetchMatchIds(puuid, region, count);
+        List<String> matchIds;
+        if (queue != null) {
+            matchIds = riotApiClientPort.fetchMatchIds(puuid, region, count, queue);
+        } else {
+            matchIds = riotApiClientPort.fetchMatchIds(puuid, region, count);
+        }
 
         List<Future<MatchSummary>> futures = new ArrayList<>();
         java.util.concurrent.Semaphore semaphore = new java.util.concurrent.Semaphore(3);

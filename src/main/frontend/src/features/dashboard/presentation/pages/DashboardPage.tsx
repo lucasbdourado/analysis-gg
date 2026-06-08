@@ -18,8 +18,27 @@ export const DashboardPage: React.FC = () => {
   const region = searchParams.get('region') || '';
 
   const [activeRange, setActiveRange] = useState<number>(20);
+  const [selectedQueues, setSelectedQueues] = useState<string[]>([]);
 
-  const { data, loading, error } = usePlayerAnalytics(gameName, tagLine, region, activeRange);
+  const toggleQueueFilter = (queueKey: string) => {
+    setSelectedQueues((prev) =>
+      prev.includes(queueKey)
+        ? prev.filter((k) => k !== queueKey)
+        : [...prev, queueKey]
+    );
+  };
+
+  const clearQueueFilters = () => {
+    setSelectedQueues([]);
+  };
+
+  const { data, loading, error } = usePlayerAnalytics(
+    gameName,
+    tagLine,
+    region,
+    activeRange,
+    selectedQueues
+  );
 
   const handleBackToSearch = () => {
     navigate('/');
@@ -49,7 +68,14 @@ export const DashboardPage: React.FC = () => {
   }
 
   return (
-    <DashboardProvider rawData={data.matches} activeRange={activeRange} setActiveRange={setActiveRange}>
+    <DashboardProvider
+      rawData={data.matches}
+      activeRange={activeRange}
+      setActiveRange={setActiveRange}
+      selectedQueues={selectedQueues}
+      toggleQueueFilter={toggleQueueFilter}
+      clearQueueFilters={clearQueueFilters}
+    >
       <div className={styles.dashboardContainer} data-testid="dashboard-success">
         <header className={styles.header}>
           <div className={styles.playerTitleSection}>

@@ -16,8 +16,9 @@ const FILTER_ITEMS: FilterItem[] = [
 ];
 
 export const MatchQueueFilter: React.FC = () => {
-  const { selectedQueues, toggleQueueFilter, rawData } = useDashboard();
+  const { selectedQueues, toggleQueueFilter, rawData, clearQueueFilters } = useDashboard();
   const isDisabled = !rawData || rawData.length === 0;
+  const hasActiveFilters = selectedQueues.length > 0;
 
   return (
     <div className={styles.container} data-testid="match-queue-filter">
@@ -38,6 +39,16 @@ export const MatchQueueFilter: React.FC = () => {
             </button>
           );
         })}
+        {hasActiveFilters && (
+          <button
+            data-testid="reset-filters-btn"
+            className={styles.resetButton}
+            onClick={() => clearQueueFilters?.()}
+            disabled={isDisabled}
+          >
+            Reset Filters
+          </button>
+        )}
       </div>
     </div>
   );
