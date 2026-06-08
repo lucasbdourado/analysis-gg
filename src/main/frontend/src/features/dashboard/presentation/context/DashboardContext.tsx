@@ -50,12 +50,12 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
 
   const filteredMatches = useMemo(() => {
     const data = rawData || [];
-    const sliced = data.slice(0, Math.min(data.length, activeRange));
     if (selectedQueues.length === 0) {
-      return sliced;
+      return data.slice(0, Math.min(data.length, activeRange));
     }
     const targetQueueIds = selectedQueues.flatMap(q => QUEUE_MAP[q] || []);
-    return sliced.filter(match => targetQueueIds.includes(match.queueId));
+    const filtered = data.filter(match => targetQueueIds.includes(match.queueId));
+    return filtered.slice(0, Math.min(filtered.length, activeRange));
   }, [rawData, activeRange, selectedQueues]);
 
   return (

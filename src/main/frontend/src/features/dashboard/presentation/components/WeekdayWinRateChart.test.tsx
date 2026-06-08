@@ -21,7 +21,7 @@ vi.mock('recharts', async () => {
         {children}
       </div>
     ),
-    XAxis: () => <div />,
+    XAxis: (props: any) => <div data-testid="xAxis" data-props={JSON.stringify(props)} />,
     YAxis: () => <div />,
     Tooltip: ({ content }: any) => {
       if (React.isValidElement(content)) {
@@ -239,6 +239,21 @@ describe('WeekdayWinRateChart Component Tests', () => {
 
       expect(screen.getByText('Thursday')).toBeInTheDocument();
       expect(screen.getByText('No games played')).toBeInTheDocument();
+    });
+  });
+
+  describe('XAxis Configuration', () => {
+    it('should configure XAxis with interval={0} to prevent tick label clipping', () => {
+      const matches = [createLocalMatch(1, true)];
+      render(
+        <DashboardProvider rawData={matches}>
+          <WeekdayWinRateChart />
+        </DashboardProvider>
+      );
+
+      const xAxisEl = screen.getByTestId('xAxis');
+      const props = JSON.parse(xAxisEl.getAttribute('data-props') || '{}');
+      expect(props.interval).toBe(0);
     });
   });
 });

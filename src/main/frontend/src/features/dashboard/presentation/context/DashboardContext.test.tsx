@@ -345,7 +345,7 @@ describe('DashboardContext Unit & Integration Tests', () => {
       expect(matchIds).toContain('match-5'); // 430
     });
 
-    it('should apply activeRange slicing before queue filtering', () => {
+    it('should apply queue filtering before activeRange slicing', () => {
       let contextVal!: DashboardContextProps;
       const rawData = createMixedMockMatches();
       render(
@@ -354,13 +354,15 @@ describe('DashboardContext Unit & Integration Tests', () => {
         </DashboardProvider>
       );
 
-      // Active range is 2: only match-0 (Solo/Duo) and match-1 (Flex) are sliced.
-      // If we filter by NORMAL (queue 400 is at index 2, which is out of range 2)
+      // If we filter by NORMAL, we should get matches matching NORMAL first, then sliced to activeRange.
+      // NORMAL has match-2 (index 2) and match-5 (index 5).
       act(() => {
         contextVal.toggleQueueFilter('NORMAL');
       });
 
-      expect(contextVal.filteredMatches).toHaveLength(0);
+      expect(contextVal.filteredMatches).toHaveLength(2);
+      const matchIds = contextVal.filteredMatches.map(m => m.matchId);
+      expect(matchIds).toEqual(['match-2', 'match-5']);
     });
   });
 });

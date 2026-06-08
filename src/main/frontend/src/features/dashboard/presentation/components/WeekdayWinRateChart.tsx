@@ -85,7 +85,7 @@ export const WeekdayWinRateChart: React.FC = () => {
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={weekdayData} margin={{ top: 10, right: 10, left: -20, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.05)" />
-              <XAxis dataKey="dayName" stroke="var(--text)" fontSize={12} tickLine={false} />
+              <XAxis dataKey="dayName" stroke="var(--text)" fontSize={12} tickLine={false} interval={0} />
               <YAxis domain={[0, 100]} stroke="var(--text)" fontSize={12} tickLine={false} />
               <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255, 255, 255, 0.02)' }} />
               <Bar dataKey="winRate" fill="var(--accent-cyan)" radius={[4, 4, 0, 0]} />

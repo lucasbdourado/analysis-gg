@@ -2,8 +2,8 @@
 
 ## Current Change Context
 
-- Active change: `002-weekday-chart-and-filter-fixes`
-- Spec path: `docs/changes/002-weekday-chart-and-filter-fixes/change-spec.md`
+- Active change: None
+- Spec path: None
 - Open blockers:
   - None
 - Pending decisions:
@@ -24,6 +24,7 @@
 - Spec path: `docs/changes/002-weekday-chart-and-filter-fixes/change-spec.md`
 - Created from: User request, calculation audit, and Playwright MCP verification
 - Summary: R&D spec for fixing match filtering ordering and Recharts Wednesday label rendering.
+- Status: Completed and verified (Vitest + Maven unit tests passing, production build compiled, and manual Playwright check completed successfully).
 - Open blockers:
   - None
 - Pending decisions:
