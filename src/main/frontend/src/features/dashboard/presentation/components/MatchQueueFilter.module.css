@@ -1,0 +1,65 @@
+.container {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.filterList {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filterButton {
+  background: none;
+  border: none;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+  user-select: none;
+}
+
+.filterButton:hover:not(:disabled) {
+  color: var(--text-h);
+}
+
+.filterButton.active {
+  color: var(--accent-cyan);
+  text-shadow: var(--focus-glow);
+}
+
+.filterButton::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--accent-gradient);
+  transition: width 0.2s ease, left 0.2s ease;
+}
+
+.filterButton.active::after {
+  width: 100%;
+  left: 0;
+}
+
+.filterButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  color: var(--text);
+}

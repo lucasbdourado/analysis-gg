@@ -89,15 +89,10 @@ public class RiotApiIntegrationTest {
                         .withBody("{\"puuid\":\"lucas-puuid-123\",\"gameName\":\"Lucas\",\"tagLine\":\"BR1\"}")));
 
         // Stub match IDs fetch
-        wireMockServer.stubFor(get(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/by-puuid/lucas-puuid-123/ids?queue=420&start=0&count=2"))
+        wireMockServer.stubFor(get(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/by-puuid/lucas-puuid-123/ids?start=0&count=2"))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
-                        .withBody("[\"BR1_101\", \"BR1_102\"]")));
-
-        wireMockServer.stubFor(get(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/by-puuid/lucas-puuid-123/ids?queue=440&start=0&count=2"))
-                .willReturn(aResponse()
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("[\"BR1_101\"]")));
+                        .withBody("[\"BR1_102\", \"BR1_101\"]")));
 
         // Stub match details fetch
         String matchDetail1 = createMatchDetailJson("BR1_101", "lucas-puuid-123", true, 8, 2, 10, "Ahri");
@@ -130,8 +125,7 @@ public class RiotApiIntegrationTest {
 
         // Verify that WireMock received requests
         wireMockServer.verify(1, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/Lucas/BR1")));
-        wireMockServer.verify(1, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/by-puuid/lucas-puuid-123/ids?queue=420&start=0&count=2")));
-        wireMockServer.verify(1, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/by-puuid/lucas-puuid-123/ids?queue=440&start=0&count=2")));
+        wireMockServer.verify(1, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/by-puuid/lucas-puuid-123/ids?start=0&count=2")));
         wireMockServer.verify(1, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/BR1_101")));
         wireMockServer.verify(1, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/BR1_102")));
 
@@ -147,8 +141,7 @@ public class RiotApiIntegrationTest {
         // Verify that profile resolution and match details are served from cache (call count remains 1)
         // whereas match IDs lists are fetched again (call count becomes 2)
         wireMockServer.verify(1, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/Lucas/BR1")));
-        wireMockServer.verify(2, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/by-puuid/lucas-puuid-123/ids?queue=420&start=0&count=2")));
-        wireMockServer.verify(2, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/by-puuid/lucas-puuid-123/ids?queue=440&start=0&count=2")));
+        wireMockServer.verify(2, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/by-puuid/lucas-puuid-123/ids?start=0&count=2")));
         wireMockServer.verify(1, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/BR1_101")));
         wireMockServer.verify(1, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/BR1_102")));
     }
@@ -196,15 +189,10 @@ public class RiotApiIntegrationTest {
                         .withBody("{\"puuid\":\"lucas-puuid-123\",\"gameName\":\"Lucas\",\"tagLine\":\"BR1\"}")));
 
         // Stub match IDs fetch
-        wireMockServer.stubFor(get(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/by-puuid/lucas-puuid-123/ids?queue=420&start=0&count=2"))
+        wireMockServer.stubFor(get(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/by-puuid/lucas-puuid-123/ids?start=0&count=2"))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "application/json")
-                        .withBody("[\"BR1_101\", \"BR1_102\"]")));
-
-        wireMockServer.stubFor(get(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/by-puuid/lucas-puuid-123/ids?queue=440&start=0&count=2"))
-                .willReturn(aResponse()
-                        .withHeader("Content-Type", "application/json")
-                        .withBody("[]")));
+                        .withBody("[\"BR1_102\", \"BR1_101\"]")));
 
         // Stub match details: one succeeds, one fails (500)
         String matchDetail1 = createMatchDetailJson("BR1_101", "lucas-puuid-123", true, 8, 2, 10, "Ahri");

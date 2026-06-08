@@ -221,4 +221,146 @@ describe('DashboardContext Unit & Integration Tests', () => {
       expect(contextVal.filteredMatches).toHaveLength(75); // only 75 available
     });
   });
+
+  describe('Match Type / Queue Filtering Logic', () => {
+    const createMixedMockMatches = (): MatchSummary[] => {
+      // 0: match-0, queueId: 420 (Solo/Duo)
+      // 1: match-1, queueId: 440 (Flex)
+      // 2: match-2, queueId: 400 (Normal)
+      // 3: match-3, queueId: 450 (ARAM)
+      // 4: match-4, queueId: 0   (Custom)
+      // 5: match-5, queueId: 430 (Normal)
+      const queueIds = [420, 440, 400, 450, 0, 430];
+      return queueIds.map((queueId, i) => ({
+        matchId: `match-${i}`,
+        gameDuration: 1200,
+        gameCreation: Date.now() - i * 1000 * 60 * 30,
+        queueId,
+        win: i % 2 === 0,
+        championId: 1,
+        championName: 'Champion',
+        kills: 5,
+        deaths: 3,
+        assists: 10,
+        totalMinionsKilled: 150,
+        neutralMinionsKilled: 20,
+      }));
+    };
+
+    it('should initialize selectedQueues as an empty array', () => {
+      let contextVal!: DashboardContextProps;
+      render(
+        <DashboardProvider rawData={[]}>
+          <ContextConsumer callback={(val) => { contextVal = val; }} />
+        </DashboardProvider>
+      );
+      expect(contextVal.selectedQueues).toEqual([]);
+    });
+
+    it('should toggle queues in selectedQueues correctly', () => {
+      let contextVal!: DashboardContextProps;
+      render(
+        <DashboardProvider rawData={[]}>
+          <ContextConsumer callback={(val) => { contextVal = val; }} />
+        </DashboardProvider>
+      );
+
+      act(() => {
+        contextVal.toggleQueueFilter('SOLO_DUO');
+      });
+      expect(contextVal.selectedQueues).toEqual(['SOLO_DUO']);
+
+      act(() => {
+        contextVal.toggleQueueFilter('FLEX');
+      });
+      expect(contextVal.selectedQueues).toEqual(['SOLO_DUO', 'FLEX']);
+
+      act(() => {
+        contextVal.toggleQueueFilter('SOLO_DUO');
+      });
+      expect(contextVal.selectedQueues).toEqual(['FLEX']);
+    });
+
+    it('should filter matches by selected queue type', () => {
+      let contextVal!: DashboardContextProps;
+      const rawData = createMixedMockMatches();
+      render(
+        <DashboardProvider rawData={rawData} activeRange={20}>
+          <ContextConsumer callback={(val) => { contextVal = val; }} />
+        </DashboardProvider>
+      );
+
+      // Default: show all 6 matches
+      expect(contextVal.filteredMatches).toHaveLength(6);
+
+      // Filter by Solo/Duo (queue 420)
+      act(() => {
+        contextVal.toggleQueueFilter('SOLO_DUO');
+      });
+      expect(contextVal.filteredMatches).toHaveLength(1);
+      expect(contextVal.filteredMatches[0].matchId).toBe('match-0');
+      expect(contextVal.filteredMatches[0].queueId).toBe(420);
+    });
+
+    it('should filter matches by multiple selected queue types combined', () => {
+      let contextVal!: DashboardContextProps;
+      const rawData = createMixedMockMatches();
+      render(
+        <DashboardProvider rawData={rawData} activeRange={20}>
+          <ContextConsumer callback={(val) => { contextVal = val; }} />
+        </DashboardProvider>
+      );
+
+      // Filter by Solo/Duo (420) and Flex (440)
+      act(() => {
+        contextVal.toggleQueueFilter('SOLO_DUO');
+      });
+      act(() => {
+        contextVal.toggleQueueFilter('FLEX');
+      });
+
+      expect(contextVal.filteredMatches).toHaveLength(2);
+      const matchIds = contextVal.filteredMatches.map(m => m.matchId);
+      expect(matchIds).toContain('match-0');
+      expect(matchIds).toContain('match-1');
+    });
+
+    it('should handle normal queue types correctly (multiple sub-queues)', () => {
+      let contextVal!: DashboardContextProps;
+      const rawData = createMixedMockMatches();
+      render(
+        <DashboardProvider rawData={rawData} activeRange={20}>
+          <ContextConsumer callback={(val) => { contextVal = val; }} />
+        </DashboardProvider>
+      );
+
+      // Filter by Normal (400 and 430)
+      act(() => {
+        contextVal.toggleQueueFilter('NORMAL');
+      });
+
+      expect(contextVal.filteredMatches).toHaveLength(2);
+      const matchIds = contextVal.filteredMatches.map(m => m.matchId);
+      expect(matchIds).toContain('match-2'); // 400
+      expect(matchIds).toContain('match-5'); // 430
+    });
+
+    it('should apply activeRange slicing before queue filtering', () => {
+      let contextVal!: DashboardContextProps;
+      const rawData = createMixedMockMatches();
+      render(
+        <DashboardProvider rawData={rawData} activeRange={2}>
+          <ContextConsumer callback={(val) => { contextVal = val; }} />
+        </DashboardProvider>
+      );
+
+      // Active range is 2: only match-0 (Solo/Duo) and match-1 (Flex) are sliced.
+      // If we filter by NORMAL (queue 400 is at index 2, which is out of range 2)
+      act(() => {
+        contextVal.toggleQueueFilter('NORMAL');
+      });
+
+      expect(contextVal.filteredMatches).toHaveLength(0);
+    });
+  });
 });

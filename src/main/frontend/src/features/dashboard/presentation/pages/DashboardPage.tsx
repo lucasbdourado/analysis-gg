@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { DashboardProvider } from '../context/DashboardContext';
 import { MatchRangeFilter } from '../components/MatchRangeFilter';
+import { MatchQueueFilter } from '../components/MatchQueueFilter';
 import { usePlayerAnalytics } from '../hooks/usePlayerAnalytics';
 import { WeekdayWinRateChart } from '../components/WeekdayWinRateChart';
 import { DailyPerformanceGrid } from '../components/DailyPerformanceGrid';
@@ -56,7 +57,10 @@ export const DashboardPage: React.FC = () => {
             <span className={styles.playerTag}>#{data.tagLine}</span>
             <span className={styles.regionBadge}>{data.region}</span>
           </div>
-          <MatchRangeFilter />
+          <div className={styles.filtersSection}>
+            <MatchQueueFilter />
+            <MatchRangeFilter />
+          </div>
         </header>
         
         <main className={styles.mainContent}>

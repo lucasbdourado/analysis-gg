@@ -89,21 +89,14 @@ class RiotApiClientAdapterTest {
     }
 
     @Test
-    void shouldFetchAndDeduplicateMatchIds() {
-        String soloDuoJson = "[\"BR1_3\", \"BR1_1\"]";
-        String flexJson = "[\"BR1_2\", \"BR1_3\"]";
+    void shouldFetchMatchIds() {
+        String matchIdsJson = "[\"BR1_3\", \"BR1_2\", \"BR1_1\"]";
 
-        server.expect(requestTo("https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/puuid-123/ids?queue=420&start=0&count=5"))
-                .andRespond(withSuccess(soloDuoJson, MediaType.APPLICATION_JSON));
-
-        server.expect(requestTo("https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/puuid-123/ids?queue=440&start=0&count=5"))
-                .andRespond(withSuccess(flexJson, MediaType.APPLICATION_JSON));
+        server.expect(requestTo("https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/puuid-123/ids?start=0&count=5"))
+                .andRespond(withSuccess(matchIdsJson, MediaType.APPLICATION_JSON));
 
         List<String> matchIds = adapter.fetchMatchIds(new Puuid("puuid-123"), new Region("br1"), 5);
 
-        // Deduplicated: BR1_3, BR1_2, BR1_1
-        // Sorted descending lexicographically: BR1_3, BR1_2, BR1_1
-        // Truncated to 5 (which is 3)
         assertThat(matchIds).containsExactly("BR1_3", "BR1_2", "BR1_1");
         server.verify();
     }

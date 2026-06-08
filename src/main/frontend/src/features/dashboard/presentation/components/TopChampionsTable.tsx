@@ -3,7 +3,7 @@ import { useDashboard } from '../context/DashboardContext';
 import type { MatchSummary } from '../../domain/MatchSummary';
 import styles from './TopChampionsTable.module.css';
 
-const CHAMPION_ASSET_VERSION = '14.11.1';
+const CHAMPION_ASSET_VERSION = '16.11.1';
 
 interface ChampionStats {
   championName: string;

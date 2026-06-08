@@ -50,13 +50,6 @@ public class SyncPlayerProfileUseCase {
                 if (cached.isPresent()) {
                     futures.add(CompletableFuture.completedFuture(cached.get()));
                 } else {
-                    if (matchIds.size() > 5) {
-                        try {
-                            Thread.sleep(100); // space out requests only for larger batches
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                        }
-                    }
                     futures.add(executor.submit(() -> {
                         try {
                             semaphore.acquire();

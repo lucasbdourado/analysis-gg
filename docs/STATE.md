@@ -1,47 +1,30 @@
-# Harness Execution State
+# Project State
 
-## Current Feature
+## Current Change Context
 
-`top-champions-stats-table`
+- Active change: `002-weekday-chart-and-filter-fixes`
+- Spec path: `docs/changes/002-weekday-chart-and-filter-fixes/change-spec.md`
+- Open blockers:
+  - None
+- Pending decisions:
+  - None
 
-## Current Task
+## Change History
 
-`999-verify-feature-completion` in `docs/features/top-champions-stats-table/tasks/999-verify-feature-completion.md`
+- Spec path: `docs/changes/001-match-type-filtering/change-spec.md`
+- Created from: User request, backend analysis, and Playwright MCP observation
+- Summary: Research and development spec for client-side match type filtering on the dashboard page.
+- Open blockers:
+  - None
+- Pending decisions:
+  - None
 
-## Current Task Plan
+### 002 - Weekday Chart and Filter Fixes
 
-`docs/features/top-champions-stats-table/task-plans/999-verify-feature-completion-plan.md`
-
-## Current Execution Report
-
-`docs/features/top-champions-stats-table/executions/999-verify-feature-completion-execution.md`
-
-## Current Status
-
-`Implemented`
-
-## Last Completed Step
-
-Completed all verification checks, compilation builds, and test suite executions successfully.
-
-## Current Blocker
-
-None
-
-## Required Next Action
-
-Not active
-
-## Safe Resume Point
-
-All feature tasks (001-005) and final verification (999) are fully implemented and verified. The feature is ready for final product delivery.
-
-## Last Updated
-
-2026-06-06T21:28:00-03:00
-
-## Notes
-
-None
-
-
+- Spec path: `docs/changes/002-weekday-chart-and-filter-fixes/change-spec.md`
+- Created from: User request, calculation audit, and Playwright MCP verification
+- Summary: R&D spec for fixing match filtering ordering and Recharts Wednesday label rendering.
+- Open blockers:
+  - None
+- Pending decisions:
+  - None

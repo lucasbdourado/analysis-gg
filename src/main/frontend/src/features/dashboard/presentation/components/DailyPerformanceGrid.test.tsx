@@ -42,6 +42,8 @@ describe('DailyPerformanceGrid Component Tests', () => {
       activeRange: 20,
       setActiveRange: vi.fn(),
       filteredMatches: [],
+      selectedQueues: [],
+      toggleQueueFilter: vi.fn(),
     });
 
     render(<DailyPerformanceGrid />);
@@ -63,6 +65,8 @@ describe('DailyPerformanceGrid Component Tests', () => {
       activeRange: 20,
       setActiveRange: vi.fn(),
       filteredMatches: matches,
+      selectedQueues: [],
+      toggleQueueFilter: vi.fn(),
     });
 
     const { container } = render(<DailyPerformanceGrid />);
@@ -97,6 +101,8 @@ describe('DailyPerformanceGrid Component Tests', () => {
       activeRange: 20,
       setActiveRange: vi.fn(),
       filteredMatches: matches,
+      selectedQueues: [],
+      toggleQueueFilter: vi.fn(),
     });
 
     const { container } = render(<DailyPerformanceGrid />);
@@ -138,6 +144,8 @@ describe('DailyPerformanceGrid Component Tests', () => {
       activeRange: 20,
       setActiveRange: vi.fn(),
       filteredMatches: matches,
+      selectedQueues: [],
+      toggleQueueFilter: vi.fn(),
     });
 
     const { container } = render(<DailyPerformanceGrid />);
@@ -203,6 +211,8 @@ describe('DailyPerformanceGrid Component Tests', () => {
       activeRange: 20,
       setActiveRange: vi.fn(),
       filteredMatches: matches,
+      selectedQueues: [],
+      toggleQueueFilter: vi.fn(),
     });
 
     const { container } = render(<DailyPerformanceGrid />);

@@ -90,43 +90,23 @@ public class RiotApiClientAdapter implements RiotApiClientPort {
         return executeWithRetry(() -> {
             String host = resolveHost(region);
 
-            List<String> soloDuoMatchIds = restClient.get()
-                    .uri("https://{host}/lol/match/v5/matches/by-puuid/{puuid}/ids?queue=420&start=0&count={count}",
+            List<String> matchIds = restClient.get()
+                    .uri("https://{host}/lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count={count}",
                             host, puuid.value(), count)
                     .retrieve()
                     .onStatus(status -> status.value() == 429, (req, resp) -> {
                         throw new RateLimitExceededException("Rate limit exceeded querying Riot API");
                     })
                     .onStatus(status -> status.isError(), (req, resp) -> {
-                        throw new RiotApiException("Riot API error when fetching Solo/Duo match IDs: " + resp.getStatusCode());
+                        throw new RiotApiException("Riot API error when fetching match IDs: " + resp.getStatusCode());
                     })
                     .body(new ParameterizedTypeReference<List<String>>() {});
 
-            List<String> flexMatchIds = restClient.get()
-                    .uri("https://{host}/lol/match/v5/matches/by-puuid/{puuid}/ids?queue=440&start=0&count={count}",
-                            host, puuid.value(), count)
-                    .retrieve()
-                    .onStatus(status -> status.value() == 429, (req, resp) -> {
-                        throw new RateLimitExceededException("Rate limit exceeded querying Riot API");
-                    })
-                    .onStatus(status -> status.isError(), (req, resp) -> {
-                        throw new RiotApiException("Riot API error when fetching Flex match IDs: " + resp.getStatusCode());
-                    })
-                    .body(new ParameterizedTypeReference<List<String>>() {});
-
-            List<String> merged = new ArrayList<>();
-            if (soloDuoMatchIds != null) {
-                merged.addAll(soloDuoMatchIds);
-            }
-            if (flexMatchIds != null) {
-                merged.addAll(flexMatchIds);
+            if (matchIds == null) {
+                return List.of();
             }
 
-            return merged.stream()
-                    .distinct()
-                    .sorted(Comparator.reverseOrder())
-                    .limit(count)
-                    .toList();
+            return matchIds;
         });
     }
 
