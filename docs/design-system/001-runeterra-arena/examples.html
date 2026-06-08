@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Runeterra Arena Design System Examples</title>
+    <link rel="stylesheet" href="./components.css">
+  </head>
+  <body>
+    <div class="ds-page">
+      <header class="ds-topbar">
+        <a class="ds-brand" href="#">
+          <span class="ds-brand-mark" aria-hidden="true"></span>
+          Rift Atlas
+        </a>
+        <nav class="ds-nav" aria-label="Primary">
+          <a class="ds-nav-link" aria-current="page" href="#">Overview</a>
+          <a class="ds-nav-link" href="#">Champions</a>
+          <a class="ds-nav-link" href="#">Patch Notes</a>
+          <a class="ds-nav-link" href="#">Community</a>
+        </nav>
+        <button class="ds-icon-button" aria-label="Search">S</button>
+        <a class="ds-button ds-button-secondary" href="#">Play Now</a>
+      </header>
+
+      <main>
+        <section class="ds-hero">
+          <div class="ds-container ds-hero-content">
+            <p class="ds-kicker">Season briefing</p>
+            <h1>Enter the Rift</h1>
+            <p class="ds-lede">A high-contrast fantasy interface for competitive game portals, champion libraries, news hubs, and event pages.</p>
+            <div class="ds-cluster">
+              <a class="ds-button ds-button-primary" href="#">Start Free</a>
+              <a class="ds-button ds-button-ghost" href="#">View Champions</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="ds-section ds-section-dark">
+          <div class="ds-container ds-stack-lg">
+            <div class="ds-stack">
+              <p class="ds-kicker">Latest Updates</p>
+              <h2>Editorial Cards</h2>
+              <p class="ds-body">Use media-led cards for updates, events, champion spotlights, and learning content.</p>
+            </div>
+            <div class="ds-component-grid">
+              <article class="ds-card">
+                <div class="ds-card-media" role="img" aria-label="Abstract arena backdrop"></div>
+                <div class="ds-card-body">
+                  <span class="ds-badge">Patch</span>
+                  <h3 class="ds-heading-md">Balance Preview</h3>
+                  <p class="ds-body">Compact summaries, sharp metadata, and strong contrast keep repeated content easy to scan.</p>
+                </div>
+              </article>
+              <article class="ds-card">
+                <div class="ds-card-media" role="img" aria-label="Abstract champion backdrop"></div>
+                <div class="ds-card-body">
+                  <span class="ds-badge">Champion</span>
+                  <h3 class="ds-heading-md">Role Guides</h3>
+                  <p class="ds-body">Cards should expose a clear topic, status, and one action instead of dense explanatory copy.</p>
+                </div>
+              </article>
+              <article class="ds-card">
+                <div class="ds-card-media" role="img" aria-label="Abstract event backdrop"></div>
+                <div class="ds-card-body">
+                  <span class="ds-badge">Event</span>
+                  <h3 class="ds-heading-md">Ranked Split</h3>
+                  <p class="ds-body">Gold accents signal premium content while cyan is reserved for active actions and links.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="ds-article-header">
+          <div class="ds-container-narrow ds-stack-lg">
+            <div class="ds-stack">
+              <span class="ds-badge">Game Updates</span>
+              <h2 class="ds-article-title">Patch 26.11 Notes</h2>
+              <p class="ds-article-subtitle">A seasonal update with support, champion, item, mode, and quality-of-life changes.</p>
+            </div>
+            <div class="ds-article-meta">
+              <span>Game Updates</span>
+              <span>Riot Cashmiir, Riot sternest</span>
+              <time datetime="2026-05-27">May 27, 2026</time>
+            </div>
+          </div>
+        </section>
+
+        <section class="ds-section ds-section-dark">
+          <article class="ds-article-body ds-stack-lg">
+            <div class="ds-article-intro">
+              Patch articles can open with an editorial summary before the dense data. Keep the tone lively, but make sure the first screen clearly communicates what changed and which player groups are affected.
+            </div>
+
+            <section class="ds-patch-section">
+              <div class="ds-patch-summary">
+                <span class="ds-badge">Highlights</span>
+                <h3 class="ds-heading-lg">Patch Structure</h3>
+                <p class="ds-body">The reference article groups changes into highlights, event notes, client updates, route missions, support adjustments, champions, items, runes, ARAM, Arena, bug fixes, skins, chromas, and related articles.</p>
+              </div>
+            </section>
+
+            <section class="ds-patch-section">
+              <h3 class="ds-heading-lg">Support Adjustments</h3>
+              <div class="ds-patch-entry">
+                <div class="ds-patch-entry-head">
+                  <span class="ds-patch-icon" aria-hidden="true">A</span>
+                  <div>
+                    <h4 class="ds-heading-md">Aery</h4>
+                    <p class="ds-body">Use a short designer note to explain why an entity is being adjusted before listing numerical changes.</p>
+                  </div>
+                </div>
+                <ul class="ds-change-list">
+                  <li class="ds-change-item ds-change-nerf"><span class="ds-change-label">Early defense:</span> mark reductions with the crimson state.</li>
+                  <li class="ds-change-item ds-change-system"><span class="ds-change-label">Context:</span> keep systemic explanations separate from raw values.</li>
+                </ul>
+              </div>
+              <div class="ds-patch-entry">
+                <div class="ds-patch-entry-head">
+                  <span class="ds-patch-icon" aria-hidden="true">S</span>
+                  <div>
+                    <h4 class="ds-heading-md">Solari Locket</h4>
+                    <p class="ds-body">Item changes can use the same entry structure as champions and runes for consistent scanning.</p>
+                  </div>
+                </div>
+                <ul class="ds-change-list">
+                  <li class="ds-change-item ds-change-buff"><span class="ds-change-label">Tank utility:</span> mark direct improvements with the forest state.</li>
+                </ul>
+              </div>
+            </section>
+          </article>
+        </section>
+
+        <section class="ds-section ds-section-panel">
+          <div class="ds-container ds-split">
+            <div class="ds-stack-lg">
+              <div class="ds-stack">
+                <p class="ds-kicker">Interface States</p>
+                <h2>Controls and Feedback</h2>
+                <p class="ds-body">Controls use squared silhouettes, strong focus rings, and compact uppercase labels to match the competitive tone.</p>
+              </div>
+              <div class="ds-cluster">
+                <button class="ds-button ds-button-primary">Primary Action</button>
+                <button class="ds-button ds-button-secondary">Secondary Action</button>
+                <button class="ds-button ds-button-ghost">Ghost Action</button>
+              </div>
+            </div>
+            <div class="ds-panel ds-stack-lg">
+              <div class="ds-tabs" role="tablist" aria-label="Modes">
+                <button class="ds-tab" aria-selected="true" role="tab">Build</button>
+                <button class="ds-tab" aria-selected="false" role="tab">Stats</button>
+                <button class="ds-tab" aria-selected="false" role="tab">Lore</button>
+              </div>
+              <label class="ds-field">
+                <span class="ds-label">Summoner Name</span>
+                <input class="ds-input" placeholder="Enter a name">
+              </label>
+              <div class="ds-alert ds-alert-info">
+                <strong>Queue ready</strong>
+                <span>Use cyan feedback for actionable, non-destructive system messages.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

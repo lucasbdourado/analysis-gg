@@ -12,13 +12,13 @@ export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElemen
 }
 
 export const Select: React.FC<SelectProps> = ({ options, error, className = '', ...props }) => {
-  const selectClassName = `${styles.select} ${error ? styles.error : ''} ${className}`;
+  const selectClassName = `ds-select ${error ? styles.error : ''} ${className}`;
 
   return (
     <div className={styles.wrapper}>
       <select className={selectClassName} {...props}>
         {options.map((option) => (
-          <option key={option.value} value={option.value}>
+          <option key={option.value} value={option.value} className={styles.option}>
             {option.label}
           </option>
         ))}

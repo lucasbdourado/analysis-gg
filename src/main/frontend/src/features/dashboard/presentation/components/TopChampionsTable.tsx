@@ -168,13 +168,13 @@ export const TopChampionsTable: React.FC = () => {
   const hasMatches = filteredMatches.length > 0;
 
   return (
-    <div className={styles.tableCard}>
-      <h3 className={styles.tableTitle}>Top Champions</h3>
+    <div className={`ds-panel ${styles.tableCard}`}>
+      <h3 className={`ds-heading-md ${styles.tableTitle}`}>Top Champions</h3>
       {!hasMatches ? (
         <div className={styles.emptyState}>No champion statistics to display.</div>
       ) : (
         <div className={styles.tableWrapper}>
-          <table className={styles.table}>
+          <table className={`ds-table ${styles.table}`}>
             <thead>
               <tr>
                 <th className={styles.thLeft} onClick={() => handleSort('championName')}>

@@ -93,9 +93,9 @@ export const DailyPerformanceGrid: React.FC = () => {
   const hasMatches = filteredMatches.length > 0;
 
   return (
-    <div className={styles.gridCard}>
+    <div className={`ds-panel ${styles.gridCard}`}>
       <div className={styles.gridHeader}>
-        <h3 className={styles.gridTitle}>Recent Daily Performance</h3>
+        <h3 className={`ds-heading-md ${styles.gridTitle}`}>Recent Daily Performance</h3>
         <div className={styles.legend}>
           <span className={styles.legendItem}>
             <span className={`${styles.cell} ${styles.win}`} /> Win

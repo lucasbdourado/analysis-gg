@@ -3,7 +3,11 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './routes';
 
 const App: React.FC = () => {
-  return <RouterProvider router={router} />;
+  return (
+    <div className="ds-page">
+      <RouterProvider router={router} />
+    </div>
+  );
 };
 
 export default App;

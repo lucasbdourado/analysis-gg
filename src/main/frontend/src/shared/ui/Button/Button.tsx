@@ -1,10 +1,16 @@
 import React from 'react';
-import styles from './Button.module.css';
 
-export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary' | 'ghost';
+}
 
-export const Button: React.FC<ButtonProps> = ({ children, className = '', ...props }) => {
-  const buttonClassName = `${styles.button} ${className}`;
+export const Button: React.FC<ButtonProps> = ({ 
+  children, 
+  className = '', 
+  variant = 'primary', 
+  ...props 
+}) => {
+  const buttonClassName = `ds-button ds-button-${variant} ${className}`;
 
   return (
     <button className={buttonClassName} {...props}>

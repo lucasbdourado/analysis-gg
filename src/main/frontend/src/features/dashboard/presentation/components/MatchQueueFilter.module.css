@@ -1,96 +1,67 @@
 .container {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text);
+  font-size: var(--font-size-sm);
+  font-weight: 900;
+  color: var(--color-text-strong);
   white-space: nowrap;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
 }
 
 .filterList {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   flex-wrap: wrap;
 }
 
 .filterButton {
-  background: none;
-  border: none;
-  color: var(--text);
-  font-family: var(--sans);
-  font-size: 0.875rem;
-  font-weight: 600;
-  padding: 4px 8px;
-  cursor: pointer;
-  outline: none;
-  position: relative;
-  transition: color 0.2s ease, text-shadow 0.2s ease;
-  user-select: none;
-}
-
-.filterButton:hover:not(:disabled) {
-  color: var(--text-h);
+  min-block-size: 36px;
+  padding: 0 var(--space-4);
+  font-size: var(--font-size-xs);
+  transition: background-color var(--duration-base) var(--ease-standard), border-color var(--duration-base) var(--ease-standard), color var(--duration-base) var(--ease-standard);
 }
 
 .filterButton.active {
-  color: var(--accent-cyan);
-  text-shadow: var(--focus-glow);
-}
-
-.filterButton::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background: var(--accent-gradient);
-  transition: width 0.2s ease, left 0.2s ease;
-}
-
-.filterButton.active::after {
-  width: 100%;
-  left: 0;
-}
-
-.filterButton:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  color: var(--text);
+  background: var(--color-cyan-500) !important;
+  color: #031419 !important;
+  border-color: var(--color-cyan-500) !important;
+  box-shadow: 0 0 10px rgba(22, 185, 220, 0.4);
 }
 
 .resetButton {
-  background: rgba(244, 63, 94, 0.1);
-  border: 1px solid rgba(244, 63, 94, 0.3);
-  color: var(--error-red);
-  border-radius: 4px;
-  font-family: var(--sans);
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 4px 10px;
+  background: rgba(183, 52, 58, 0.1);
+  border: 1px solid rgba(227, 91, 97, 0.3);
+  color: var(--color-crimson-400);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  padding: 6px 12px;
   cursor: pointer;
   outline: none;
-  transition: all 0.2s ease;
+  transition: all var(--duration-base) var(--ease-standard);
   user-select: none;
-  margin-left: 8px;
+  margin-left: var(--space-2);
+  text-transform: uppercase;
 }
 
 .resetButton:hover:not(:disabled) {
-  background: rgba(244, 63, 94, 0.25);
-  border-color: rgba(244, 63, 94, 0.6);
-  box-shadow: var(--error-glow);
+  background: rgba(227, 91, 97, 0.25);
+  border-color: var(--color-crimson-400);
+  box-shadow: 0 0 10px rgba(227, 91, 97, 0.4);
   color: #fff;
 }
 
 .resetButton:disabled {
   opacity: 0.4;
   cursor: not-allowed;
-  border-color: rgba(244, 63, 94, 0.1);
-  background: rgba(244, 63, 94, 0.05);
-  color: var(--text);
+  border-color: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--color-text-muted);
 }

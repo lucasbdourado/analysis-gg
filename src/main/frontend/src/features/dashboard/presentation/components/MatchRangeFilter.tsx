@@ -25,7 +25,7 @@ export const MatchRangeFilter: React.FC = () => {
         value={activeRange}
         onChange={handleChange}
         disabled={totalMatches === 0}
-        className={styles.select}
+        className={`ds-select ${styles.select}`}
       >
         {totalMatches === 0 ? (
           <option value={activeRange}>No matches available</option>

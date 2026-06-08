@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Runeterra Arena Design System</title>
+    <link rel="stylesheet" href="./components.css">
+  </head>
+  <body>
+    <div class="ds-page">
+      <header class="ds-topbar">
+        <a class="ds-brand" href="#">
+          <span class="ds-brand-mark" aria-hidden="true"></span>
+          Runeterra Arena
+        </a>
+        <nav class="ds-nav" aria-label="Documentation">
+          <a class="ds-nav-link" href="#direction">Direction</a>
+          <a class="ds-nav-link" href="#tokens">Tokens</a>
+          <a class="ds-nav-link" href="#components">Components</a>
+          <a class="ds-nav-link" href="#patch-notes">Patch Notes</a>
+          <a class="ds-nav-link" href="#responsive">Responsive</a>
+        </nav>
+        <a class="ds-button ds-button-secondary" href="./examples.html">Examples</a>
+      </header>
+
+      <main>
+        <section class="ds-hero">
+          <div class="ds-container ds-hero-content">
+            <p class="ds-kicker">Design system reference</p>
+            <h1>Runeterra Arena</h1>
+            <p class="ds-lede">A cinematic, competitive fantasy interface inspired by the League of Legends website without copying its proprietary artwork, logos, or exact layouts.</p>
+            <div class="ds-cluster">
+              <a class="ds-button ds-button-primary" href="#components">View Components</a>
+              <a class="ds-button ds-button-ghost" href="./README.md">Read Notes</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="ds-section ds-section-dark" id="direction">
+          <div class="ds-container ds-doc-layout">
+            <aside class="ds-doc-sidebar ds-stack">
+              <a href="#research">Research</a>
+              <a href="#personality">Personality</a>
+              <a href="#tokens">Tokens</a>
+              <a href="#typography">Typography</a>
+              <a href="#components">Components</a>
+              <a href="#patch-notes">Patch Notes</a>
+              <a href="#accessibility">Accessibility</a>
+            </aside>
+            <div class="ds-stack-lg">
+              <section class="ds-panel ds-stack" id="research">
+                <p class="ds-kicker">Reference research</p>
+                <h2>Observed Visual Patterns</h2>
+                <p class="ds-body">The reference site uses a fixed black navigation bar around 80px tall, uppercase navigation labels, circular utility icons, a bright cyan play action, and a large cinematic hero with a centered mark, short uppercase copy, and a gold primary button. The page then moves into large editorial sections, carousels, split content blocks, and a dense institutional footer.</p>
+                <p class="ds-body">The Patch 26.11 article adds a long-form editorial pattern: a centered article header with title, playful subtitle, category, authors, and date; a narrative intro; highlights; then repeated sections for Pride 2026, ranked client changes, route missions, support adjustments, champions, items, runes, ARAM, Arena, bug fixes, future skins, chromas, and related articles.</p>
+                <p class="ds-body">On mobile, the brand and utility icons remain in the top bar, navigation collapses, hero content stacks vertically, the primary button becomes full width, and editorial blocks become a single-column feed.</p>
+              </section>
+
+              <section class="ds-panel ds-stack" id="personality">
+                <p class="ds-kicker">Design direction</p>
+                <h2>Visual Personality</h2>
+                <p class="ds-body">The system should feel cinematic, competitive, premium, and direct. Use dark surfaces as the stage, gold for prestige and primary calls to action, cyan for active digital affordances, and crimson only for destructive or urgent states. The interface should be dramatic in hero areas and disciplined in functional UI.</p>
+              </section>
+
+              <section class="ds-panel ds-stack" id="tokens">
+                <p class="ds-kicker">Color palette</p>
+                <h2>Core Tokens</h2>
+                <div class="ds-swatch-grid">
+                  <div class="ds-swatch"><div class="ds-swatch-color" style="background:#07090d"></div><div class="ds-swatch-body"><strong>Void 950</strong><span class="ds-small">Primary background</span></div></div>
+                  <div class="ds-swatch"><div class="ds-swatch-color" style="background:#cfae63"></div><div class="ds-swatch-body"><strong>Gold 500</strong><span class="ds-small">Primary action</span></div></div>
+                  <div class="ds-swatch"><div class="ds-swatch-color" style="background:#16b9dc"></div><div class="ds-swatch-body"><strong>Cyan 500</strong><span class="ds-small">Active action</span></div></div>
+                  <div class="ds-swatch"><div class="ds-swatch-color" style="background:#b7343a"></div><div class="ds-swatch-body"><strong>Crimson 600</strong><span class="ds-small">Danger and urgency</span></div></div>
+                  <div class="ds-swatch"><div class="ds-swatch-color" style="background:#24705d"></div><div class="ds-swatch-body"><strong>Forest 600</strong><span class="ds-small">Success and confirmation</span></div></div>
+                  <div class="ds-swatch"><div class="ds-swatch-color" style="background:#eef3f7"></div><div class="ds-swatch-body"><strong>Mist 100</strong><span class="ds-small">Text on dark</span></div></div>
+                </div>
+              </section>
+
+              <section class="ds-panel ds-stack" id="typography">
+                <p class="ds-kicker">Typography</p>
+                <h2>Hierarchy Rules</h2>
+                <p class="ds-display">Display Title</p>
+                <p class="ds-lede">Use serif display typography for iconic page titles and condensed sans typography for navigational and functional hierarchy.</p>
+                <p class="ds-body">Body copy should be concise and never compete with media or actions. Use uppercase text for navigation, buttons, badges, tabs, and short labels only.</p>
+              </section>
+
+              <section class="ds-panel ds-stack" id="components">
+                <p class="ds-kicker">Components</p>
+                <h2>Reusable Building Blocks</h2>
+                <div class="ds-component-grid">
+                  <div class="ds-stack">
+                    <h3 class="ds-heading-md">Buttons</h3>
+                    <button class="ds-button ds-button-primary">Gold Primary</button>
+                    <button class="ds-button ds-button-secondary">Cyan Secondary</button>
+                    <button class="ds-button ds-button-ghost">Ghost Button</button>
+                  </div>
+                  <div class="ds-stack">
+                    <h3 class="ds-heading-md">Form</h3>
+                    <label class="ds-field"><span class="ds-label">Region</span><select class="ds-select"><option>Brazil</option><option>North America</option></select></label>
+                    <label class="ds-field"><span class="ds-label">Search</span><input class="ds-input" placeholder="Champion, role, or patch"></label>
+                  </div>
+                  <div class="ds-stack">
+                    <h3 class="ds-heading-md">Feedback</h3>
+                    <div class="ds-alert ds-alert-info"><strong>Information</strong><span>Use for neutral progress and queue states.</span></div>
+                    <div class="ds-alert ds-alert-danger"><strong>Warning</strong><span>Use for irreversible or urgent messages.</span></div>
+                  </div>
+                </div>
+              </section>
+
+              <section class="ds-panel ds-stack" id="patch-notes">
+                <p class="ds-kicker">Patch notes article pattern</p>
+                <h2>Game Update Content</h2>
+                <p class="ds-body">Use this pattern for detailed updates that mix editorial commentary with dense balance data. Keep the article body narrow, separate each gameplay area with H2 headings, and make each repeated change entry scannable through an icon, entity name, designer note, and short change list.</p>
+                <article class="ds-stack-lg">
+                  <div class="ds-patch-summary">
+                    <span class="ds-badge">Game Updates</span>
+                    <h3 class="ds-heading-lg">Patch 26.11 Notes</h3>
+                    <p class="ds-body">Observed content themes include support meta adjustments, ranked client scoreboard simplification, Pride 2026 rewards, champion tuning, item and rune changes, Arena updates, ARAM updates, bug fixes, and future skins and chromas.</p>
+                  </div>
+                  <section class="ds-patch-section">
+                    <h3 class="ds-heading-lg">Champions</h3>
+                    <div class="ds-patch-entry">
+                      <div class="ds-patch-entry-head">
+                        <span class="ds-patch-icon" aria-hidden="true">D</span>
+                        <div>
+                          <h4 class="ds-heading-md">Diana</h4>
+                          <p class="ds-body">Champion entries should start with a concise design rationale before exposing exact ability or stat changes.</p>
+                        </div>
+                      </div>
+                      <ul class="ds-change-list">
+                        <li class="ds-change-item ds-change-buff"><span class="ds-change-label">Base stats:</span> show whether the change is a buff, nerf, or neutral adjustment.</li>
+                        <li class="ds-change-item ds-change-system"><span class="ds-change-label">Ability row:</span> group ability-specific changes under a clear H4 label.</li>
+                      </ul>
+                    </div>
+                  </section>
+                </article>
+              </section>
+
+              <section class="ds-panel ds-stack" id="accessibility">
+                <p class="ds-kicker">Accessibility</p>
+                <h2>Usage Guidelines</h2>
+                <p class="ds-body">Maintain strong contrast on dark surfaces, preserve visible focus rings, and avoid relying on gold alone to communicate state. Keep all interactive targets at least 44px tall, use semantic buttons and links, and ensure mobile full-width buttons have concise labels.</p>
+              </section>
+
+              <section class="ds-panel ds-stack" id="responsive">
+                <p class="ds-kicker">Responsive behavior</p>
+                <h2>Breakpoints</h2>
+                <p class="ds-body">At widths below 900px, split sections collapse to one column and sticky documentation navigation becomes static. Below 760px, primary navigation is hidden behind a menu pattern and actions become full width when placed in clusters. Patch note articles should use a narrow single column, compact metadata, shorter section spacing, and one-column change entries. Below 520px, page gutters reduce to 12px per side and vertical rhythm tightens.</p>
+              </section>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

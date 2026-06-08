@@ -6,7 +6,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 }
 
 export const Input: React.FC<InputProps> = ({ error, className = '', ...props }) => {
-  const inputClassName = `${styles.input} ${error ? styles.error : ''} ${className}`;
+  const inputClassName = `ds-input ${error ? styles.error : ''} ${className}`;
   
   return (
     <div className={styles.wrapper}>

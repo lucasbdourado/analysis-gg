@@ -47,8 +47,10 @@ export const DashboardPage: React.FC = () => {
   if (loading) {
     return (
       <div className={styles.centeredContainer} data-testid="dashboard-loading">
-        <div className={styles.spinner} />
-        <p className={styles.loadingText}>Synchronizing Riot API match history...</p>
+        <div className={`ds-panel ${styles.loadingCard}`}>
+          <div className={styles.spinner} />
+          <p className={styles.loadingText}>Synchronizing Riot API match history...</p>
+        </div>
       </div>
     );
   }
@@ -56,10 +58,10 @@ export const DashboardPage: React.FC = () => {
   if (error || !data) {
     return (
       <div className={styles.centeredContainer} data-testid="dashboard-error">
-        <div className={styles.errorCard}>
-          <h2 className={styles.errorTitle}>Analysis Refused</h2>
+        <div className={`ds-panel ${styles.errorCard}`}>
+          <h2 className={`ds-heading-lg ${styles.errorTitle}`}>Analysis Refused</h2>
           <p className={styles.errorMessage}>{error || 'Failed to retrieve profile analytics.'}</p>
-          <button className={styles.backButton} onClick={handleBackToSearch}>
+          <button className="ds-button ds-button-ghost" onClick={handleBackToSearch}>
             Back to Search
           </button>
         </div>
@@ -76,12 +78,12 @@ export const DashboardPage: React.FC = () => {
       toggleQueueFilter={toggleQueueFilter}
       clearQueueFilters={clearQueueFilters}
     >
-      <div className={styles.dashboardContainer} data-testid="dashboard-success">
+      <div className={`ds-container ds-section ds-stack-lg ${styles.dashboardContainer}`} data-testid="dashboard-success">
         <header className={styles.header}>
           <div className={styles.playerTitleSection}>
-            <h1 className={styles.playerName}>{data.gameName}</h1>
+            <h1 className={`ds-heading-xl ${styles.playerName}`}>{data.gameName}</h1>
             <span className={styles.playerTag}>#{data.tagLine}</span>
-            <span className={styles.regionBadge}>{data.region}</span>
+            <span className="ds-badge">{data.region}</span>
           </div>
           <div className={styles.filtersSection}>
             <MatchQueueFilter />

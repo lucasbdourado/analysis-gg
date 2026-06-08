@@ -76,8 +76,8 @@ export const WeekdayWinRateChart: React.FC = () => {
   const hasMatches = filteredMatches.length > 0;
 
   return (
-    <div className={styles.chartCard}>
-      <h3 className={styles.chartTitle}>Weekday Performance</h3>
+    <div className={`ds-panel ${styles.chartCard}`}>
+      <h3 className={`ds-heading-md ${styles.chartTitle}`}>Weekday Performance</h3>
       {!hasMatches ? (
         <div className={styles.emptyState}>No match records to display.</div>
       ) : (
@@ -85,10 +85,10 @@ export const WeekdayWinRateChart: React.FC = () => {
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={weekdayData} margin={{ top: 10, right: 10, left: -20, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.05)" />
-              <XAxis dataKey="dayName" stroke="var(--text)" fontSize={12} tickLine={false} interval={0} />
-              <YAxis domain={[0, 100]} stroke="var(--text)" fontSize={12} tickLine={false} />
+              <XAxis dataKey="dayName" stroke="var(--color-text-muted)" fontSize={12} tickLine={false} interval={0} />
+              <YAxis domain={[0, 100]} stroke="var(--color-text-muted)" fontSize={12} tickLine={false} />
               <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255, 255, 255, 0.02)' }} />
-              <Bar dataKey="winRate" fill="var(--accent-cyan)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="winRate" fill="var(--color-cyan-500)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

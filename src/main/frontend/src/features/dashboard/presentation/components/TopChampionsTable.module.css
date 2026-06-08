@@ -1,9 +1,4 @@
 .tableCard {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  padding: 1.5rem;
-  border-radius: 8px;
-  backdrop-filter: blur(10px);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -11,11 +6,7 @@
 }
 
 .tableTitle {
-  font-family: var(--heading);
-  font-size: 1.25rem;
-  font-weight: 600;
   margin: 0 0 1.5rem 0;
-  color: var(--text-h);
   text-align: left;
 }
 
@@ -25,25 +16,14 @@
 }
 
 .table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: var(--sans);
-  font-size: 0.9rem;
-  color: var(--text);
-  text-align: center;
-}
-
-.table thead tr {
-  border-bottom: 1px solid var(--card-border);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
 }
 
 .table th {
-  font-weight: 600;
-  color: var(--text-h);
-  padding: 0.75rem 1rem;
   cursor: pointer;
   user-select: none;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition: background-color var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard);
 }
 
 .table th:hover {
@@ -55,21 +35,11 @@
 }
 
 .tr {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-  transition: background-color 0.2s ease;
+  transition: background-color var(--duration-base) var(--ease-standard);
 }
 
 .tr:hover {
   background-color: rgba(255, 255, 255, 0.02);
-}
-
-.tr:last-child {
-  border-bottom: none;
-}
-
-.table td {
-  padding: 0.85rem 1rem;
-  vertical-align: middle;
 }
 
 .tdLeft {
@@ -82,22 +52,22 @@
 
 .championNameCell {
   font-weight: 700;
-  color: var(--text-h);
+  color: var(--color-text-strong);
 }
 
 .kdaCell {
-  font-family: var(--mono);
-  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
 }
 
 .highWinRate {
-  color: var(--accent-cyan);
+  color: var(--color-cyan-300);
   font-weight: 700;
 }
 
 .recordDetail {
-  font-size: 0.75rem;
-  color: var(--text);
+  font-size: var(--font-size-2xs);
+  color: var(--color-text-subtle);
   margin-left: 0.25rem;
 }
 
@@ -106,18 +76,18 @@
   justify-content: center;
   align-items: center;
   height: 200px;
-  color: var(--text);
-  font-size: 1rem;
-  font-family: var(--sans);
-  border: 1px dashed var(--card-border);
-  border-radius: 6px;
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-md);
+  font-family: var(--font-body);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.01);
 }
 
 .sortIndicator {
   margin-left: 0.35rem;
-  color: var(--accent-cyan);
-  font-size: 0.8rem;
+  color: var(--color-cyan-300);
+  font-size: var(--font-size-2xs);
   display: inline-block;
   vertical-align: middle;
   line-height: 1;
@@ -134,7 +104,7 @@
   height: 28px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--color-border);
   display: block;
 }
 
@@ -142,18 +112,18 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background-color: hsl(220, 15%, 20%);
-  color: var(--text-h);
+  background-color: var(--color-void-800);
+  color: var(--color-text-strong);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.85rem;
+  font-size: var(--font-size-xs);
   font-weight: 700;
   text-transform: uppercase;
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--color-border);
   box-sizing: border-box;
 }
 
 .championNameText {
-  color: var(--text-h);
+  color: var(--color-text-strong);
 }

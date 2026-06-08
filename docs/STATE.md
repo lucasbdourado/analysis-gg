@@ -2,14 +2,24 @@
 
 ## Current Change Context
 
-- Active change: `003-api-driven-match-filtering`
-- Spec path: `docs/changes/003-api-driven-match-filtering/change-spec.md`
+- Active change: `004-runeterra-arena-design-system`
+- Spec path: `docs/changes/004-runeterra-arena-design-system/change-spec.md`
 - Open blockers:
   - None
 - Pending decisions:
   - None
 
 ## Change History
+
+### 004 - Runeterra Arena Design System
+
+- Spec path: `docs/changes/004-runeterra-arena-design-system/change-spec.md`
+- Created from: User request, design system research, and Playwright browser observation
+- Summary: Research and spec for applying the Runeterra Arena design system, importing Google Fonts, removing fixed-width wrapper, and updating component styling.
+- Open blockers:
+  - None
+- Pending decisions:
+  - None
 
 ### 003 - API-Driven Match Filtering
 

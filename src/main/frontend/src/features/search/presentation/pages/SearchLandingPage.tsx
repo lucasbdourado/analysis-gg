@@ -4,10 +4,11 @@ import styles from './SearchLandingPage.module.css';
 
 export const SearchLandingPage: React.FC = () => {
   return (
-    <div className={styles.pageContainer}>
-      <main className={styles.mainCard}>
+    <div className="ds-hero">
+      <main className="ds-hero-content">
         <div className={styles.logoSection}>
-          <h1 className={styles.title}>Analysis.GG</h1>
+          <span className="ds-kicker">Riot Games Analytics</span>
+          <h1 className="ds-display">Analysis.GG</h1>
           <p className={styles.subtitle}>
             League of Legends Performance Dashboard
           </p>

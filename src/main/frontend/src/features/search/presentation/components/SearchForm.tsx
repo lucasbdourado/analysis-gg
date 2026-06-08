@@ -53,7 +53,7 @@ export const SearchForm: React.FC = () => {
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form className={`ds-panel ds-stack ${styles.form}`} onSubmit={handleSubmit}>
       <Input 
         id="riot-id-input"
         placeholder="Riot ID (e.g., Hide on bush#KR1)"

@@ -30,7 +30,7 @@ export const MatchQueueFilter: React.FC = () => {
             <button
               key={item.key}
               data-testid={`filter-btn-${item.key.toLowerCase().replace('_', '-')}`}
-              className={`${styles.filterButton} ${isActive ? styles.active : ''}`}
+              className={`ds-button ds-button-ghost ${styles.filterButton} ${isActive ? styles.active : ''}`}
               onClick={() => toggleQueueFilter(item.key)}
               disabled={isDisabled}
               aria-pressed={isActive}
