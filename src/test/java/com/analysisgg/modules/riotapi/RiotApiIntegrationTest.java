@@ -94,6 +94,8 @@ public class RiotApiIntegrationTest {
                         .withHeader("Content-Type", "application/json")
                         .withBody("[\"BR1_102\", \"BR1_101\"]")));
 
+        stubRankedEntries();
+
         // Stub match details fetch
         String matchDetail1 = createMatchDetailJson("BR1_101", "lucas-puuid-123", true, 8, 2, 10, "Ahri");
         String matchDetail2 = createMatchDetailJson("BR1_102", "lucas-puuid-123", false, 3, 5, 4, "LeeSin");
@@ -117,6 +119,11 @@ public class RiotApiIntegrationTest {
                 .andExpect(jsonPath("$.puuid", is("lucas-puuid-123")))
                 .andExpect(jsonPath("$.gameName", is("Lucas")))
                 .andExpect(jsonPath("$.tagLine", is("BR1")))
+                .andExpect(jsonPath("$.rankedQueues.soloDuo.tier", is("GOLD")))
+                .andExpect(jsonPath("$.rankedQueues.soloDuo.rank", is("II")))
+                .andExpect(jsonPath("$.rankedQueues.soloDuo.leaguePoints", is(37)))
+                .andExpect(jsonPath("$.rankedQueues.soloDuo.winRate", closeTo(54 * 100.0 / 102, 0.001)))
+                .andExpect(jsonPath("$.rankedQueues.flex.tier").doesNotExist())
                 .andExpect(jsonPath("$.matches", hasSize(2)))
                 .andExpect(jsonPath("$.matches[0].matchId", is("BR1_102"))) // Sorted alphabetically reverse order
                 .andExpect(jsonPath("$.matches[0].championName", is("LeeSin")))
@@ -125,6 +132,7 @@ public class RiotApiIntegrationTest {
 
         // Verify that WireMock received requests
         wireMockServer.verify(1, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/Lucas/BR1")));
+        wireMockServer.verify(1, getRequestedFor(urlEqualTo("/br1.api.riotgames.com/lol/league/v4/entries/by-puuid/lucas-puuid-123")));
         wireMockServer.verify(1, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/by-puuid/lucas-puuid-123/ids?start=0&count=2")));
         wireMockServer.verify(1, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/BR1_101")));
         wireMockServer.verify(1, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/BR1_102")));
@@ -141,6 +149,7 @@ public class RiotApiIntegrationTest {
         // Verify that profile resolution and match details are served from cache (call count remains 1)
         // whereas match IDs lists are fetched again (call count becomes 2)
         wireMockServer.verify(1, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/Lucas/BR1")));
+        wireMockServer.verify(2, getRequestedFor(urlEqualTo("/br1.api.riotgames.com/lol/league/v4/entries/by-puuid/lucas-puuid-123")));
         wireMockServer.verify(2, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/by-puuid/lucas-puuid-123/ids?start=0&count=2")));
         wireMockServer.verify(1, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/BR1_101")));
         wireMockServer.verify(1, getRequestedFor(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/BR1_102")));
@@ -194,6 +203,8 @@ public class RiotApiIntegrationTest {
                         .withHeader("Content-Type", "application/json")
                         .withBody("[\"BR1_102\", \"BR1_101\"]")));
 
+        stubRankedEntries();
+
         // Stub match details: one succeeds, one fails (500)
         String matchDetail1 = createMatchDetailJson("BR1_101", "lucas-puuid-123", true, 8, 2, 10, "Ahri");
         wireMockServer.stubFor(get(urlEqualTo("/americas.api.riotgames.com/lol/match/v5/matches/BR1_101"))
@@ -213,9 +224,28 @@ public class RiotApiIntegrationTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.puuid", is("lucas-puuid-123")))
+                .andExpect(jsonPath("$.rankedQueues.soloDuo.tier", is("GOLD")))
                 .andExpect(jsonPath("$.matches", hasSize(1))) // Only the successful match is returned
                 .andExpect(jsonPath("$.matches[0].matchId", is("BR1_101")))
                 .andExpect(jsonPath("$.matches[0].championName", is("Ahri")));
+    }
+
+    private void stubRankedEntries() {
+        wireMockServer.stubFor(get(urlEqualTo("/br1.api.riotgames.com/lol/league/v4/entries/by-puuid/lucas-puuid-123"))
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("""
+                                [
+                                  {
+                                    "queueType": "RANKED_SOLO_5x5",
+                                    "tier": "GOLD",
+                                    "rank": "II",
+                                    "leaguePoints": 37,
+                                    "wins": 54,
+                                    "losses": 48
+                                  }
+                                ]
+                                """)));
     }
 
     private String createMatchDetailJson(

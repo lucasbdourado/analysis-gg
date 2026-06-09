@@ -11,6 +11,7 @@ import com.analysisgg.modules.riotapi.domain.exception.PlayerNotFoundException;
 import com.analysisgg.modules.riotapi.domain.exception.RateLimitExceededException;
 import com.analysisgg.modules.riotapi.domain.exception.RiotApiException;
 import com.analysisgg.modules.riotapi.domain.model.MatchSummary;
+import com.analysisgg.modules.riotapi.domain.model.RankedQueueSummary;
 import com.analysisgg.modules.riotapi.domain.valueobject.Puuid;
 import com.analysisgg.modules.riotapi.domain.valueobject.Region;
 import com.analysisgg.modules.riotapi.domain.valueobject.RiotId;
@@ -98,6 +99,47 @@ class RiotApiClientAdapterTest {
         List<String> matchIds = adapter.fetchMatchIds(new Puuid("puuid-123"), new Region("br1"), 5);
 
         assertThat(matchIds).containsExactly("BR1_3", "BR1_2", "BR1_1");
+        server.verify();
+    }
+
+    @Test
+    void shouldFetchRankedEntriesUsingPlatformHostAndMapWinRate() {
+        String rankedEntriesJson = """
+                [
+                  {
+                    "queueType": "RANKED_SOLO_5x5",
+                    "tier": "GOLD",
+                    "rank": "II",
+                    "leaguePoints": 37,
+                    "wins": 54,
+                    "losses": 48
+                  },
+                  {
+                    "queueType": "RANKED_FLEX_SR",
+                    "tier": "SILVER",
+                    "rank": "I",
+                    "leaguePoints": 12,
+                    "wins": 10,
+                    "losses": 0
+                  }
+                ]
+                """;
+
+        server.expect(requestTo("https://br1.api.riotgames.com/lol/league/v4/entries/by-puuid/puuid-123"))
+                .andExpect(header("X-Riot-Token", "test-token"))
+                .andRespond(withSuccess(rankedEntriesJson, MediaType.APPLICATION_JSON));
+
+        List<RankedQueueSummary> entries = adapter.fetchRankedEntries(new Puuid("puuid-123"), new Region("br1"));
+
+        assertThat(entries).hasSize(2);
+        assertThat(entries.get(0).queueType()).isEqualTo("RANKED_SOLO_5x5");
+        assertThat(entries.get(0).tier()).isEqualTo("GOLD");
+        assertThat(entries.get(0).rank()).isEqualTo("II");
+        assertThat(entries.get(0).leaguePoints()).isEqualTo(37);
+        assertThat(entries.get(0).wins()).isEqualTo(54);
+        assertThat(entries.get(0).losses()).isEqualTo(48);
+        assertThat(entries.get(0).winRate()).isEqualTo(54 * 100.0 / 102);
+        assertThat(entries.get(1).winRate()).isEqualTo(100.0);
         server.verify();
     }
 

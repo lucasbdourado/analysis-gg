@@ -1,6 +1,7 @@
 package com.analysisgg.modules.riotapi.application.port;
 
 import com.analysisgg.modules.riotapi.domain.model.MatchSummary;
+import com.analysisgg.modules.riotapi.domain.model.RankedQueueSummary;
 import com.analysisgg.modules.riotapi.domain.valueobject.Puuid;
 import com.analysisgg.modules.riotapi.domain.valueobject.Region;
 import com.analysisgg.modules.riotapi.domain.valueobject.RiotId;
@@ -40,6 +41,16 @@ public interface RiotApiClientPort {
      * @throws com.analysisgg.modules.riotapi.domain.exception.RiotApiException if the external API returns an error
      */
     List<String> fetchMatchIds(Puuid puuid, Region region, int count, Integer queue);
+
+    /**
+     * Fetches current ranked League-v4 queue entries for the given player.
+     *
+     * @param puuid the player's PUUID
+     * @param region the platform region (e.g., br1)
+     * @return Riot ranked entries mapped to domain queue summaries
+     * @throws com.analysisgg.modules.riotapi.domain.exception.RiotApiException if the external API returns an error
+     */
+    List<RankedQueueSummary> fetchRankedEntries(Puuid puuid, Region region);
 
     /**
      * Fetches details of a specific match and maps it to a MatchSummary for the target player.

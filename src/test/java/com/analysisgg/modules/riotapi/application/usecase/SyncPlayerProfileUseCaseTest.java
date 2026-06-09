@@ -9,6 +9,7 @@ import com.analysisgg.modules.riotapi.application.port.PlayerProfileCachePort;
 import com.analysisgg.modules.riotapi.application.port.RiotApiClientPort;
 import com.analysisgg.modules.riotapi.domain.model.MatchSummary;
 import com.analysisgg.modules.riotapi.domain.model.PlayerAnalytics;
+import com.analysisgg.modules.riotapi.domain.model.RankedQueueSummary;
 import com.analysisgg.modules.riotapi.domain.model.RiotAccount;
 import com.analysisgg.modules.riotapi.domain.valueobject.Puuid;
 import com.analysisgg.modules.riotapi.domain.valueobject.Region;
@@ -48,6 +49,9 @@ class SyncPlayerProfileUseCaseTest {
         MatchSummary match2 = new MatchSummary("KR_2", 1500, 2000, 440, false, 2, "Ahri", 2, 6, 4, 150, 10);
 
         when(playerProfileCachePort.getProfile(riotId, region)).thenReturn(Optional.of(cachedAccount));
+        when(riotApiClientPort.fetchRankedEntries(puuid, region)).thenReturn(List.of(
+                RankedQueueSummary.ranked("RANKED_SOLO_5x5", "GOLD", "II", 37, 54, 48)
+        ));
         when(riotApiClientPort.fetchMatchIds(puuid, region, 2)).thenReturn(List.of("KR_1", "KR_2"));
         when(playerProfileCachePort.getMatchSummary("KR_1", puuid, region)).thenReturn(Optional.of(match1));
         when(playerProfileCachePort.getMatchSummary("KR_2", puuid, region)).thenReturn(Optional.of(match2));
@@ -58,8 +62,13 @@ class SyncPlayerProfileUseCaseTest {
         assertThat(analytics.gameName()).isEqualTo(riotId.gameName());
         assertThat(analytics.tagLine()).isEqualTo(riotId.tagLine());
         assertThat(analytics.region()).isEqualTo(region.value());
+        assertThat(analytics.rankedQueues().soloDuo().tier()).isEqualTo("GOLD");
+        assertThat(analytics.rankedQueues().soloDuo().winRate()).isEqualTo(54 * 100.0 / 102);
+        assertThat(analytics.rankedQueues().flex().tier()).isNull();
         assertThat(analytics.matches()).containsExactly(match1, match2);
 
+        verify(riotApiClientPort).fetchRankedEntries(puuid, region);
+        verify(riotApiClientPort).fetchMatchIds(puuid, region, 2);
         verifyNoMoreInteractions(riotApiClientPort);
     }
 
@@ -74,6 +83,7 @@ class SyncPlayerProfileUseCaseTest {
 
         when(playerProfileCachePort.getProfile(riotId, region)).thenReturn(Optional.empty());
         when(riotApiClientPort.resolvePuuid(riotId, region)).thenReturn(puuid);
+        when(riotApiClientPort.fetchRankedEntries(puuid, region)).thenReturn(List.of());
         when(riotApiClientPort.fetchMatchIds(puuid, region, 1)).thenReturn(List.of("KR_1"));
         when(playerProfileCachePort.getMatchSummary("KR_1", puuid, region)).thenReturn(Optional.empty());
         when(riotApiClientPort.fetchMatchDetail("KR_1", puuid, region)).thenReturn(match1);
@@ -81,6 +91,8 @@ class SyncPlayerProfileUseCaseTest {
         PlayerAnalytics analytics = useCase.execute(riotId, region, 1);
 
         assertThat(analytics.matches()).containsExactly(match1);
+        assertThat(analytics.rankedQueues().soloDuo().tier()).isNull();
+        assertThat(analytics.rankedQueues().flex().tier()).isNull();
 
         verify(playerProfileCachePort).putProfile(riotId, region, resolvedAccount);
         verify(playerProfileCachePort).putMatchSummary("KR_1", puuid, region, match1);
@@ -96,6 +108,7 @@ class SyncPlayerProfileUseCaseTest {
         MatchSummary match1 = new MatchSummary("KR_1", 1800, 1000, 420, true, 1, "Jax", 5, 2, 5, 200, 20);
 
         when(playerProfileCachePort.getProfile(riotId, region)).thenReturn(Optional.of(cachedAccount));
+        when(riotApiClientPort.fetchRankedEntries(puuid, region)).thenReturn(List.of());
         when(riotApiClientPort.fetchMatchIds(puuid, region, 2)).thenReturn(List.of("KR_1", "KR_2"));
 
         // Match 1 is cached
@@ -122,6 +135,7 @@ class SyncPlayerProfileUseCaseTest {
         MatchSummary match3 = new MatchSummary("KR_3", 1600, 3000, 420, true, 3, "Zed", 10, 1, 3, 180, 15);
 
         when(playerProfileCachePort.getProfile(riotId, region)).thenReturn(Optional.of(cachedAccount));
+        when(riotApiClientPort.fetchRankedEntries(puuid, region)).thenReturn(List.of());
         when(riotApiClientPort.fetchMatchIds(puuid, region, 3)).thenReturn(List.of("KR_1", "KR_2", "KR_3"));
 
         when(playerProfileCachePort.getMatchSummary(anyString(), eq(puuid), eq(region))).thenReturn(Optional.empty());
@@ -161,13 +175,16 @@ class SyncPlayerProfileUseCaseTest {
         MatchSummary match1 = new MatchSummary("KR_1", 1800, 1000, 420, true, 1, "Jax", 5, 2, 5, 200, 20);
 
         when(playerProfileCachePort.getProfile(riotId, region)).thenReturn(Optional.of(cachedAccount));
+        when(riotApiClientPort.fetchRankedEntries(puuid, region)).thenReturn(List.of());
         when(riotApiClientPort.fetchMatchIds(puuid, region, 1, queue)).thenReturn(List.of("KR_1"));
         when(playerProfileCachePort.getMatchSummary("KR_1", puuid, region)).thenReturn(Optional.of(match1));
 
         PlayerAnalytics analytics = useCase.execute(riotId, region, 1, queue);
 
         assertThat(analytics.matches()).containsExactly(match1);
+        assertThat(analytics.rankedQueues().soloDuo().queueType()).isEqualTo("RANKED_SOLO_5x5");
         verify(riotApiClientPort).fetchMatchIds(puuid, region, 1, queue);
+        verify(riotApiClientPort).fetchRankedEntries(puuid, region);
         verifyNoMoreInteractions(riotApiClientPort);
     }
 }

@@ -1,0 +1,172 @@
+.summary {
+  display: grid;
+  align-items: center;
+  gap: var(--space-8);
+  grid-template-columns: minmax(12rem, 0.65fr) minmax(0, 1.35fr);
+  min-width: 0;
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 1.625rem;
+  border: var(--border-hairline);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-muted);
+  font-size: var(--font-size-lg);
+  line-height: 1;
+}
+
+.identityText {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.riotId {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.name {
+  color: var(--color-text-strong);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+  line-height: var(--line-height-ui);
+}
+
+.tag,
+.region {
+  color: var(--color-text-muted);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  line-height: var(--line-height-ui);
+}
+
+.region {
+  color: var(--color-gold-300);
+}
+
+.queues {
+  display: grid;
+  align-items: stretch;
+  gap: var(--space-4);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.queueItem {
+  display: grid;
+  align-items: center;
+  gap: var(--space-4);
+  grid-template-columns: 5rem minmax(0, 1fr);
+  min-width: 0;
+  min-height: 7rem;
+  padding: var(--space-4);
+  border: var(--border-hairline);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 12% 50%, rgba(207, 174, 99, 0.14), transparent 34%),
+    rgba(7, 9, 13, 0.52);
+}
+
+.emblemFrame {
+  display: grid;
+  place-items: center;
+  width: 5rem;
+  height: 5rem;
+}
+
+.emblem {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.unrankedMark {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border: var(--border-hairline);
+  border-radius: 50%;
+  color: var(--color-text-subtle);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-xl);
+  font-weight: 800;
+}
+
+.queueDetails {
+  display: grid;
+  align-content: center;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.queueLabel {
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  line-height: var(--line-height-ui);
+  text-transform: uppercase;
+}
+
+.rankText {
+  color: var(--color-text-strong);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-md);
+  font-weight: 800;
+  line-height: var(--line-height-ui);
+}
+
+.queueStats {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  line-height: var(--line-height-ui);
+  white-space: nowrap;
+}
+
+.statDivider {
+  color: var(--color-border-strong);
+}
+
+@media (max-width: 720px) {
+  .summary {
+    grid-template-columns: 1fr;
+  }
+
+  .queues {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 420px) {
+  .queueItem {
+    gap: var(--space-3);
+    grid-template-columns: 4rem minmax(0, 1fr);
+    padding: var(--space-3);
+  }
+
+  .emblemFrame {
+    width: 4rem;
+    height: 4rem;
+  }
+}

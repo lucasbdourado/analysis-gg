@@ -4,6 +4,7 @@ import com.analysisgg.modules.riotapi.application.port.PlayerProfileCachePort;
 import com.analysisgg.modules.riotapi.application.port.RiotApiClientPort;
 import com.analysisgg.modules.riotapi.domain.model.MatchSummary;
 import com.analysisgg.modules.riotapi.domain.model.PlayerAnalytics;
+import com.analysisgg.modules.riotapi.domain.model.RankedQueues;
 import com.analysisgg.modules.riotapi.domain.model.RiotAccount;
 import com.analysisgg.modules.riotapi.domain.valueobject.Puuid;
 import com.analysisgg.modules.riotapi.domain.valueobject.Region;
@@ -44,6 +45,8 @@ public class SyncPlayerProfileUseCase {
                 });
 
         Puuid puuid = new Puuid(profile.puuid());
+        RankedQueues rankedQueues = RankedQueues.fromEntries(riotApiClientPort.fetchRankedEntries(puuid, region));
+
         List<String> matchIds;
         if (queue != null) {
             matchIds = riotApiClientPort.fetchMatchIds(puuid, region, count, queue);
@@ -95,6 +98,7 @@ public class SyncPlayerProfileUseCase {
                 profile.gameName(),
                 profile.tagLine(),
                 region.value(),
+                rankedQueues,
                 matches
         );
     }

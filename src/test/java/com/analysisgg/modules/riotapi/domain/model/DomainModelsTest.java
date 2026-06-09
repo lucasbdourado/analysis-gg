@@ -67,11 +67,30 @@ class DomainModelsTest {
         assertThat(analytics.gameName()).isEqualTo("Faker");
         assertThat(analytics.tagLine()).isEqualTo("KR1");
         assertThat(analytics.region()).isEqualTo("kr");
+        assertThat(analytics.rankedQueues().soloDuo().queueType()).isEqualTo("RANKED_SOLO_5x5");
+        assertThat(analytics.rankedQueues().flex().queueType()).isEqualTo("RANKED_FLEX_SR");
         assertThat(analytics.matches()).hasSize(1);
 
         // Ensure the list is immutable/copied defensively
         assertThatThrownBy(() -> analytics.matches().add(new MatchSummary(
             "BR1_67890", 1800L, 1620000000000L, 420, false, 266, "Aatrox", 1, 5, 2, 150, 10
         ))).isInstanceOf(UnsupportedOperationException.class);
+    }
+
+    @Test
+    void shouldCreateRankedQueuesFromEntriesWithUnrankedMissingQueues() {
+        RankedQueues rankedQueues = RankedQueues.fromEntries(List.of(
+                RankedQueueSummary.ranked("RANKED_SOLO_5x5", "GOLD", "II", 37, 54, 48)
+        ));
+
+        assertThat(rankedQueues.soloDuo().tier()).isEqualTo("GOLD");
+        assertThat(rankedQueues.soloDuo().rank()).isEqualTo("II");
+        assertThat(rankedQueues.soloDuo().leaguePoints()).isEqualTo(37);
+        assertThat(rankedQueues.soloDuo().wins()).isEqualTo(54);
+        assertThat(rankedQueues.soloDuo().losses()).isEqualTo(48);
+        assertThat(rankedQueues.soloDuo().winRate()).isEqualTo(54 * 100.0 / 102);
+        assertThat(rankedQueues.flex().queueType()).isEqualTo("RANKED_FLEX_SR");
+        assertThat(rankedQueues.flex().tier()).isNull();
+        assertThat(rankedQueues.flex().winRate()).isNull();
     }
 }

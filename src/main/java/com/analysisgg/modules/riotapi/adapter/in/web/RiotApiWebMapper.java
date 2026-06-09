@@ -2,6 +2,8 @@ package com.analysisgg.modules.riotapi.adapter.in.web;
 
 import com.analysisgg.modules.riotapi.domain.model.MatchSummary;
 import com.analysisgg.modules.riotapi.domain.model.PlayerAnalytics;
+import com.analysisgg.modules.riotapi.domain.model.RankedQueueSummary;
+import com.analysisgg.modules.riotapi.domain.model.RankedQueues;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -24,7 +26,35 @@ public class RiotApiWebMapper {
                 domain.gameName(),
                 domain.tagLine(),
                 domain.region(),
+                toRankedQueuesResponse(domain.rankedQueues()),
                 matches
+        );
+    }
+
+    public RankedQueuesResponse toRankedQueuesResponse(RankedQueues domain) {
+        if (domain == null) {
+            return null;
+        }
+
+        return new RankedQueuesResponse(
+                toRankedQueueSummaryResponse(domain.soloDuo()),
+                toRankedQueueSummaryResponse(domain.flex())
+        );
+    }
+
+    public RankedQueueSummaryResponse toRankedQueueSummaryResponse(RankedQueueSummary domain) {
+        if (domain == null) {
+            return null;
+        }
+
+        return new RankedQueueSummaryResponse(
+                domain.queueType(),
+                domain.tier(),
+                domain.rank(),
+                domain.leaguePoints(),
+                domain.wins(),
+                domain.losses(),
+                domain.winRate()
         );
     }
 

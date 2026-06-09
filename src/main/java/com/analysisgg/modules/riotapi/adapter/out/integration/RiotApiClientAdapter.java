@@ -1,6 +1,7 @@
 package com.analysisgg.modules.riotapi.adapter.out.integration;
 
 import com.analysisgg.modules.riotapi.adapter.out.integration.dto.RiotAccountDto;
+import com.analysisgg.modules.riotapi.adapter.out.integration.dto.RiotLeagueEntryDto;
 import com.analysisgg.modules.riotapi.adapter.out.integration.dto.RiotMatchDto;
 import com.analysisgg.modules.riotapi.adapter.out.integration.mapper.RiotMatchMapper;
 import com.analysisgg.modules.riotapi.application.port.RiotApiClientPort;
@@ -8,11 +9,10 @@ import com.analysisgg.modules.riotapi.domain.exception.PlayerNotFoundException;
 import com.analysisgg.modules.riotapi.domain.exception.RateLimitExceededException;
 import com.analysisgg.modules.riotapi.domain.exception.RiotApiException;
 import com.analysisgg.modules.riotapi.domain.model.MatchSummary;
+import com.analysisgg.modules.riotapi.domain.model.RankedQueueSummary;
 import com.analysisgg.modules.riotapi.domain.valueobject.Puuid;
 import com.analysisgg.modules.riotapi.domain.valueobject.Region;
 import com.analysisgg.modules.riotapi.domain.valueobject.RiotId;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -124,6 +124,39 @@ public class RiotApiClientAdapter implements RiotApiClientPort {
     }
 
     @Override
+    public List<RankedQueueSummary> fetchRankedEntries(Puuid puuid, Region region) {
+        return executeWithRetry(() -> {
+            String host = resolvePlatformHost(region);
+
+            List<RiotLeagueEntryDto> entries = restClient.get()
+                    .uri("https://{host}/lol/league/v4/entries/by-puuid/{puuid}", host, puuid.value())
+                    .retrieve()
+                    .onStatus(status -> status.value() == 429, (req, resp) -> {
+                        throw new RateLimitExceededException("Rate limit exceeded querying Riot API");
+                    })
+                    .onStatus(status -> status.isError(), (req, resp) -> {
+                        throw new RiotApiException("Riot API error when fetching ranked entries: " + resp.getStatusCode());
+                    })
+                    .body(new ParameterizedTypeReference<List<RiotLeagueEntryDto>>() {});
+
+            if (entries == null) {
+                return List.of();
+            }
+
+            return entries.stream()
+                    .map(entry -> RankedQueueSummary.ranked(
+                            entry.queueType(),
+                            entry.tier(),
+                            entry.rank(),
+                            entry.leaguePoints(),
+                            entry.wins(),
+                            entry.losses()
+                    ))
+                    .toList();
+        });
+    }
+
+    @Override
     public MatchSummary fetchMatchDetail(String matchId, Puuid targetPuuid, Region region) {
         return executeWithRetry(() -> {
             String host = resolveHost(region);
@@ -153,6 +186,18 @@ public class RiotApiClientAdapter implements RiotApiClientPort {
             case "br1", "na1" -> "americas.api.riotgames.com";
             case "euw1", "eune1" -> "europe.api.riotgames.com";
             case "kr" -> "asia.api.riotgames.com";
+            default -> throw new IllegalArgumentException("Unsupported region value: " + region.value());
+        };
+    }
+
+    private String resolvePlatformHost(Region region) {
+        String val = region.value().toLowerCase().trim();
+        return switch (val) {
+            case "br1" -> "br1.api.riotgames.com";
+            case "na1" -> "na1.api.riotgames.com";
+            case "euw1" -> "euw1.api.riotgames.com";
+            case "eune1" -> "eun1.api.riotgames.com";
+            case "kr" -> "kr.api.riotgames.com";
             default -> throw new IllegalArgumentException("Unsupported region value: " + region.value());
         };
     }

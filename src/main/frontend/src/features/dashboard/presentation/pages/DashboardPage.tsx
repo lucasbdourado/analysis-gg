@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { DashboardProvider } from '../context/DashboardContext';
 import { MatchRangeFilter } from '../components/MatchRangeFilter';
 import { MatchQueueFilter } from '../components/MatchQueueFilter';
+import { AccountRankedSummary } from '../components/AccountRankedSummary';
 import { usePlayerAnalytics } from '../hooks/usePlayerAnalytics';
 import { WeekdayWinRateChart } from '../components/WeekdayWinRateChart';
 import { DailyPerformanceGrid } from '../components/DailyPerformanceGrid';
@@ -80,18 +81,22 @@ export const DashboardPage: React.FC = () => {
     >
       <div className={`ds-container ds-section ds-stack-lg ${styles.dashboardContainer}`} data-testid="dashboard-success">
         <header className={styles.header}>
-          <div className={styles.playerTitleSection}>
-            <h1 className={`ds-heading-xl ${styles.playerName}`}>{data.gameName}</h1>
-            <span className={styles.playerTag}>#{data.tagLine}</span>
-            <span className="ds-badge">{data.region}</span>
-          </div>
-          <div className={styles.filtersSection}>
+          <div className={styles.filtersSection} data-testid="dashboard-filters">
             <MatchQueueFilter />
             <MatchRangeFilter />
           </div>
         </header>
+
+        <div data-testid="dashboard-profile">
+          <AccountRankedSummary
+            gameName={data.gameName}
+            tagLine={data.tagLine}
+            region={data.region}
+            rankedQueues={data.rankedQueues}
+          />
+        </div>
         
-        <main className={styles.mainContent}>
+        <main className={styles.mainContent} data-testid="dashboard-analytics">
           <div className={styles.topWidgetsGrid}>
             <WeekdayWinRateChart />
             <DailyPerformanceGrid />

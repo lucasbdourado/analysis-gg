@@ -56,6 +56,8 @@ class RiotApiControllerTest {
                 .andExpect(jsonPath("$.gameName").value("Ahri"))
                 .andExpect(jsonPath("$.tagLine").value("123"))
                 .andExpect(jsonPath("$.region").value("br1"))
+                .andExpect(jsonPath("$.rankedQueues.soloDuo.queueType").value("RANKED_SOLO_5x5"))
+                .andExpect(jsonPath("$.rankedQueues.flex.queueType").value("RANKED_FLEX_SR"))
                 .andExpect(jsonPath("$.matches").isEmpty());
 
         verify(syncPlayerProfileUseCase).execute(riotId, region, count);
