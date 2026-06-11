@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { WeekdayWinRateChart } from './WeekdayWinRateChart';
 import { DashboardProvider } from '../context/DashboardContext';
@@ -30,7 +30,15 @@ vi.mock('recharts', async () => {
       return null;
     },
     CartesianGrid: () => <div />,
-    Bar: () => <div />,
+    Bar: ({ children }: any) => <div data-testid="bar-element">{children}</div>,
+    Cell: ({ fill, onClick, ...props }: any) => (
+      <button
+        data-testid="bar-cell"
+        data-fill={fill}
+        onClick={onClick}
+        {...props}
+      />
+    ),
   };
 });
 
@@ -254,6 +262,43 @@ describe('WeekdayWinRateChart Component Tests', () => {
       const xAxisEl = screen.getByTestId('xAxis');
       const props = JSON.parse(xAxisEl.getAttribute('data-props') || '{}');
       expect(props.interval).toBe(0);
+    });
+  });
+
+  describe('Interactivity and Cell Selection', () => {
+    it('should select weekday when clicking on cell and toggle off on second click', () => {
+      const matches = [createLocalMatch(1, true)]; // Monday match
+      const { container } = render(
+        <DashboardProvider rawData={matches}>
+          <WeekdayWinRateChart />
+        </DashboardProvider>
+      );
+
+      // Verify cells are rendered. Monday is at index 0.
+      const cells = screen.getAllByTestId('bar-cell');
+      expect(cells).toHaveLength(7);
+
+      // Verify that all cells initially have the standard cyan color
+      cells.forEach(cell => {
+        expect(cell.getAttribute('data-fill')).toBe('var(--color-cyan-500)');
+      });
+
+      // Click the Monday cell
+      fireEvent.click(cells[0]);
+
+      // Monday cell should now have the gold color
+      expect(cells[0].getAttribute('data-fill')).toBe('var(--color-gold-500)');
+
+      // Other cells should still be cyan
+      for (let i = 1; i < 7; i++) {
+        expect(cells[i].getAttribute('data-fill')).toBe('var(--color-cyan-500)');
+      }
+
+      // Click the Monday cell again to deselect
+      fireEvent.click(cells[0]);
+
+      // Monday cell should revert to cyan
+      expect(cells[0].getAttribute('data-fill')).toBe('var(--color-cyan-500)');
     });
   });
 });

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, Cell, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { useDashboard } from '../context/DashboardContext';
 import type { MatchSummary } from '../../domain/MatchSummary';
 import styles from './WeekdayWinRateChart.module.css';
@@ -38,7 +38,7 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label })
 };
 
 export const WeekdayWinRateChart: React.FC = () => {
-  const { roleFilteredMatches } = useDashboard();
+  const { roleFilteredMatches, selectedWeekday, setSelectedWeekday } = useDashboard();
 
   const weekdayData = useMemo(() => {
     const days = [
@@ -88,7 +88,25 @@ export const WeekdayWinRateChart: React.FC = () => {
               <XAxis dataKey="dayName" stroke="var(--color-text-muted)" fontSize={12} tickLine={false} interval={0} />
               <YAxis domain={[0, 100]} stroke="var(--color-text-muted)" fontSize={12} tickLine={false} />
               <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255, 255, 255, 0.02)' }} />
-              <Bar dataKey="winRate" fill="var(--color-cyan-500)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="winRate" radius={[4, 4, 0, 0]}>
+                {weekdayData.map((entry, index) => {
+                  const isSelected = selectedWeekday === entry.dayName;
+                  return (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={isSelected ? 'var(--color-gold-500)' : 'var(--color-cyan-500)'}
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => {
+                        if (selectedWeekday === entry.dayName) {
+                          setSelectedWeekday(null);
+                        } else {
+                          setSelectedWeekday(entry.dayName);
+                        }
+                      }}
+                    />
+                  );
+                })}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>

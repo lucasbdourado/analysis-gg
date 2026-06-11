@@ -461,4 +461,87 @@ describe('DashboardContext Unit & Integration Tests', () => {
       expect(contextVal.roleFilteredMatches).toHaveLength(6);
     });
   });
+
+  describe('Weekday & Combined Filtering Logic', () => {
+    const createWeekdayMatch = (dayOfWeekIndex: number, position: string, matchId: string): MatchSummary => {
+      const date = new Date();
+      const currentDay = date.getDay();
+      const diff = dayOfWeekIndex - currentDay;
+      date.setDate(date.getDate() + diff);
+      date.setHours(12, 0, 0, 0);
+      return {
+        matchId,
+        gameDuration: 1200,
+        gameCreation: date.getTime(),
+        queueId: 420,
+        win: true,
+        championId: 1,
+        championName: 'Champion',
+        kills: 5,
+        deaths: 3,
+        assists: 10,
+        totalMinionsKilled: 150,
+        neutralMinionsKilled: 20,
+        teamPosition: position,
+      };
+    };
+
+    it('should filter matches by selected weekday and combinations correctly', () => {
+      let contextVal!: DashboardContextProps;
+      const rawData = [
+        createWeekdayMatch(1, 'TOP', 'match-mon-top'),    // Monday (1) Top
+        createWeekdayMatch(1, 'MIDDLE', 'match-mon-mid'), // Monday (1) Mid
+        createWeekdayMatch(2, 'MIDDLE', 'match-tue-mid'), // Tuesday (2) Mid
+      ];
+
+      render(
+        <DashboardProvider rawData={rawData}>
+          <ContextConsumer callback={(val) => { contextVal = val; }} />
+        </DashboardProvider>
+      );
+
+      // Defaults
+      expect(contextVal.selectedWeekday).toBeNull();
+      expect(contextVal.weekdayFilteredMatches).toHaveLength(3);
+      expect(contextVal.combinedFilteredMatches).toHaveLength(3);
+
+      // Select Monday
+      act(() => {
+        contextVal.setSelectedWeekday('Monday');
+      });
+      expect(contextVal.selectedWeekday).toBe('Monday');
+      expect(contextVal.weekdayFilteredMatches).toHaveLength(2);
+      expect(contextVal.weekdayFilteredMatches.map(m => m.matchId)).toContain('match-mon-top');
+      expect(contextVal.weekdayFilteredMatches.map(m => m.matchId)).toContain('match-mon-mid');
+
+      // combinedFilteredMatches should also be filtered by Monday since selectedRole is null
+      expect(contextVal.combinedFilteredMatches).toHaveLength(2);
+
+      // Select Mid role as well
+      act(() => {
+        contextVal.setSelectedRole('Mid');
+      });
+      // combinedFilteredMatches should filter by BOTH Monday and Mid
+      expect(contextVal.combinedFilteredMatches).toHaveLength(1);
+      expect(contextVal.combinedFilteredMatches[0].matchId).toBe('match-mon-mid');
+
+      // roleFilteredMatches should filter by Mid ONLY (ignoring weekday filter)
+      expect(contextVal.roleFilteredMatches).toHaveLength(2);
+      expect(contextVal.roleFilteredMatches.map(m => m.matchId)).toContain('match-mon-mid');
+      expect(contextVal.roleFilteredMatches.map(m => m.matchId)).toContain('match-tue-mid');
+
+      // weekdayFilteredMatches should filter by Monday ONLY (ignoring role filter)
+      expect(contextVal.weekdayFilteredMatches).toHaveLength(2);
+      expect(contextVal.weekdayFilteredMatches.map(m => m.matchId)).toContain('match-mon-top');
+      expect(contextVal.weekdayFilteredMatches.map(m => m.matchId)).toContain('match-mon-mid');
+
+      // Clear weekday filter
+      act(() => {
+        contextVal.setSelectedWeekday(null);
+      });
+      expect(contextVal.selectedWeekday).toBeNull();
+      expect(contextVal.weekdayFilteredMatches).toHaveLength(3);
+      expect(contextVal.combinedFilteredMatches).toHaveLength(2); // Mid only (both Monday and Tuesday)
+    });
+  });
 });

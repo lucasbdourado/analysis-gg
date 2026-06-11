@@ -12,7 +12,7 @@ const iconUrls: Record<string, string> = {
 };
 
 export const RouteWinRateChart: React.FC = () => {
-  const { filteredMatches, selectedRole, setSelectedRole } = useDashboard();
+  const { weekdayFilteredMatches, selectedRole, setSelectedRole } = useDashboard();
 
   const { activeRoles, hasMatches } = useMemo(() => {
     const rolesMap: Record<string, { wins: number; losses: number }> = {
@@ -23,7 +23,7 @@ export const RouteWinRateChart: React.FC = () => {
       Support: { wins: 0, losses: 0 },
     };
 
-    filteredMatches.forEach((match: MatchSummary) => {
+    weekdayFilteredMatches.forEach((match: MatchSummary) => {
       const pos = match.teamPosition;
       if (!pos) return;
 
@@ -74,7 +74,7 @@ export const RouteWinRateChart: React.FC = () => {
       activeRoles: active,
       hasMatches: active.length > 0,
     };
-  }, [filteredMatches]);
+  }, [weekdayFilteredMatches]);
 
   return (
     <div className={`ds-panel ${styles.chartCard}`}>

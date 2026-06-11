@@ -2,14 +2,24 @@
 
 ## Current Change Context
 
-- Active change: `013-interactive-role-filtering-and-ranks-relayout`
-- Spec path: `docs/changes/013-interactive-role-filtering-and-ranks-relayout/change-spec.md`
+- Active change: `014-interactive-weekday-filtering`
+- Spec path: `docs/changes/014-interactive-weekday-filtering/change-spec.md`
 - Open blockers:
   - None
 - Pending decisions:
   - None
 
 ## Change History
+
+### 014 - Interactive Weekday Filtering
+
+- Spec path: `docs/changes/014-interactive-weekday-filtering/change-spec.md`
+- Created from: User request, dashboard component cross-filtering design, and Recharts interaction planning
+- Summary: Research and spec for making day bars in WeekdayWinRateChart interactive, filtering downstream widgets by selected weekday and/or role, and highlighting selected day with gold.
+- Open blockers:
+  - None
+- Pending decisions:
+  - None
 
 ### 013 - Interactive Role Filtering and Ranks Relayout
 

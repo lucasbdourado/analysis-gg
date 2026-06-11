@@ -13,6 +13,10 @@ export interface DashboardContextProps {
   selectedRole: string | null;
   setSelectedRole: (role: string | null) => void;
   roleFilteredMatches: MatchSummary[];
+  selectedWeekday: string | null;
+  setSelectedWeekday: (day: string | null) => void;
+  weekdayFilteredMatches: MatchSummary[];
+  combinedFilteredMatches: MatchSummary[];
 }
 
 export interface DashboardProviderProps {
@@ -24,6 +28,8 @@ export interface DashboardProviderProps {
   clearQueueFilters?: () => void;
   selectedRole?: string | null;
   setSelectedRole?: (role: string | null) => void;
+  selectedWeekday?: string | null;
+  setSelectedWeekday?: (day: string | null) => void;
   children: ReactNode;
 }
 
@@ -35,6 +41,13 @@ const QUEUE_MAP: Record<string, number[]> = {
   NORMAL: [400, 430, 490],
   ARAM: [450],
   CUSTOM: [0]
+};
+
+const DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+const getMatchDayName = (match: MatchSummary) => {
+  const date = new Date(match.gameCreation);
+  return DAYS_OF_WEEK[date.getDay()];
 };
 
 const isMatchForRole = (match: MatchSummary, role: string) => {
@@ -58,11 +71,14 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
   clearQueueFilters: propClearQueueFilters,
   selectedRole: propSelectedRole,
   setSelectedRole: propSetSelectedRole,
+  selectedWeekday: propSelectedWeekday,
+  setSelectedWeekday: propSetSelectedWeekday,
   children 
 }) => {
   const [localActiveRange, localSetActiveRange] = useState<number>(20);
   const [localSelectedQueues, setLocalSelectedQueues] = useState<string[]>([]);
   const [localSelectedRole, setLocalSelectedRole] = useState<string | null>(null);
+  const [localSelectedWeekday, setLocalSelectedWeekday] = useState<string | null>(null);
 
   const activeRange = propActiveRange !== undefined ? propActiveRange : localActiveRange;
   const setActiveRange = propSetActiveRange !== undefined ? propSetActiveRange : localSetActiveRange;
@@ -71,6 +87,9 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
 
   const selectedRole = propSelectedRole !== undefined ? propSelectedRole : localSelectedRole;
   const setSelectedRole = propSetSelectedRole !== undefined ? propSetSelectedRole : setLocalSelectedRole;
+
+  const selectedWeekday = propSelectedWeekday !== undefined ? propSelectedWeekday : localSelectedWeekday;
+  const setSelectedWeekday = propSetSelectedWeekday !== undefined ? propSetSelectedWeekday : setLocalSelectedWeekday;
 
   const toggleQueueFilter = (queueKey: string) => {
     if (propToggleQueueFilter !== undefined) {
@@ -107,6 +126,22 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
     return filteredMatches.filter(match => isMatchForRole(match, selectedRole));
   }, [filteredMatches, selectedRole]);
 
+  const weekdayFilteredMatches = useMemo(() => {
+    if (!selectedWeekday) return filteredMatches;
+    return filteredMatches.filter(match => getMatchDayName(match) === selectedWeekday);
+  }, [filteredMatches, selectedWeekday]);
+
+  const combinedFilteredMatches = useMemo(() => {
+    let result = filteredMatches;
+    if (selectedRole) {
+      result = result.filter(match => isMatchForRole(match, selectedRole));
+    }
+    if (selectedWeekday) {
+      result = result.filter(match => getMatchDayName(match) === selectedWeekday);
+    }
+    return result;
+  }, [filteredMatches, selectedRole, selectedWeekday]);
+
   return (
     <DashboardContext.Provider value={{ 
       rawData: rawData || [], 
@@ -118,7 +153,11 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
       clearQueueFilters,
       selectedRole,
       setSelectedRole,
-      roleFilteredMatches
+      roleFilteredMatches,
+      selectedWeekday,
+      setSelectedWeekday,
+      weekdayFilteredMatches,
+      combinedFilteredMatches
     }}>
       {children}
     </DashboardContext.Provider>

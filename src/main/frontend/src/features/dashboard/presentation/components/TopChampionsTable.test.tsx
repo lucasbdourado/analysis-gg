@@ -39,6 +39,10 @@ describe('TopChampionsTable Component Tests', () => {
       selectedRole: null,
       setSelectedRole: vi.fn(),
       roleFilteredMatches: [],
+      selectedWeekday: null,
+      setSelectedWeekday: vi.fn(),
+      weekdayFilteredMatches: [],
+      combinedFilteredMatches: [],
     });
 
     render(<TopChampionsTable />);
@@ -81,6 +85,10 @@ describe('TopChampionsTable Component Tests', () => {
       selectedRole: null,
       setSelectedRole: vi.fn(),
       roleFilteredMatches: matches,
+      selectedWeekday: null,
+      setSelectedWeekday: vi.fn(),
+      weekdayFilteredMatches: matches,
+      combinedFilteredMatches: matches,
     });
 
     const { container } = render(<TopChampionsTable />);
@@ -129,6 +137,10 @@ describe('TopChampionsTable Component Tests', () => {
       selectedRole: null,
       setSelectedRole: vi.fn(),
       roleFilteredMatches: matches,
+      selectedWeekday: null,
+      setSelectedWeekday: vi.fn(),
+      weekdayFilteredMatches: matches,
+      combinedFilteredMatches: matches,
     });
 
     render(<TopChampionsTable />);
@@ -160,6 +172,10 @@ describe('TopChampionsTable Component Tests', () => {
       selectedRole: null,
       setSelectedRole: vi.fn(),
       roleFilteredMatches: matches,
+      selectedWeekday: null,
+      setSelectedWeekday: vi.fn(),
+      weekdayFilteredMatches: matches,
+      combinedFilteredMatches: matches,
     });
 
     const { container } = render(<TopChampionsTable />);
@@ -283,6 +299,10 @@ describe('TopChampionsTable Component Tests', () => {
       selectedRole: null,
       setSelectedRole: vi.fn(),
       roleFilteredMatches: matches,
+      selectedWeekday: null,
+      setSelectedWeekday: vi.fn(),
+      weekdayFilteredMatches: matches,
+      combinedFilteredMatches: matches,
     });
 
     const { container } = render(<TopChampionsTable />);
@@ -367,6 +387,10 @@ describe('TopChampionsTable Component Tests', () => {
       selectedRole: null,
       setSelectedRole: vi.fn(),
       roleFilteredMatches: matches,
+      selectedWeekday: null,
+      setSelectedWeekday: vi.fn(),
+      weekdayFilteredMatches: matches,
+      combinedFilteredMatches: matches,
     });
 
     render(<TopChampionsTable />);
@@ -403,6 +427,10 @@ describe('TopChampionsTable Component Tests', () => {
       selectedRole: null,
       setSelectedRole: vi.fn(),
       roleFilteredMatches: matches,
+      selectedWeekday: null,
+      setSelectedWeekday: vi.fn(),
+      weekdayFilteredMatches: matches,
+      combinedFilteredMatches: matches,
     });
 
     render(<TopChampionsTable />);
@@ -435,6 +463,10 @@ describe('TopChampionsTable Component Tests', () => {
       selectedRole: null,
       setSelectedRole: vi.fn(),
       roleFilteredMatches: matches,
+      selectedWeekday: null,
+      setSelectedWeekday: vi.fn(),
+      weekdayFilteredMatches: matches,
+      combinedFilteredMatches: matches,
     });
 
     render(<TopChampionsTable />);

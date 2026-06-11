@@ -93,7 +93,7 @@ export const DashboardPage: React.FC = () => {
 };
 
 const DashboardContent: React.FC<DashboardContentProps> = ({ data }) => {
-  const { roleFilteredMatches } = useDashboard();
+  const { combinedFilteredMatches } = useDashboard();
 
   return (
     <div className={`ds-container ds-section ds-stack-lg ${styles.dashboardContainer}`} data-testid="dashboard-success">
@@ -129,7 +129,7 @@ const DashboardContent: React.FC<DashboardContentProps> = ({ data }) => {
             <TopChampionsTable />
           </div>
           <div className={styles.bottomWidgetRow}>
-            <RecentMatchHistory matches={roleFilteredMatches} />
+            <RecentMatchHistory matches={combinedFilteredMatches} />
           </div>
         </main>
       </div>
