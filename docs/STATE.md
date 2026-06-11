@@ -2,14 +2,34 @@
 
 ## Current Change Context
 
-- Active change: `006-player-profile-section`
-- Spec path: `docs/changes/006-player-profile-section/change-spec.md`
+- Active change: `009-compact-profile-dashboard`
+- Spec path: `docs/changes/009-compact-profile-dashboard/change-spec.md`
 - Open blockers:
-  - None
+  - Browser-based local UI observation could not be completed in this session.
 - Pending decisions:
   - None
 
 ## Change History
+
+### 009 - Compact Profile Dashboard
+
+- Spec path: `docs/changes/009-compact-profile-dashboard/change-spec.md`
+- Created from: User request, dashboard frontend code research, and web comparison against OP.GG, U.GG, and Blitz.gg profile pages
+- Summary: Research and development spec for making the dashboard profile-first, compact, and less vertically dense while keeping the existing analytics data flow.
+- Open blockers:
+  - Browser-based local UI observation could not be completed in this session.
+- Pending decisions:
+  - None
+
+### 007 - Recent Match History Section
+
+- Spec path: `docs/changes/007-recent-match-history-section/change-spec.md`
+- Created from: User request, dashboard frontend code research, backend code research, and OP.GG web reference
+- Summary: Research and development spec for adding a compact recent match history section that reuses the match list already returned by the API.
+- Open blockers:
+  - None
+- Pending decisions:
+  - None
 
 ### 006 - Player Profile Section
 

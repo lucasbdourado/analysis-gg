@@ -4,11 +4,41 @@ import { DashboardProvider } from '../context/DashboardContext';
 import { MatchRangeFilter } from '../components/MatchRangeFilter';
 import { MatchQueueFilter } from '../components/MatchQueueFilter';
 import { AccountRankedSummary } from '../components/AccountRankedSummary';
+import { RecentMatchHistory } from '../components/RecentMatchHistory';
 import { usePlayerAnalytics } from '../hooks/usePlayerAnalytics';
 import { WeekdayWinRateChart } from '../components/WeekdayWinRateChart';
 import { DailyPerformanceGrid } from '../components/DailyPerformanceGrid';
 import { TopChampionsTable } from '../components/TopChampionsTable';
+import { useDashboard } from '../context/DashboardContext';
 import styles from './DashboardPage.module.css';
+
+type DashboardContentProps = {
+  data: {
+    gameName: string;
+    tagLine: string;
+    region: string;
+    rankedQueues: {
+      soloDuo: {
+        queueType: string;
+        tier: string | null;
+        rank: string | null;
+        leaguePoints: number | null;
+        wins: number | null;
+        losses: number | null;
+        winRate: number | null;
+      };
+      flex: {
+        queueType: string;
+        tier: string | null;
+        rank: string | null;
+        leaguePoints: number | null;
+        wins: number | null;
+        losses: number | null;
+        winRate: number | null;
+      };
+    };
+  };
+};
 
 export const DashboardPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -79,33 +109,44 @@ export const DashboardPage: React.FC = () => {
       toggleQueueFilter={toggleQueueFilter}
       clearQueueFilters={clearQueueFilters}
     >
-      <div className={`ds-container ds-section ds-stack-lg ${styles.dashboardContainer}`} data-testid="dashboard-success">
-        <header className={styles.header}>
-          <div className={styles.filtersSection} data-testid="dashboard-filters">
-            <MatchQueueFilter />
-            <MatchRangeFilter />
-          </div>
-        </header>
-
-        <div data-testid="dashboard-profile">
-          <AccountRankedSummary
-            gameName={data.gameName}
-            tagLine={data.tagLine}
-            region={data.region}
-            rankedQueues={data.rankedQueues}
-          />
-        </div>
-        
-        <main className={styles.mainContent} data-testid="dashboard-analytics">
-          <div className={styles.topWidgetsGrid}>
-            <WeekdayWinRateChart />
-            <DailyPerformanceGrid />
-          </div>
-          <div className={styles.bottomWidgetRow}>
-            <TopChampionsTable />
-          </div>
-        </main>
-      </div>
+      <DashboardContent data={data} />
     </DashboardProvider>
+  );
+};
+
+const DashboardContent: React.FC<DashboardContentProps> = ({ data }) => {
+  const { filteredMatches } = useDashboard();
+
+  return (
+    <div className={`ds-container ds-section ds-stack-lg ${styles.dashboardContainer}`} data-testid="dashboard-success">
+      <header className={styles.header}>
+        <div className={styles.filtersSection} data-testid="dashboard-filters">
+          <MatchQueueFilter />
+          <MatchRangeFilter />
+        </div>
+      </header>
+
+      <div data-testid="dashboard-profile">
+        <AccountRankedSummary
+          gameName={data.gameName}
+          tagLine={data.tagLine}
+          region={data.region}
+          rankedQueues={data.rankedQueues}
+        />
+      </div>
+      
+      <main className={styles.mainContent} data-testid="dashboard-analytics">
+        <div className={styles.topWidgetsGrid}>
+          <WeekdayWinRateChart />
+          <DailyPerformanceGrid />
+        </div>
+        <div className={styles.bottomWidgetRow}>
+          <TopChampionsTable />
+        </div>
+        <div className={styles.bottomWidgetRow}>
+          <RecentMatchHistory matches={filteredMatches} />
+        </div>
+      </main>
+    </div>
   );
 };

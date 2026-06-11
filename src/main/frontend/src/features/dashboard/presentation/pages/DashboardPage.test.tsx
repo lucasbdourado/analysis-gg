@@ -1,7 +1,15 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
 import { DashboardPage } from './DashboardPage';
+
+class ResizeObserverMock {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+vi.stubGlobal('ResizeObserver', ResizeObserverMock);
 
 vi.mock('../hooks/usePlayerAnalytics', () => ({
   usePlayerAnalytics: () => ({
@@ -32,7 +40,22 @@ vi.mock('../hooks/usePlayerAnalytics', () => ({
           winRate: null,
         },
       },
-      matches: [],
+      matches: [
+        {
+          matchId: 'match-old',
+          gameDuration: 1200,
+          gameCreation: new Date('2026-06-08T11:00:00.000Z').getTime(),
+          queueId: 420,
+          win: false,
+          championId: 84,
+          championName: 'Akali',
+          kills: 4,
+          deaths: 5,
+          assists: 3,
+          totalMinionsKilled: 145,
+          neutralMinionsKilled: 12,
+        },
+      ],
     },
   }),
 }));
@@ -51,5 +74,8 @@ describe('DashboardPage', () => {
 
     expect(filters.compareDocumentPosition(profile) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(profile.compareDocumentPosition(analytics) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    const historyRegion = screen.getByRole('region', { name: 'Recent match history' });
+    expect(historyRegion).toBeInTheDocument();
+    expect(within(historyRegion).getByText('Akali')).toBeInTheDocument();
   });
 });

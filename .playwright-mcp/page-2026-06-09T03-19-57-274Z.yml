@@ -1,0 +1,14 @@
+- main [ref=e5]:
+  - generic [ref=e6]:
+    - text: Riot Games Analytics
+    - heading "Analysis.GG" [level=1] [ref=e7]
+    - paragraph [ref=e8]: League of Legends Performance Dashboard
+  - generic [ref=e10]:
+    - textbox "Riot ID (e.g., Hide on bush#KR1)" [ref=e12]
+    - combobox [ref=e14]:
+      - option "Brazil" [selected]
+      - option "North America"
+      - option "Europe West"
+      - option "Europe Nordic & East"
+      - option "Korea"
+    - button "Analyze" [ref=e15] [cursor=pointer]
