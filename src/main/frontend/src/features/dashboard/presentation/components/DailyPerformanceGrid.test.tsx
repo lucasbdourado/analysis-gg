@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { DailyPerformanceGrid } from './DailyPerformanceGrid';
 import { useDashboard } from '../context/DashboardContext';
@@ -44,12 +44,15 @@ describe('DailyPerformanceGrid Component Tests', () => {
       filteredMatches: [],
       selectedQueues: [],
       toggleQueueFilter: vi.fn(),
-      selectedRole: null,
-      setSelectedRole: vi.fn(),
-      roleFilteredMatches: [],
-      selectedWeekday: null,
-      setSelectedWeekday: vi.fn(),
-      weekdayFilteredMatches: [],
+      selectedRoles: [],
+      setSelectedRoles: vi.fn(),
+      roleSelectorMatches: [],
+      selectedWeekdays: [],
+      setSelectedWeekdays: vi.fn(),
+      weekdaySelectorMatches: [],
+      selectedDates: [],
+      setSelectedDates: vi.fn(),
+      dateSelectorMatches: [],
       combinedFilteredMatches: [],
     });
 
@@ -74,12 +77,15 @@ describe('DailyPerformanceGrid Component Tests', () => {
       filteredMatches: matches,
       selectedQueues: [],
       toggleQueueFilter: vi.fn(),
-      selectedRole: null,
-      setSelectedRole: vi.fn(),
-      roleFilteredMatches: matches,
-      selectedWeekday: null,
-      setSelectedWeekday: vi.fn(),
-      weekdayFilteredMatches: matches,
+      selectedRoles: [],
+      setSelectedRoles: vi.fn(),
+      roleSelectorMatches: matches,
+      selectedWeekdays: [],
+      setSelectedWeekdays: vi.fn(),
+      weekdaySelectorMatches: matches,
+      selectedDates: [],
+      setSelectedDates: vi.fn(),
+      dateSelectorMatches: matches,
       combinedFilteredMatches: matches,
     });
 
@@ -117,12 +123,15 @@ describe('DailyPerformanceGrid Component Tests', () => {
       filteredMatches: matches,
       selectedQueues: [],
       toggleQueueFilter: vi.fn(),
-      selectedRole: null,
-      setSelectedRole: vi.fn(),
-      roleFilteredMatches: matches,
-      selectedWeekday: null,
-      setSelectedWeekday: vi.fn(),
-      weekdayFilteredMatches: matches,
+      selectedRoles: [],
+      setSelectedRoles: vi.fn(),
+      roleSelectorMatches: matches,
+      selectedWeekdays: [],
+      setSelectedWeekdays: vi.fn(),
+      weekdaySelectorMatches: matches,
+      selectedDates: [],
+      setSelectedDates: vi.fn(),
+      dateSelectorMatches: matches,
       combinedFilteredMatches: matches,
     });
 
@@ -167,12 +176,15 @@ describe('DailyPerformanceGrid Component Tests', () => {
       filteredMatches: matches,
       selectedQueues: [],
       toggleQueueFilter: vi.fn(),
-      selectedRole: null,
-      setSelectedRole: vi.fn(),
-      roleFilteredMatches: matches,
-      selectedWeekday: null,
-      setSelectedWeekday: vi.fn(),
-      weekdayFilteredMatches: matches,
+      selectedRoles: [],
+      setSelectedRoles: vi.fn(),
+      roleSelectorMatches: matches,
+      selectedWeekdays: [],
+      setSelectedWeekdays: vi.fn(),
+      weekdaySelectorMatches: matches,
+      selectedDates: [],
+      setSelectedDates: vi.fn(),
+      dateSelectorMatches: matches,
       combinedFilteredMatches: matches,
     });
 
@@ -241,12 +253,15 @@ describe('DailyPerformanceGrid Component Tests', () => {
       filteredMatches: matches,
       selectedQueues: [],
       toggleQueueFilter: vi.fn(),
-      selectedRole: null,
-      setSelectedRole: vi.fn(),
-      roleFilteredMatches: matches,
-      selectedWeekday: null,
-      setSelectedWeekday: vi.fn(),
-      weekdayFilteredMatches: matches,
+      selectedRoles: [],
+      setSelectedRoles: vi.fn(),
+      roleSelectorMatches: matches,
+      selectedWeekdays: [],
+      setSelectedWeekdays: vi.fn(),
+      weekdaySelectorMatches: matches,
+      selectedDates: [],
+      setSelectedDates: vi.fn(),
+      dateSelectorMatches: matches,
       combinedFilteredMatches: matches,
     });
 
@@ -270,4 +285,78 @@ describe('DailyPerformanceGrid Component Tests', () => {
     const tooltipMinus3 = cells[26].getAttribute('data-tooltip');
     expect(tooltipMinus3).toBe(`${expectedFormat(dayMinus3)}: No games played`);
   });
+
+  it('should toggle date selection and apply active outline style when clicked', () => {
+    const today = new Date();
+    today.setHours(12, 0, 0, 0);
+    const dateStr = today.toISOString().split('T')[0]; // YYYY-MM-DD
+    const matches = [createMockMatch(today, true)];
+
+    let selectedDates: string[] = [];
+    const setSelectedDatesMock = vi.fn((newDates: string[] | ((prev: string[]) => string[])) => {
+      if (typeof newDates === 'function') {
+        selectedDates = newDates(selectedDates);
+      } else {
+        selectedDates = newDates;
+      }
+    });
+
+    vi.mocked(useDashboard).mockReturnValue({
+      rawData: matches,
+      activeRange: 20,
+      setActiveRange: vi.fn(),
+      filteredMatches: matches,
+      selectedQueues: [],
+      toggleQueueFilter: vi.fn(),
+      selectedRoles: [],
+      setSelectedRoles: vi.fn(),
+      roleSelectorMatches: matches,
+      selectedWeekdays: [],
+      setSelectedWeekdays: vi.fn(),
+      weekdaySelectorMatches: matches,
+      selectedDates,
+      setSelectedDates: setSelectedDatesMock,
+      dateSelectorMatches: matches,
+      combinedFilteredMatches: matches,
+    });
+
+    const { container, rerender } = render(<DailyPerformanceGrid />);
+    const cells = container.querySelectorAll('[data-tooltip]');
+    const todayCell = cells[29];
+
+    // Click the cell
+    fireEvent.click(todayCell);
+
+    // Should toggle inclusion of today's date
+    expect(setSelectedDatesMock).toHaveBeenCalledTimes(1);
+    expect(setSelectedDatesMock).toHaveBeenCalledWith([dateStr]);
+
+    // Rerender with the selected date in selection list
+    vi.mocked(useDashboard).mockReturnValue({
+      rawData: matches,
+      activeRange: 20,
+      setActiveRange: vi.fn(),
+      filteredMatches: matches,
+      selectedQueues: [],
+      toggleQueueFilter: vi.fn(),
+      selectedRoles: [],
+      setSelectedRoles: vi.fn(),
+      roleSelectorMatches: matches,
+      selectedWeekdays: [],
+      setSelectedWeekdays: vi.fn(),
+      weekdaySelectorMatches: matches,
+      selectedDates: [dateStr],
+      setSelectedDates: setSelectedDatesMock,
+      dateSelectorMatches: matches,
+      combinedFilteredMatches: matches,
+    });
+
+    rerender(<DailyPerformanceGrid />);
+    const updatedCells = container.querySelectorAll('[data-tooltip]');
+    const updatedTodayCell = updatedCells[29];
+
+    // Verify it now has the selected class
+    expect(updatedTodayCell).toHaveClass(styles.selected);
+  });
 });
+

@@ -2,14 +2,25 @@
 
 ## Current Change Context
 
-- Active change: `014-interactive-weekday-filtering`
-- Spec path: `docs/changes/014-interactive-weekday-filtering/change-spec.md`
+- Active change: None
+- Spec path: None
 - Open blockers:
   - None
 - Pending decisions:
   - None
 
 ## Change History
+
+### 015 - Interactive Daily Performance Filtering and Multi-Select
+
+- Spec path: `docs/changes/015-interactive-daily-performance-filtering-and-multi-select/change-spec.md`
+- Status: Implemented
+- Created from: User request, dashboard component cross-filtering redesign, and multi-select interaction design
+- Summary: Research and spec for making activity cells in DailyPerformanceGrid interactive to filter by specific calendar date, and upgrading all dashboard selection filters (roles, weekdays, calendar dates) to support direct-click multi-selection.
+- Open blockers:
+  - None
+- Pending decisions:
+  - None
 
 ### 014 - Interactive Weekday Filtering
 

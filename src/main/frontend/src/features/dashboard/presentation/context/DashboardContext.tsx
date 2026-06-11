@@ -10,12 +10,15 @@ export interface DashboardContextProps {
   selectedQueues: string[];
   toggleQueueFilter: (queueKey: string) => void;
   clearQueueFilters?: () => void;
-  selectedRole: string | null;
-  setSelectedRole: (role: string | null) => void;
-  roleFilteredMatches: MatchSummary[];
-  selectedWeekday: string | null;
-  setSelectedWeekday: (day: string | null) => void;
-  weekdayFilteredMatches: MatchSummary[];
+  selectedRoles: string[];
+  setSelectedRoles: (roles: string[]) => void;
+  roleSelectorMatches: MatchSummary[];
+  selectedWeekdays: string[];
+  setSelectedWeekdays: (days: string[]) => void;
+  weekdaySelectorMatches: MatchSummary[];
+  selectedDates: string[];
+  setSelectedDates: (dates: string[]) => void;
+  dateSelectorMatches: MatchSummary[];
   combinedFilteredMatches: MatchSummary[];
 }
 
@@ -26,10 +29,12 @@ export interface DashboardProviderProps {
   selectedQueues?: string[];
   toggleQueueFilter?: (queueKey: string) => void;
   clearQueueFilters?: () => void;
-  selectedRole?: string | null;
-  setSelectedRole?: (role: string | null) => void;
-  selectedWeekday?: string | null;
-  setSelectedWeekday?: (day: string | null) => void;
+  selectedRoles?: string[];
+  setSelectedRoles?: (roles: string[]) => void;
+  selectedWeekdays?: string[];
+  setSelectedWeekdays?: (days: string[]) => void;
+  selectedDates?: string[];
+  setSelectedDates?: (dates: string[]) => void;
   children: ReactNode;
 }
 
@@ -50,6 +55,14 @@ const getMatchDayName = (match: MatchSummary) => {
   return DAYS_OF_WEEK[date.getDay()];
 };
 
+const getLocalDateString = (timestamp: number) => {
+  const d = new Date(timestamp);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 const isMatchForRole = (match: MatchSummary, role: string) => {
   const pos = match.teamPosition;
   if (!pos) return false;
@@ -62,6 +75,21 @@ const isMatchForRole = (match: MatchSummary, role: string) => {
   return false;
 };
 
+const isMatchForRoles = (match: MatchSummary, roles: string[]) => {
+  if (roles.length === 0) return true;
+  return roles.some(role => isMatchForRole(match, role));
+};
+
+const isMatchForWeekdays = (match: MatchSummary, weekdays: string[]) => {
+  if (weekdays.length === 0) return true;
+  return weekdays.includes(getMatchDayName(match));
+};
+
+const isMatchForDates = (match: MatchSummary, dates: string[]) => {
+  if (dates.length === 0) return true;
+  return dates.includes(getLocalDateString(match.gameCreation));
+};
+
 export const DashboardProvider: React.FC<DashboardProviderProps> = ({ 
   rawData = [], 
   activeRange: propActiveRange,
@@ -69,27 +97,33 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
   selectedQueues: propSelectedQueues,
   toggleQueueFilter: propToggleQueueFilter,
   clearQueueFilters: propClearQueueFilters,
-  selectedRole: propSelectedRole,
-  setSelectedRole: propSetSelectedRole,
-  selectedWeekday: propSelectedWeekday,
-  setSelectedWeekday: propSetSelectedWeekday,
+  selectedRoles: propSelectedRoles,
+  setSelectedRoles: propSetSelectedRoles,
+  selectedWeekdays: propSelectedWeekdays,
+  setSelectedWeekdays: propSetSelectedWeekdays,
+  selectedDates: propSelectedDates,
+  setSelectedDates: propSetSelectedDates,
   children 
 }) => {
   const [localActiveRange, localSetActiveRange] = useState<number>(20);
   const [localSelectedQueues, setLocalSelectedQueues] = useState<string[]>([]);
-  const [localSelectedRole, setLocalSelectedRole] = useState<string | null>(null);
-  const [localSelectedWeekday, setLocalSelectedWeekday] = useState<string | null>(null);
+  const [localSelectedRoles, setLocalSelectedRoles] = useState<string[]>([]);
+  const [localSelectedWeekdays, setLocalSelectedWeekdays] = useState<string[]>([]);
+  const [localSelectedDates, setLocalSelectedDates] = useState<string[]>([]);
 
   const activeRange = propActiveRange !== undefined ? propActiveRange : localActiveRange;
   const setActiveRange = propSetActiveRange !== undefined ? propSetActiveRange : localSetActiveRange;
 
   const selectedQueues = propSelectedQueues !== undefined ? propSelectedQueues : localSelectedQueues;
 
-  const selectedRole = propSelectedRole !== undefined ? propSelectedRole : localSelectedRole;
-  const setSelectedRole = propSetSelectedRole !== undefined ? propSetSelectedRole : setLocalSelectedRole;
+  const selectedRoles = propSelectedRoles !== undefined ? propSelectedRoles : localSelectedRoles;
+  const setSelectedRoles = propSetSelectedRoles !== undefined ? propSetSelectedRoles : setLocalSelectedRoles;
 
-  const selectedWeekday = propSelectedWeekday !== undefined ? propSelectedWeekday : localSelectedWeekday;
-  const setSelectedWeekday = propSetSelectedWeekday !== undefined ? propSetSelectedWeekday : setLocalSelectedWeekday;
+  const selectedWeekdays = propSelectedWeekdays !== undefined ? propSelectedWeekdays : localSelectedWeekdays;
+  const setSelectedWeekdays = propSetSelectedWeekdays !== undefined ? propSetSelectedWeekdays : setLocalSelectedWeekdays;
+
+  const selectedDates = propSelectedDates !== undefined ? propSelectedDates : localSelectedDates;
+  const setSelectedDates = propSetSelectedDates !== undefined ? propSetSelectedDates : setLocalSelectedDates;
 
   const toggleQueueFilter = (queueKey: string) => {
     if (propToggleQueueFilter !== undefined) {
@@ -121,26 +155,34 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
     return filtered.slice(0, Math.min(filtered.length, activeRange));
   }, [rawData, activeRange, selectedQueues]);
 
-  const roleFilteredMatches = useMemo(() => {
-    if (!selectedRole) return filteredMatches;
-    return filteredMatches.filter(match => isMatchForRole(match, selectedRole));
-  }, [filteredMatches, selectedRole]);
+  // 1. Filtered by range/queues + selectedWeekdays + selectedDates (for Route Chart)
+  const roleSelectorMatches = useMemo(() => {
+    return filteredMatches
+      .filter(m => isMatchForWeekdays(m, selectedWeekdays))
+      .filter(m => isMatchForDates(m, selectedDates));
+  }, [filteredMatches, selectedWeekdays, selectedDates]);
 
-  const weekdayFilteredMatches = useMemo(() => {
-    if (!selectedWeekday) return filteredMatches;
-    return filteredMatches.filter(match => getMatchDayName(match) === selectedWeekday);
-  }, [filteredMatches, selectedWeekday]);
+  // 2. Filtered by range/queues + selectedRoles + selectedDates (for Weekday Chart)
+  const weekdaySelectorMatches = useMemo(() => {
+    return filteredMatches
+      .filter(m => isMatchForRoles(m, selectedRoles))
+      .filter(m => isMatchForDates(m, selectedDates));
+  }, [filteredMatches, selectedRoles, selectedDates]);
 
+  // 3. Filtered by range/queues + selectedRoles + selectedWeekdays (for Daily Grid)
+  const dateSelectorMatches = useMemo(() => {
+    return filteredMatches
+      .filter(m => isMatchForRoles(m, selectedRoles))
+      .filter(m => isMatchForWeekdays(m, selectedWeekdays));
+  }, [filteredMatches, selectedRoles, selectedWeekdays]);
+
+  // 4. Combined Filtered Matches (for Top Champions & Match History)
   const combinedFilteredMatches = useMemo(() => {
-    let result = filteredMatches;
-    if (selectedRole) {
-      result = result.filter(match => isMatchForRole(match, selectedRole));
-    }
-    if (selectedWeekday) {
-      result = result.filter(match => getMatchDayName(match) === selectedWeekday);
-    }
-    return result;
-  }, [filteredMatches, selectedRole, selectedWeekday]);
+    return filteredMatches
+      .filter(m => isMatchForRoles(m, selectedRoles))
+      .filter(m => isMatchForWeekdays(m, selectedWeekdays))
+      .filter(m => isMatchForDates(m, selectedDates));
+  }, [filteredMatches, selectedRoles, selectedWeekdays, selectedDates]);
 
   return (
     <DashboardContext.Provider value={{ 
@@ -151,12 +193,15 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
       selectedQueues, 
       toggleQueueFilter,
       clearQueueFilters,
-      selectedRole,
-      setSelectedRole,
-      roleFilteredMatches,
-      selectedWeekday,
-      setSelectedWeekday,
-      weekdayFilteredMatches,
+      selectedRoles,
+      setSelectedRoles,
+      roleSelectorMatches,
+      selectedWeekdays,
+      setSelectedWeekdays,
+      weekdaySelectorMatches,
+      selectedDates,
+      setSelectedDates,
+      dateSelectorMatches,
       combinedFilteredMatches
     }}>
       {children}

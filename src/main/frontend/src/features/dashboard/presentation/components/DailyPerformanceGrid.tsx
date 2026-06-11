@@ -12,7 +12,7 @@ interface DayRecord {
 }
 
 export const DailyPerformanceGrid: React.FC = () => {
-  const { combinedFilteredMatches } = useDashboard();
+  const { dateSelectorMatches, selectedDates, setSelectedDates } = useDashboard();
 
   const getLocalDateString = (timestamp: number) => {
     const d = new Date(timestamp);
@@ -33,12 +33,12 @@ export const DailyPerformanceGrid: React.FC = () => {
   };
 
   const gridData = useMemo((): DayRecord[] => {
-    if (combinedFilteredMatches.length === 0) {
+    if (dateSelectorMatches.length === 0) {
       return [];
     }
 
     // Find the min and max timestamps to construct the window
-    const timestamps = combinedFilteredMatches.map(m => m.gameCreation);
+    const timestamps = dateSelectorMatches.map(m => m.gameCreation);
     const latestTimestamp = Math.max(...timestamps);
     
     // Generate the last 30 calendar days leading to the latest match
@@ -55,7 +55,7 @@ export const DailyPerformanceGrid: React.FC = () => {
 
     // Aggregate matches by local date string
     const counts: Record<string, { wins: number; losses: number }> = {};
-    combinedFilteredMatches.forEach((match: MatchSummary) => {
+    dateSelectorMatches.forEach((match: MatchSummary) => {
       const dateStr = getLocalDateString(match.gameCreation);
       if (!counts[dateStr]) {
         counts[dateStr] = { wins: 0, losses: 0 };
@@ -88,9 +88,17 @@ export const DailyPerformanceGrid: React.FC = () => {
         status,
       };
     });
-  }, [combinedFilteredMatches]);
+  }, [dateSelectorMatches]);
 
-  const hasMatches = combinedFilteredMatches.length > 0;
+  const hasMatches = dateSelectorMatches.length > 0;
+
+  const handleDateClick = (dateStr: string) => {
+    setSelectedDates(
+      selectedDates.includes(dateStr)
+        ? selectedDates.filter(d => d !== dateStr)
+        : [...selectedDates, dateStr]
+    );
+  };
 
   return (
     <div className={`ds-panel ${styles.gridCard}`}>
@@ -126,11 +134,14 @@ export const DailyPerformanceGrid: React.FC = () => {
                 })`;
               }
 
+              const isSelected = selectedDates.includes(day.date);
+
               return (
                 <div
                   key={day.date}
-                  className={`${styles.cell} ${styles[day.status]}`}
+                  className={`${styles.cell} ${styles[day.status]} ${isSelected ? styles.selected : ''}`}
                   data-tooltip={tooltipText}
+                  onClick={() => handleDateClick(day.date)}
                 />
               );
             })}

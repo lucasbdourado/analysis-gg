@@ -18,3 +18,5 @@ This file indexes the change specs created for the project.
 | 012 | Reorganize Dashboard Charts | [change-spec.md](./012-reorganize-dashboard-charts/change-spec.md) |
 | 013 | Interactive Role Filtering and Ranks Relayout | [change-spec.md](./013-interactive-role-filtering-and-ranks-relayout/change-spec.md) |
 | 014 | Interactive Weekday Filtering | [change-spec.md](./014-interactive-weekday-filtering/change-spec.md) |
+| 015 | Interactive Daily Performance Filtering and Multi-Select | [change-spec.md](./015-interactive-daily-performance-filtering-and-multi-select/change-spec.md) |
+

@@ -368,12 +368,6 @@ describe('DashboardContext Unit & Integration Tests', () => {
 
   describe('Role Filtering Logic', () => {
     const createRoleMockMatches = (): MatchSummary[] => {
-      // 0: match-0, position: TOP
-      // 1: match-1, position: JUNGLE
-      // 2: match-2, position: MIDDLE
-      // 3: match-3, position: BOTTOM
-      // 4: match-4, position: UTILITY
-      // 5: match-5, position: NONE
       const positions = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM', 'UTILITY', 'NONE'];
       return positions.map((pos, i) => ({
         matchId: `match-${i}`,
@@ -392,7 +386,7 @@ describe('DashboardContext Unit & Integration Tests', () => {
       }));
     };
 
-    it('should initialize selectedRole as null and roleFilteredMatches as filteredMatches', () => {
+    it('should initialize selectedRoles as empty and roleSelectorMatches as filteredMatches', () => {
       let contextVal!: DashboardContextProps;
       const rawData = createRoleMockMatches();
       render(
@@ -400,11 +394,11 @@ describe('DashboardContext Unit & Integration Tests', () => {
           <ContextConsumer callback={(val) => { contextVal = val; }} />
         </DashboardProvider>
       );
-      expect(contextVal.selectedRole).toBeNull();
-      expect(contextVal.roleFilteredMatches).toHaveLength(6);
+      expect(contextVal.selectedRoles).toEqual([]);
+      expect(contextVal.roleSelectorMatches).toHaveLength(6);
     });
 
-    it('should filter matches by selected role and allow clearing it', () => {
+    it('should filter matches by selected roles (multi-select) and allow clearing them', () => {
       let contextVal!: DashboardContextProps;
       const rawData = createRoleMockMatches();
       render(
@@ -415,58 +409,35 @@ describe('DashboardContext Unit & Integration Tests', () => {
 
       // Select 'Top'
       act(() => {
-        contextVal.setSelectedRole('Top');
+        contextVal.setSelectedRoles(['Top']);
       });
-      expect(contextVal.selectedRole).toBe('Top');
-      expect(contextVal.roleFilteredMatches).toHaveLength(1);
-      expect(contextVal.roleFilteredMatches[0].matchId).toBe('match-0');
+      expect(contextVal.selectedRoles).toEqual(['Top']);
+      expect(contextVal.combinedFilteredMatches).toHaveLength(1);
+      expect(contextVal.combinedFilteredMatches[0].matchId).toBe('match-0');
 
-      // Select 'Jungle'
+      // Select 'Jungle' as well
       act(() => {
-        contextVal.setSelectedRole('Jungle');
+        contextVal.setSelectedRoles(['Top', 'Jungle']);
       });
-      expect(contextVal.selectedRole).toBe('Jungle');
-      expect(contextVal.roleFilteredMatches).toHaveLength(1);
-      expect(contextVal.roleFilteredMatches[0].matchId).toBe('match-1');
-
-      // Select 'Mid'
-      act(() => {
-        contextVal.setSelectedRole('Mid');
-      });
-      expect(contextVal.selectedRole).toBe('Mid');
-      expect(contextVal.roleFilteredMatches).toHaveLength(1);
-      expect(contextVal.roleFilteredMatches[0].matchId).toBe('match-2');
-
-      // Select 'Bot'
-      act(() => {
-        contextVal.setSelectedRole('Bot');
-      });
-      expect(contextVal.selectedRole).toBe('Bot');
-      expect(contextVal.roleFilteredMatches).toHaveLength(1);
-      expect(contextVal.roleFilteredMatches[0].matchId).toBe('match-3');
-
-      // Select 'Support'
-      act(() => {
-        contextVal.setSelectedRole('Support');
-      });
-      expect(contextVal.selectedRole).toBe('Support');
-      expect(contextVal.roleFilteredMatches).toHaveLength(1);
-      expect(contextVal.roleFilteredMatches[0].matchId).toBe('match-4');
+      expect(contextVal.selectedRoles).toEqual(['Top', 'Jungle']);
+      expect(contextVal.combinedFilteredMatches).toHaveLength(2);
+      expect(contextVal.combinedFilteredMatches.map(m => m.matchId)).toContain('match-0');
+      expect(contextVal.combinedFilteredMatches.map(m => m.matchId)).toContain('match-1');
 
       // Clear selection
       act(() => {
-        contextVal.setSelectedRole(null);
+        contextVal.setSelectedRoles([]);
       });
-      expect(contextVal.selectedRole).toBeNull();
-      expect(contextVal.roleFilteredMatches).toHaveLength(6);
+      expect(contextVal.selectedRoles).toEqual([]);
+      expect(contextVal.combinedFilteredMatches).toHaveLength(6);
     });
   });
 
-  describe('Weekday & Combined Filtering Logic', () => {
-    const createWeekdayMatch = (dayOfWeekIndex: number, position: string, matchId: string): MatchSummary => {
+  describe('Weekday, Date & Combined Filtering Logic', () => {
+    const createWeekdayMatch = (dayOfWeekIndex: number, position: string, matchId: string, daysAgo: number = 0): MatchSummary => {
       const date = new Date();
       const currentDay = date.getDay();
-      const diff = dayOfWeekIndex - currentDay;
+      const diff = dayOfWeekIndex - currentDay - (daysAgo * 7);
       date.setDate(date.getDate() + diff);
       date.setHours(12, 0, 0, 0);
       return {
@@ -486,12 +457,12 @@ describe('DashboardContext Unit & Integration Tests', () => {
       };
     };
 
-    it('should filter matches by selected weekday and combinations correctly', () => {
+    it('should filter matches by selected weekdays, roles, and dates with independent selector charts', () => {
       let contextVal!: DashboardContextProps;
       const rawData = [
-        createWeekdayMatch(1, 'TOP', 'match-mon-top'),    // Monday (1) Top
-        createWeekdayMatch(1, 'MIDDLE', 'match-mon-mid'), // Monday (1) Mid
-        createWeekdayMatch(2, 'MIDDLE', 'match-tue-mid'), // Tuesday (2) Mid
+        createWeekdayMatch(1, 'TOP', 'match-mon-top', 0),    // Monday Top
+        createWeekdayMatch(1, 'MIDDLE', 'match-mon-mid', 0), // Monday Mid
+        createWeekdayMatch(2, 'MIDDLE', 'match-tue-mid', 0), // Tuesday Mid
       ];
 
       render(
@@ -501,47 +472,40 @@ describe('DashboardContext Unit & Integration Tests', () => {
       );
 
       // Defaults
-      expect(contextVal.selectedWeekday).toBeNull();
-      expect(contextVal.weekdayFilteredMatches).toHaveLength(3);
+      expect(contextVal.selectedWeekdays).toEqual([]);
+      expect(contextVal.selectedRoles).toEqual([]);
+      expect(contextVal.selectedDates).toEqual([]);
       expect(contextVal.combinedFilteredMatches).toHaveLength(3);
 
       // Select Monday
       act(() => {
-        contextVal.setSelectedWeekday('Monday');
+        contextVal.setSelectedWeekdays(['Monday']);
       });
-      expect(contextVal.selectedWeekday).toBe('Monday');
-      expect(contextVal.weekdayFilteredMatches).toHaveLength(2);
-      expect(contextVal.weekdayFilteredMatches.map(m => m.matchId)).toContain('match-mon-top');
-      expect(contextVal.weekdayFilteredMatches.map(m => m.matchId)).toContain('match-mon-mid');
-
-      // combinedFilteredMatches should also be filtered by Monday since selectedRole is null
+      expect(contextVal.selectedWeekdays).toEqual(['Monday']);
       expect(contextVal.combinedFilteredMatches).toHaveLength(2);
+      expect(contextVal.combinedFilteredMatches.map(m => m.matchId)).toContain('match-mon-top');
+      expect(contextVal.combinedFilteredMatches.map(m => m.matchId)).toContain('match-mon-mid');
 
       // Select Mid role as well
       act(() => {
-        contextVal.setSelectedRole('Mid');
+        contextVal.setSelectedRoles(['Mid']);
       });
-      // combinedFilteredMatches should filter by BOTH Monday and Mid
       expect(contextVal.combinedFilteredMatches).toHaveLength(1);
       expect(contextVal.combinedFilteredMatches[0].matchId).toBe('match-mon-mid');
 
-      // roleFilteredMatches should filter by Mid ONLY (ignoring weekday filter)
-      expect(contextVal.roleFilteredMatches).toHaveLength(2);
-      expect(contextVal.roleFilteredMatches.map(m => m.matchId)).toContain('match-mon-mid');
-      expect(contextVal.roleFilteredMatches.map(m => m.matchId)).toContain('match-tue-mid');
+      // roleSelectorMatches ignores selectedRoles, but filters by selectedWeekdays and selectedDates.
+      // So it should be filtered by Monday (selectedWeekdays=['Monday']).
+      // Matches on Monday: match-mon-top, match-mon-mid.
+      expect(contextVal.roleSelectorMatches).toHaveLength(2);
+      expect(contextVal.roleSelectorMatches.map(m => m.matchId)).toContain('match-mon-top');
+      expect(contextVal.roleSelectorMatches.map(m => m.matchId)).toContain('match-mon-mid');
 
-      // weekdayFilteredMatches should filter by Monday ONLY (ignoring role filter)
-      expect(contextVal.weekdayFilteredMatches).toHaveLength(2);
-      expect(contextVal.weekdayFilteredMatches.map(m => m.matchId)).toContain('match-mon-top');
-      expect(contextVal.weekdayFilteredMatches.map(m => m.matchId)).toContain('match-mon-mid');
-
-      // Clear weekday filter
-      act(() => {
-        contextVal.setSelectedWeekday(null);
-      });
-      expect(contextVal.selectedWeekday).toBeNull();
-      expect(contextVal.weekdayFilteredMatches).toHaveLength(3);
-      expect(contextVal.combinedFilteredMatches).toHaveLength(2); // Mid only (both Monday and Tuesday)
+      // weekdaySelectorMatches ignores selectedWeekdays, but filters by selectedRoles and selectedDates.
+      // So it should be filtered by Mid (selectedRoles=['Mid']).
+      // Matches with Mid: match-mon-mid, match-tue-mid.
+      expect(contextVal.weekdaySelectorMatches).toHaveLength(2);
+      expect(contextVal.weekdaySelectorMatches.map(m => m.matchId)).toContain('match-mon-mid');
+      expect(contextVal.weekdaySelectorMatches.map(m => m.matchId)).toContain('match-tue-mid');
     });
   });
 });

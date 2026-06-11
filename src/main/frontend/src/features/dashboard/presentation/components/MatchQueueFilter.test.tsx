@@ -12,9 +12,16 @@ describe('MatchQueueFilter Component Tests', () => {
     filteredMatches: [],
     selectedQueues: [],
     toggleQueueFilter: vi.fn(),
-    selectedRole: null,
-    setSelectedRole: vi.fn(),
-    roleFilteredMatches: [],
+    selectedRoles: [],
+    setSelectedRoles: vi.fn(),
+    roleSelectorMatches: [],
+    selectedWeekdays: [],
+    setSelectedWeekdays: vi.fn(),
+    weekdaySelectorMatches: [],
+    selectedDates: [],
+    setSelectedDates: vi.fn(),
+    dateSelectorMatches: [],
+    combinedFilteredMatches: [],
   };
 
   const renderWithContext = (contextProps: Partial<DashboardContextProps>) => {

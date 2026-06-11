@@ -175,16 +175,16 @@ describe('RouteWinRateChart Component Tests', () => {
       createMockMatch('JUNGLE', false),
     ];
 
-    let selectedRole: string | null = null;
-    const setSelectedRoleMock = (role: string | null) => {
-      selectedRole = role;
+    let selectedRoles: string[] = [];
+    const setSelectedRolesMock = (roles: string[]) => {
+      selectedRoles = roles;
     };
 
     const { rerender } = render(
       <DashboardProvider
         rawData={matches}
-        selectedRole={selectedRole}
-        setSelectedRole={setSelectedRoleMock}
+        selectedRoles={selectedRoles}
+        setSelectedRoles={setSelectedRolesMock}
       >
         <RouteWinRateChart />
       </DashboardProvider>
@@ -194,15 +194,15 @@ describe('RouteWinRateChart Component Tests', () => {
     const topText = screen.getByText('Top');
     fireEvent.click(topText);
 
-    // The callback should have been called with 'Top'
-    expect(selectedRole).toBe('Top');
+    // The callback should have been called with ['Top']
+    expect(selectedRoles).toEqual(['Top']);
 
-    // Rerender with the updated selectedRole to check class application
+    // Rerender with the updated selectedRoles to check class application
     rerender(
       <DashboardProvider
         rawData={matches}
-        selectedRole={selectedRole}
-        setSelectedRole={setSelectedRoleMock}
+        selectedRoles={selectedRoles}
+        setSelectedRoles={setSelectedRolesMock}
       >
         <RouteWinRateChart />
       </DashboardProvider>
@@ -212,8 +212,8 @@ describe('RouteWinRateChart Component Tests', () => {
     const topItem = topText.parentElement?.parentElement?.parentElement;
     expect(topItem?.className).toContain('roleItemActive');
 
-    // Clicking it again should deselect it (call with null)
+    // Clicking it again should deselect it (call with empty array)
     fireEvent.click(topText);
-    expect(selectedRole).toBeNull();
+    expect(selectedRoles).toEqual([]);
   });
 });

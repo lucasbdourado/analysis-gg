@@ -38,7 +38,7 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label })
 };
 
 export const WeekdayWinRateChart: React.FC = () => {
-  const { roleFilteredMatches, selectedWeekday, setSelectedWeekday } = useDashboard();
+  const { weekdaySelectorMatches, selectedWeekdays, setSelectedWeekdays } = useDashboard();
 
   const weekdayData = useMemo(() => {
     const days = [
@@ -51,7 +51,7 @@ export const WeekdayWinRateChart: React.FC = () => {
       { dayName: 'Saturday', wins: 0, losses: 0 },
     ];
 
-    roleFilteredMatches.forEach((match: MatchSummary) => {
+    weekdaySelectorMatches.forEach((match: MatchSummary) => {
       const date = new Date(match.gameCreation);
       const dayIndex = date.getDay(); // 0 = Sunday, ..., 6 = Saturday
       if (match.win) {
@@ -71,9 +71,9 @@ export const WeekdayWinRateChart: React.FC = () => {
     });
 
     return [...dayDataList.slice(1), dayDataList[0]];
-  }, [roleFilteredMatches]);
+  }, [weekdaySelectorMatches]);
 
-  const hasMatches = roleFilteredMatches.length > 0;
+  const hasMatches = weekdaySelectorMatches.length > 0;
 
   return (
     <div className={`ds-panel ${styles.chartCard}`}>
@@ -90,18 +90,18 @@ export const WeekdayWinRateChart: React.FC = () => {
               <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255, 255, 255, 0.02)' }} />
               <Bar dataKey="winRate" radius={[4, 4, 0, 0]}>
                 {weekdayData.map((entry, index) => {
-                  const isSelected = selectedWeekday === entry.dayName;
+                  const isSelected = selectedWeekdays.includes(entry.dayName);
                   return (
                     <Cell
                       key={`cell-${index}`}
                       fill={isSelected ? 'var(--color-gold-500)' : 'var(--color-cyan-500)'}
                       style={{ cursor: 'pointer' }}
                       onClick={() => {
-                        if (selectedWeekday === entry.dayName) {
-                          setSelectedWeekday(null);
-                        } else {
-                          setSelectedWeekday(entry.dayName);
-                        }
+                        setSelectedWeekdays(
+                          selectedWeekdays.includes(entry.dayName)
+                            ? selectedWeekdays.filter(d => d !== entry.dayName)
+                            : [...selectedWeekdays, entry.dayName]
+                        );
                       }}
                     />
                   );

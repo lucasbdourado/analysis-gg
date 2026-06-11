@@ -12,7 +12,7 @@ const iconUrls: Record<string, string> = {
 };
 
 export const RouteWinRateChart: React.FC = () => {
-  const { weekdayFilteredMatches, selectedRole, setSelectedRole } = useDashboard();
+  const { roleSelectorMatches, selectedRoles, setSelectedRoles } = useDashboard();
 
   const { activeRoles, hasMatches } = useMemo(() => {
     const rolesMap: Record<string, { wins: number; losses: number }> = {
@@ -23,7 +23,7 @@ export const RouteWinRateChart: React.FC = () => {
       Support: { wins: 0, losses: 0 },
     };
 
-    weekdayFilteredMatches.forEach((match: MatchSummary) => {
+    roleSelectorMatches.forEach((match: MatchSummary) => {
       const pos = match.teamPosition;
       if (!pos) return;
 
@@ -74,7 +74,7 @@ export const RouteWinRateChart: React.FC = () => {
       activeRoles: active,
       hasMatches: active.length > 0,
     };
-  }, [weekdayFilteredMatches]);
+  }, [roleSelectorMatches]);
 
   return (
     <div className={`ds-panel ${styles.chartCard}`}>
@@ -87,17 +87,17 @@ export const RouteWinRateChart: React.FC = () => {
             {activeRoles.map(role => {
               const iconUrl = iconUrls[role.roleName];
               const gamesPlayed = role.wins + role.losses;
-              const isActive = selectedRole === role.roleName;
+              const isActive = selectedRoles.includes(role.roleName);
               return (
                 <div
                   key={role.roleName}
                   className={`${styles.roleItem} ${isActive ? styles.roleItemActive : ''}`}
                   onClick={() => {
-                    if (selectedRole === role.roleName) {
-                      setSelectedRole(null);
-                    } else {
-                      setSelectedRole(role.roleName);
-                    }
+                    setSelectedRoles(
+                      selectedRoles.includes(role.roleName)
+                        ? selectedRoles.filter(r => r !== role.roleName)
+                        : [...selectedRoles, role.roleName]
+                    );
                   }}
                 >
                   <div className={styles.roleLeft}>
