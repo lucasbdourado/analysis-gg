@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { RecentMatchHistory } from './RecentMatchHistory';
 import type { MatchSummary } from '../../domain/MatchSummary';
@@ -117,5 +117,43 @@ describe('RecentMatchHistory', () => {
     expect(item).toHaveClass(styles.item);
     expect(rail).toHaveClass(styles.outcomeRail);
     expect(rail).toHaveClass(styles.remakeRail);
+  });
+
+  it('should limit list to 5 matches by default and expand on show more click', () => {
+    const matches = [
+      createMatch({ matchId: 'm1', championName: 'Aatrox', gameCreation: 600 }),
+      createMatch({ matchId: 'm2', championName: 'Ahri', gameCreation: 500 }),
+      createMatch({ matchId: 'm3', championName: 'Lux', gameCreation: 400 }),
+      createMatch({ matchId: 'm4', championName: 'Zac', gameCreation: 300 }),
+      createMatch({ matchId: 'm5', championName: 'Zed', gameCreation: 200 }),
+      createMatch({ matchId: 'm6', championName: 'Sona', gameCreation: 100 }),
+    ];
+
+    const { container } = render(<RecentMatchHistory matches={matches} />);
+
+    // Initially, only 5 matches are shown
+    const itemsBefore = container.querySelectorAll('[data-testid="recent-match-history-item"]');
+    expect(itemsBefore).toHaveLength(5);
+    expect(screen.queryByText('Sona')).not.toBeInTheDocument();
+
+    // Click Show More
+    const showMoreButton = screen.getByRole('button', { name: 'Show More' });
+    expect(showMoreButton).toBeInTheDocument();
+    fireEvent.click(showMoreButton);
+
+    // Now all 6 are shown
+    const itemsAfter = container.querySelectorAll('[data-testid="recent-match-history-item"]');
+    expect(itemsAfter).toHaveLength(6);
+    expect(screen.queryByText('Sona')).toBeInTheDocument();
+
+    // Click Show Less
+    const showLessButton = screen.getByRole('button', { name: 'Show Less' });
+    expect(showLessButton).toBeInTheDocument();
+    fireEvent.click(showLessButton);
+
+    // Back to 5
+    const itemsFinal = container.querySelectorAll('[data-testid="recent-match-history-item"]');
+    expect(itemsFinal).toHaveLength(5);
+    expect(screen.queryByText('Sona')).not.toBeInTheDocument();
   });
 });

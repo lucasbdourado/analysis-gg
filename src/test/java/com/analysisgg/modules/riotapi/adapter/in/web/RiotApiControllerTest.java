@@ -39,10 +39,10 @@ class RiotApiControllerTest {
         int count = 20;
 
         PlayerAnalytics analytics = new PlayerAnalytics(
-                "puuid-123", "Ahri", "123", "br1", Collections.emptyList()
+                "puuid-123", "Ahri", "123", "br1", 29, 158L, null, Collections.emptyList(), Collections.emptyList()
         );
         PlayerAnalyticsResponse responseDto = new PlayerAnalyticsResponse(
-                "puuid-123", "Ahri", "123", "br1", Collections.emptyList()
+                "puuid-123", "Ahri", "123", "br1", 29, 158L, null, Collections.emptyList(), Collections.emptyList()
         );
 
         when(syncPlayerProfileUseCase.execute(eq(riotId), eq(region), eq(count)))
@@ -56,9 +56,12 @@ class RiotApiControllerTest {
                 .andExpect(jsonPath("$.gameName").value("Ahri"))
                 .andExpect(jsonPath("$.tagLine").value("123"))
                 .andExpect(jsonPath("$.region").value("br1"))
+                .andExpect(jsonPath("$.profileIconId").value(29))
+                .andExpect(jsonPath("$.summonerLevel").value(158))
                 .andExpect(jsonPath("$.rankedQueues.soloDuo.queueType").value("RANKED_SOLO_5x5"))
                 .andExpect(jsonPath("$.rankedQueues.flex.queueType").value("RANKED_FLEX_SR"))
-                .andExpect(jsonPath("$.matches").isEmpty());
+                .andExpect(jsonPath("$.matches").isEmpty())
+                .andExpect(jsonPath("$.pastSeasonRanks").isEmpty());
 
         verify(syncPlayerProfileUseCase).execute(riotId, region, count);
         verify(mapper).toResponse(analytics);

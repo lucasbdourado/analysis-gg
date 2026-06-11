@@ -12,6 +12,7 @@ public record MatchResponse(
         int deaths,
         int assists,
         int totalMinionsKilled,
-        int neutralMinionsKilled
+        int neutralMinionsKilled,
+        String teamPosition
 ) {
 }

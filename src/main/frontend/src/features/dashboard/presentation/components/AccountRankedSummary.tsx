@@ -1,11 +1,14 @@
-import type { RankedQueueSummary, RankedQueues } from '../../infrastructure/api/PlayerAnalyticsResponse';
+import type { RankedQueueSummary, RankedQueues, PastSeasonRank } from '../../infrastructure/api/PlayerAnalyticsResponse';
 import styles from './AccountRankedSummary.module.css';
 
 interface AccountRankedSummaryProps {
   gameName: string;
   tagLine: string;
   region: string;
+  profileIconId: number;
+  summonerLevel: number;
   rankedQueues: RankedQueues;
+  pastSeasonRanks: PastSeasonRank[];
 }
 
 const REGION_FLAGS: Record<string, { label: string; icon: string }> = {
@@ -122,23 +125,54 @@ export function AccountRankedSummary({
   gameName,
   tagLine,
   region,
+  profileIconId,
+  summonerLevel,
   rankedQueues,
+  pastSeasonRanks,
 }: AccountRankedSummaryProps) {
   const normalizedRegion = region.toUpperCase();
   const flag = REGION_FLAGS[normalizedRegion] ?? { label: normalizedRegion, icon: normalizedRegion };
 
   return (
     <section className={`ds-panel ${styles.summary}`} aria-label="Player profile">
-      <div className={styles.identity}>
-        <span className={styles.flag} role="img" aria-label={flag.label}>
-          {flag.icon}
-        </span>
-        <div className={styles.identityText}>
-          <div className={styles.riotId}>
-            <span className={styles.name}>{gameName}</span>
-            <span className={styles.tag}>#{tagLine}</span>
+      <div className={styles.profileSection}>
+        {pastSeasonRanks && pastSeasonRanks.length > 0 && (
+          <div className={styles.pastRanks} data-testid="past-ranks">
+            {pastSeasonRanks.map((pr) => (
+              <span key={pr.season} className={styles.pastRankPill}>
+                <strong>{pr.season}</strong> {pr.tier} {pr.rank}
+              </span>
+            ))}
           </div>
-          <span className={styles.region}>{normalizedRegion}</span>
+        )}
+        <div className={styles.identity}>
+          <div className={styles.avatarContainer}>
+            <img
+              className={styles.avatar}
+              src={`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${profileIconId}.jpg`}
+              alt={`${gameName}'s summoner icon`}
+              loading="lazy"
+              onError={(event) => {
+                event.currentTarget.src =
+                  'https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/29.jpg';
+              }}
+            />
+            <span className={styles.levelBadge} data-testid="summoner-level">
+              {summonerLevel}
+            </span>
+          </div>
+          <div className={styles.identityText}>
+            <div className={styles.riotId}>
+              <span className={styles.name}>{gameName}</span>
+              <span className={styles.tag}>#{tagLine}</span>
+            </div>
+            <div className={styles.regionInfo}>
+              <span className={styles.flag} role="img" aria-label={flag.label}>
+                {flag.icon}
+              </span>
+              <span className={styles.region}>{normalizedRegion}</span>
+            </div>
+          </div>
         </div>
       </div>
       <div className={styles.queues}>

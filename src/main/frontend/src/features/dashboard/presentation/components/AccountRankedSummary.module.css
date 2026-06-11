@@ -1,16 +1,84 @@
 .summary {
-  display: grid;
-  align-items: center;
-  gap: var(--space-8);
-  grid-template-columns: minmax(12rem, 0.65fr) minmax(0, 1.35fr);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-5);
   min-width: 0;
+  padding: var(--space-5);
+}
+
+.profileSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  width: 100%;
+}
+
+.pastRanks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: center;
+}
+
+.pastRankPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface-muted);
+  border: var(--border-hairline);
+  font-size: 0.65rem;
+  color: var(--color-text-subtle);
+  text-transform: uppercase;
+}
+
+.pastRankPill strong {
+  color: var(--color-text-muted);
 }
 
 .identity {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: var(--space-4);
-  min-width: 0;
+  text-align: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.avatarContainer {
+  position: relative;
+  width: 5.5rem;
+  height: 5.5rem;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-md);
+  border: var(--border-hairline);
+  object-fit: cover;
+  display: block;
+}
+
+.levelBadge {
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-surface-strong);
+  color: var(--color-text-strong);
+  border: var(--border-hairline);
+  border-color: var(--color-gold-300);
+  border-radius: 10px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  white-space: nowrap;
 }
 
 .flag {
@@ -27,14 +95,16 @@
 }
 
 .identityText {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: var(--space-1);
-  min-width: 0;
 }
 
 .riotId {
   display: flex;
   align-items: baseline;
+  justify-content: center;
   gap: var(--space-2);
   min-width: 0;
   flex-wrap: wrap;
@@ -61,33 +131,38 @@
   color: var(--color-gold-300);
 }
 
+.regionInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
 .queues {
-  display: grid;
-  align-items: stretch;
-  gap: var(--space-4);
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
 }
 
 .queueItem {
   display: grid;
   align-items: center;
-  gap: var(--space-4);
-  grid-template-columns: 5rem minmax(0, 1fr);
+  gap: var(--space-3);
+  grid-template-columns: 3.5rem minmax(0, 1fr);
   min-width: 0;
-  min-height: 7rem;
-  padding: var(--space-4);
+  min-height: 4.5rem;
+  padding: var(--space-3);
   border: var(--border-hairline);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   background:
-    radial-gradient(circle at 12% 50%, rgba(207, 174, 99, 0.14), transparent 34%),
+    radial-gradient(circle at 12% 50%, rgba(207, 174, 99, 0.1), transparent 34%),
     rgba(7, 9, 13, 0.52);
 }
 
 .emblemFrame {
   display: grid;
   place-items: center;
-  width: 5rem;
-  height: 5rem;
+  width: 3.5rem;
+  height: 3.5rem;
 }
 
 .emblem {
@@ -100,13 +175,13 @@
 .unrankedMark {
   display: grid;
   place-items: center;
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
   border: var(--border-hairline);
   border-radius: 50%;
   color: var(--color-text-subtle);
   font-family: var(--font-heading);
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-md);
   font-weight: 800;
 }
 
@@ -148,25 +223,50 @@
   color: var(--color-border-strong);
 }
 
-@media (max-width: 720px) {
+@media (min-width: 721px) and (max-width: 1024px) {
   .summary {
-    grid-template-columns: 1fr;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
   }
-
+  .profileSection {
+    align-items: flex-start;
+    width: auto;
+  }
+  .pastRanks {
+    justify-content: flex-start;
+  }
+  .identity {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+  }
+  .identityText {
+    align-items: flex-start;
+  }
+  .riotId {
+    justify-content: flex-start;
+  }
   .queues {
-    grid-template-columns: 1fr;
+    flex-direction: row !important;
+    flex: 1;
+    justify-content: flex-end;
+    gap: var(--space-4);
+  }
+  .queueItem {
+    min-width: 14rem;
   }
 }
 
 @media (max-width: 420px) {
   .queueItem {
-    gap: var(--space-3);
-    grid-template-columns: 4rem minmax(0, 1fr);
-    padding: var(--space-3);
+    gap: var(--space-2);
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    padding: var(--space-2);
   }
 
   .emblemFrame {
-    width: 4rem;
-    height: 4rem;
+    width: 2.5rem;
+    height: 2.5rem;
   }
 }

@@ -31,7 +31,8 @@ class DomainModelsTest {
             2,
             10,
             180,
-            20
+            20,
+            "TOP"
         );
 
         assertThat(match.matchId()).isEqualTo("BR1_12345");
@@ -46,13 +47,14 @@ class DomainModelsTest {
         assertThat(match.assists()).isEqualTo(10);
         assertThat(match.totalMinionsKilled()).isEqualTo(180);
         assertThat(match.neutralMinionsKilled()).isEqualTo(20);
+        assertThat(match.teamPosition()).isEqualTo("TOP");
     }
 
     @Test
     void shouldCreatePlayerAnalyticsCorrectlyAndEnforceImmutability() {
         List<MatchSummary> matches = new ArrayList<>();
         matches.add(new MatchSummary(
-            "BR1_12345", 1800L, 1620000000000L, 420, true, 266, "Aatrox", 5, 2, 10, 180, 20
+            "BR1_12345", 1800L, 1620000000000L, 420, true, 266, "Aatrox", 5, 2, 10, 180, 20, "TOP"
         ));
 
         PlayerAnalytics analytics = new PlayerAnalytics(
@@ -73,7 +75,7 @@ class DomainModelsTest {
 
         // Ensure the list is immutable/copied defensively
         assertThatThrownBy(() -> analytics.matches().add(new MatchSummary(
-            "BR1_67890", 1800L, 1620000000000L, 420, false, 266, "Aatrox", 1, 5, 2, 150, 10
+            "BR1_67890", 1800L, 1620000000000L, 420, false, 266, "Aatrox", 1, 5, 2, 150, 10, "MIDDLE"
         ))).isInstanceOf(UnsupportedOperationException.class);
     }
 

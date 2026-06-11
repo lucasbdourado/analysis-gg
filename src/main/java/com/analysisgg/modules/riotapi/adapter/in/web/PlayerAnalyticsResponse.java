@@ -7,9 +7,23 @@ public record PlayerAnalyticsResponse(
         String gameName,
         String tagLine,
         String region,
+        int profileIconId,
+        long summonerLevel,
         RankedQueuesResponse rankedQueues,
-        List<MatchResponse> matches
+        List<MatchResponse> matches,
+        List<PastSeasonRankResponse> pastSeasonRanks
 ) {
+    public PlayerAnalyticsResponse(
+            String puuid,
+            String gameName,
+            String tagLine,
+            String region,
+            RankedQueuesResponse rankedQueues,
+            List<MatchResponse> matches
+    ) {
+        this(puuid, gameName, tagLine, region, 29, 0L, rankedQueues, matches, List.of());
+    }
+
     public PlayerAnalyticsResponse(
             String puuid,
             String gameName,
@@ -29,6 +43,13 @@ public record PlayerAnalyticsResponse(
         }
         if (matches != null) {
             matches = List.copyOf(matches);
+        } else {
+            matches = List.of();
+        }
+        if (pastSeasonRanks != null) {
+            pastSeasonRanks = List.copyOf(pastSeasonRanks);
+        } else {
+            pastSeasonRanks = List.of();
         }
     }
 }

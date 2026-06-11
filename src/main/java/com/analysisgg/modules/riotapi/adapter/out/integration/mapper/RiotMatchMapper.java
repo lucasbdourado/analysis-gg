@@ -28,7 +28,8 @@ public class RiotMatchMapper {
             targetParticipant.deaths(),
             targetParticipant.assists(),
             targetParticipant.totalMinionsKilled(),
-            targetParticipant.neutralMinionsKilled()
+            targetParticipant.neutralMinionsKilled(),
+            targetParticipant.teamPosition()
         );
     }
 }

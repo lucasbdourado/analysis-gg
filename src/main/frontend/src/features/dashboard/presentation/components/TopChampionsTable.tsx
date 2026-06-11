@@ -34,6 +34,8 @@ export const TopChampionsTable: React.FC = () => {
     sortDirection: 'desc',
   });
 
+  const [showAll, setShowAll] = React.useState<boolean>(false);
+
   const [failedImages, setFailedImages] = React.useState<Record<string, boolean>>({});
 
   const handleImageError = (championName: string) => {
@@ -166,6 +168,7 @@ export const TopChampionsTable: React.FC = () => {
   }, [filteredMatches, sortConfig]);
 
   const hasMatches = filteredMatches.length > 0;
+  const visibleChampions = showAll ? championsData : championsData.slice(0, 5);
 
   return (
     <div className={`ds-panel ${styles.tableCard}`}>
@@ -173,72 +176,82 @@ export const TopChampionsTable: React.FC = () => {
       {!hasMatches ? (
         <div className={styles.emptyState}>No champion statistics to display.</div>
       ) : (
-        <div className={styles.tableWrapper}>
-          <table className={`ds-table ${styles.table}`}>
-            <thead>
-              <tr>
-                <th className={styles.thLeft} onClick={() => handleSort('championName')}>
-                  Champion{renderSortIndicator('championName')}
-                </th>
-                <th onClick={() => handleSort('gamesPlayed')}>
-                  Played{renderSortIndicator('gamesPlayed')}
-                </th>
-                <th onClick={() => handleSort('winRate')}>
-                  Win Rate{renderSortIndicator('winRate')}
-                </th>
-                <th className={styles.thLeft} onClick={() => handleSort('kdaValue')}>
-                  KDA{renderSortIndicator('kdaValue')}
-                </th>
-                <th onClick={() => handleSort('csMin')}>
-                  CS/min{renderSortIndicator('csMin')}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {championsData.map((champ) => {
-                // Style win rates dynamically: high win rates can highlight cyan
-                const isHighWinRate = champ.winRate >= 60;
-                return (
-                  <tr key={champ.championName} className={styles.tr}>
-                    <td className={`${styles.tdLeft} ${styles.championNameCell}`}>
-                      <div className={styles.championInfo}>
-                        {failedImages[champ.championName] ? (
-                          <div 
-                            className={styles.championFallback} 
-                            data-testid={`fallback-${champ.championName}`}
-                          >
-                            {champ.championName.charAt(0)}
-                          </div>
-                        ) : (
-                          <img
-                            src={`https://ddragon.leagueoflegends.com/cdn/${CHAMPION_ASSET_VERSION}/img/champion/${champ.championName}.png`}
-                            alt={champ.championName}
-                            className={styles.championIcon}
-                            onError={() => handleImageError(champ.championName)}
-                          />
-                        )}
-                        <span className={styles.championNameText}>{champ.championName}</span>
-                      </div>
-                    </td>
-                    <td className={styles.tdCenter}>{champ.gamesPlayed}</td>
-                    <td className={styles.tdCenter}>
-                      <span className={isHighWinRate ? styles.highWinRate : ''}>
-                        {champ.winRate}%
-                      </span>
-                      <span className={styles.recordDetail}>
-                        ({champ.wins}W - {champ.losses}L)
-                      </span>
-                    </td>
-                    <td className={`${styles.tdLeft} ${styles.kdaCell}`}>
-                      {champ.kdaString}
-                    </td>
-                    <td className={styles.tdCenter}>{champ.csMinString}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+        <>
+          <div className={styles.tableWrapper}>
+            <table className={`ds-table ${styles.table}`}>
+              <thead>
+                <tr>
+                  <th className={styles.thLeft} onClick={() => handleSort('championName')}>
+                    Champion{renderSortIndicator('championName')}
+                  </th>
+                  <th onClick={() => handleSort('gamesPlayed')}>
+                    Played{renderSortIndicator('gamesPlayed')}
+                  </th>
+                  <th onClick={() => handleSort('winRate')}>
+                    Win Rate{renderSortIndicator('winRate')}
+                  </th>
+                  <th className={styles.thLeft} onClick={() => handleSort('kdaValue')}>
+                    KDA{renderSortIndicator('kdaValue')}
+                  </th>
+                  <th onClick={() => handleSort('csMin')}>
+                    CS/min{renderSortIndicator('csMin')}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleChampions.map((champ) => {
+                  // Style win rates dynamically: high win rates can highlight cyan
+                  const isHighWinRate = champ.winRate >= 60;
+                  return (
+                    <tr key={champ.championName} className={styles.tr}>
+                      <td className={`${styles.tdLeft} ${styles.championNameCell}`}>
+                        <div className={styles.championInfo}>
+                          {failedImages[champ.championName] ? (
+                            <div 
+                              className={styles.championFallback} 
+                              data-testid={`fallback-${champ.championName}`}
+                            >
+                              {champ.championName.charAt(0)}
+                            </div>
+                          ) : (
+                            <img
+                              src={`https://ddragon.leagueoflegends.com/cdn/${CHAMPION_ASSET_VERSION}/img/champion/${champ.championName}.png`}
+                              alt={champ.championName}
+                              className={styles.championIcon}
+                              onError={() => handleImageError(champ.championName)}
+                            />
+                          )}
+                          <span className={styles.championNameText}>{champ.championName}</span>
+                        </div>
+                      </td>
+                      <td className={styles.tdCenter}>{champ.gamesPlayed}</td>
+                      <td className={styles.tdCenter}>
+                        <span className={isHighWinRate ? styles.highWinRate : ''}>
+                          {champ.winRate}%
+                        </span>
+                        <span className={styles.recordDetail}>
+                          ({champ.wins}W - {champ.losses}L)
+                        </span>
+                      </td>
+                      <td className={`${styles.tdLeft} ${styles.kdaCell}`}>
+                        {champ.kdaString}
+                      </td>
+                      <td className={styles.tdCenter}>{champ.csMinString}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          {championsData.length > 5 && (
+            <button
+              className={`ds-button ds-button-ghost ${styles.toggleButton}`}
+              onClick={() => setShowAll(!showAll)}
+            >
+              {showAll ? 'Show Less' : `Show More (${championsData.length - 5} more)`}
+            </button>
+          )}
+        </>
       )}
     </div>
   );

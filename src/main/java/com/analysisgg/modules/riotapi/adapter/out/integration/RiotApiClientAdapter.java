@@ -3,6 +3,7 @@ package com.analysisgg.modules.riotapi.adapter.out.integration;
 import com.analysisgg.modules.riotapi.adapter.out.integration.dto.RiotAccountDto;
 import com.analysisgg.modules.riotapi.adapter.out.integration.dto.RiotLeagueEntryDto;
 import com.analysisgg.modules.riotapi.adapter.out.integration.dto.RiotMatchDto;
+import com.analysisgg.modules.riotapi.adapter.out.integration.dto.RiotSummonerDto;
 import com.analysisgg.modules.riotapi.adapter.out.integration.mapper.RiotMatchMapper;
 import com.analysisgg.modules.riotapi.application.port.RiotApiClientPort;
 import com.analysisgg.modules.riotapi.domain.exception.PlayerNotFoundException;
@@ -177,6 +178,29 @@ public class RiotApiClientAdapter implements RiotApiClientPort {
             }
 
             return RiotMatchMapper.toDomain(matchDto, targetPuuid.value());
+        });
+    }
+
+    @Override
+    public RiotSummonerDto fetchSummonerByPuuid(Puuid puuid, Region region) {
+        return executeWithRetry(() -> {
+            String host = resolvePlatformHost(region);
+            RiotSummonerDto summonerDto = restClient.get()
+                    .uri("https://{host}/lol/summoner/v4/summoners/by-puuid/{puuid}", host, puuid.value())
+                    .retrieve()
+                    .onStatus(status -> status.value() == 429, (req, resp) -> {
+                        throw new RateLimitExceededException("Rate limit exceeded querying Riot API");
+                    })
+                    .onStatus(status -> status.isError(), (req, resp) -> {
+                        throw new RiotApiException("Riot API error when fetching summoner details: " + resp.getStatusCode());
+                    })
+                    .body(RiotSummonerDto.class);
+
+            if (summonerDto == null) {
+                throw new RiotApiException("Invalid summoner details response for PUUID: " + puuid.value());
+            }
+
+            return summonerDto;
         });
     }
 

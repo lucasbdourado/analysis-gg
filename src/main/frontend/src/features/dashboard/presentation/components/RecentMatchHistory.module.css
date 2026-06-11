@@ -251,10 +251,25 @@
     grid-column: 2 / -1;
   }
 
-  .matchStats {
-    grid-column: 2 / -1;
-    align-items: flex-start;
-    flex-direction: row;
-    justify-content: space-between;
+    .matchStats {
+      grid-column: 2 / -1;
+      align-items: flex-start;
+      flex-direction: row;
+      justify-content: space-between;
+    }
   }
+
+.actionRow {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.toggleButton {
+  font-size: var(--font-size-xs);
+  min-height: 38px !important;
+  height: 38px;
+  padding: 0 var(--space-4);
 }

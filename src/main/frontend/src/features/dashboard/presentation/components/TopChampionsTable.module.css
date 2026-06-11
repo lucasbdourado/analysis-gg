@@ -127,3 +127,12 @@
 .championNameText {
   color: var(--color-text-strong);
 }
+
+.toggleButton {
+  margin-top: 1rem;
+  align-self: center;
+  font-size: var(--font-size-xs);
+  min-height: 38px !important;
+  height: 38px;
+  padding: 0 var(--space-4);
+}

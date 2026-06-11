@@ -15,11 +15,20 @@ export interface RankedQueues {
   flex: RankedQueueSummary;
 }
 
+export interface PastSeasonRank {
+  season: string;
+  tier: string;
+  rank: string | null;
+}
+
 export interface PlayerAnalyticsResponse {
   puuid: string;
   gameName: string;
   tagLine: string;
   region: string;
+  profileIconId: number;
+  summonerLevel: number;
   rankedQueues: RankedQueues;
   matches: MatchSummary[];
+  pastSeasonRanks: PastSeasonRank[];
 }

@@ -13,3 +13,7 @@ This file indexes the change specs created for the project.
 | 007 | Recent Match History Section | [change-spec.md](./007-recent-match-history-section/change-spec.md) |
 | 008 | Horizontal Dashboard and Expandable Top Champions | [change-spec.md](./008-horizontal-dashboard-expandable-top-champions/change-spec.md) |
 | 009 | Compact Profile Dashboard | [change-spec.md](./009-compact-profile-dashboard/change-spec.md) |
+| 010 | Summoner Icon and Historical Ranks | [change-spec.md](./010-summoner-icon-and-historical-ranks/change-spec.md) |
+| 011 | Summoner Splits and Role Win Rates | [change-spec.md](./011-summoner-splits-and-role-win-rates/change-spec.md) |
+| 012 | Reorganize Dashboard Charts | [change-spec.md](./012-reorganize-dashboard-charts/change-spec.md) |
+

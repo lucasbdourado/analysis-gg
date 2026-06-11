@@ -393,4 +393,48 @@ describe('TopChampionsTable Component Tests', () => {
     expect(ahriWinRate).toHaveClass(styles.highWinRate);
     expect(zacWinRate).not.toHaveClass(styles.highWinRate);
   });
+
+  it('should limit list to 5 champions by default and toggle with show more/less', () => {
+    const matches = [
+      createMockMatch({ championName: 'Aatrox' }),
+      createMockMatch({ championName: 'Ahri' }),
+      createMockMatch({ championName: 'Zac' }),
+      createMockMatch({ championName: 'Zed' }),
+      createMockMatch({ championName: 'Jhin' }),
+      createMockMatch({ championName: 'Lux' }),
+    ];
+
+    vi.mocked(useDashboard).mockReturnValue({
+      rawData: matches,
+      activeRange: 20,
+      setActiveRange: vi.fn(),
+      filteredMatches: matches,
+      selectedQueues: [],
+      toggleQueueFilter: vi.fn(),
+    });
+
+    render(<TopChampionsTable />);
+
+    // Initially, only 5 champions are shown (Aatrox, Ahri, Jhin, Lux, Zac)
+    // Note: since all winRates are 100% (createMockMatch returns win:true), they sort by gamesPlayed desc, then championName asc
+    expect(screen.queryByText('Aatrox')).toBeInTheDocument();
+    expect(screen.queryByText('Lux')).toBeInTheDocument();
+    expect(screen.queryByText('Zed')).not.toBeInTheDocument();
+
+    // Click Show More
+    const showMoreButton = screen.getByText(/Show More/);
+    expect(showMoreButton).toBeInTheDocument();
+    fireEvent.click(showMoreButton);
+
+    // Now all 6 are shown
+    expect(screen.queryByText('Zed')).toBeInTheDocument();
+
+    // Click Show Less
+    const showLessButton = screen.getByText(/Show Less/);
+    expect(showLessButton).toBeInTheDocument();
+    fireEvent.click(showLessButton);
+
+    // Back to 5
+    expect(screen.queryByText('Zed')).not.toBeInTheDocument();
+  });
 });

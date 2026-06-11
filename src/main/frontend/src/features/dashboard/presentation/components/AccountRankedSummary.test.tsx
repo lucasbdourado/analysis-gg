@@ -25,13 +25,19 @@ const rankedQueues: RankedQueues = {
 };
 
 describe('AccountRankedSummary', () => {
-  it('renders ranked queue details and the mapped region flag', () => {
+  it('renders ranked queue details and the mapped region flag along with summoner level, icon, and past ranks', () => {
     render(
       <AccountRankedSummary
         gameName="Ahri"
         tagLine="BR1"
         region="br1"
+        profileIconId={1234}
+        summonerLevel={158}
         rankedQueues={rankedQueues}
+        pastSeasonRanks={[
+          { season: 'S2024', tier: 'GOLD', rank: 'II' },
+          { season: 'S2023', tier: 'SILVER', rank: 'I' },
+        ]}
       />
     );
 
@@ -55,6 +61,14 @@ describe('AccountRankedSummary', () => {
       expect.stringMatching(/\/silver\.png$/)
     );
     expect(screen.getByText(/100.0%/)).toBeInTheDocument();
+
+    // Verify Summoner Icon, Level, and Past Ranks
+    const summonerIcon = screen.getByRole('img', { name: "Ahri's summoner icon" });
+    expect(summonerIcon).toBeInTheDocument();
+    expect(summonerIcon).toHaveAttribute('src', expect.stringContaining('/profile-icons/1234.jpg'));
+    expect(screen.getByTestId('summoner-level')).toHaveTextContent('158');
+    expect(screen.getByTestId('past-ranks')).toHaveTextContent('S2024 GOLD II');
+    expect(screen.getByTestId('past-ranks')).toHaveTextContent('S2023 SILVER I');
   });
 
   it('renders missing queues as unranked without LP or win rate', () => {
@@ -63,6 +77,8 @@ describe('AccountRankedSummary', () => {
         gameName="Faker"
         tagLine="KR1"
         region="kr"
+        profileIconId={29}
+        summonerLevel={500}
         rankedQueues={{
           soloDuo: {
             queueType: 'RANKED_SOLO_5x5',
@@ -83,6 +99,7 @@ describe('AccountRankedSummary', () => {
             winRate: null,
           },
         }}
+        pastSeasonRanks={[]}
       />
     );
 
@@ -91,6 +108,8 @@ describe('AccountRankedSummary', () => {
     expect(screen.queryByRole('img', { name: /rank emblem/i })).not.toBeInTheDocument();
     expect(screen.queryByText(/LP/)).not.toBeInTheDocument();
     expect(screen.queryByText(/%/)).not.toBeInTheDocument();
+    expect(screen.getByTestId('summoner-level')).toHaveTextContent('500');
+    expect(screen.queryByTestId('past-ranks')).not.toBeInTheDocument();
   });
 
   it('maps European platforms to the European Union flag label', () => {
@@ -99,7 +118,10 @@ describe('AccountRankedSummary', () => {
         gameName="Lux"
         tagLine="EUW"
         region="euw1"
+        profileIconId={1234}
+        summonerLevel={100}
         rankedQueues={rankedQueues}
+        pastSeasonRanks={[]}
       />
     );
 

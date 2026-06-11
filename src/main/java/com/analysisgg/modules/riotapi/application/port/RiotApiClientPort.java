@@ -1,5 +1,6 @@
 package com.analysisgg.modules.riotapi.application.port;
 
+import com.analysisgg.modules.riotapi.adapter.out.integration.dto.RiotSummonerDto;
 import com.analysisgg.modules.riotapi.domain.model.MatchSummary;
 import com.analysisgg.modules.riotapi.domain.model.RankedQueueSummary;
 import com.analysisgg.modules.riotapi.domain.valueobject.Puuid;
@@ -62,4 +63,14 @@ public interface RiotApiClientPort {
      * @throws com.analysisgg.modules.riotapi.domain.exception.RiotApiException if the external API returns an error
      */
     MatchSummary fetchMatchDetail(String matchId, Puuid targetPuuid, Region region);
+
+    /**
+     * Fetches details of a summoner by their PUUID.
+     *
+     * @param puuid the player's PUUID
+     * @param region the platform region (e.g., br1)
+     * @return the fetched RiotSummonerDto
+     * @throws com.analysisgg.modules.riotapi.domain.exception.RiotApiException if the external API returns an error
+     */
+    RiotSummonerDto fetchSummonerByPuuid(Puuid puuid, Region region);
 }

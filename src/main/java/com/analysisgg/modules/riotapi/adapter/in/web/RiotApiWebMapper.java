@@ -1,6 +1,7 @@
 package com.analysisgg.modules.riotapi.adapter.in.web;
 
 import com.analysisgg.modules.riotapi.domain.model.MatchSummary;
+import com.analysisgg.modules.riotapi.domain.model.PastSeasonRank;
 import com.analysisgg.modules.riotapi.domain.model.PlayerAnalytics;
 import com.analysisgg.modules.riotapi.domain.model.RankedQueueSummary;
 import com.analysisgg.modules.riotapi.domain.model.RankedQueues;
@@ -21,13 +22,20 @@ public class RiotApiWebMapper {
                 ? domain.matches().stream().map(this::toMatchResponse).toList()
                 : Collections.emptyList();
 
+        List<PastSeasonRankResponse> pastSeasonRanks = domain.pastSeasonRanks() != null
+                ? domain.pastSeasonRanks().stream().map(this::toPastSeasonRankResponse).toList()
+                : Collections.emptyList();
+
         return new PlayerAnalyticsResponse(
                 domain.puuid(),
                 domain.gameName(),
                 domain.tagLine(),
                 domain.region(),
+                domain.profileIconId(),
+                domain.summonerLevel(),
                 toRankedQueuesResponse(domain.rankedQueues()),
-                matches
+                matches,
+                pastSeasonRanks
         );
     }
 
@@ -75,7 +83,19 @@ public class RiotApiWebMapper {
                 domain.deaths(),
                 domain.assists(),
                 domain.totalMinionsKilled(),
-                domain.neutralMinionsKilled()
+                domain.neutralMinionsKilled(),
+                domain.teamPosition()
+        );
+    }
+
+    public PastSeasonRankResponse toPastSeasonRankResponse(PastSeasonRank domain) {
+        if (domain == null) {
+            return null;
+        }
+        return new PastSeasonRankResponse(
+                domain.season(),
+                domain.tier(),
+                domain.rank()
         );
     }
 }

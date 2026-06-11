@@ -27,6 +27,7 @@ public record RiotMatchDto(
         int deaths,
         int assists,
         int totalMinionsKilled,
-        int neutralMinionsKilled
+        int neutralMinionsKilled,
+        String teamPosition
     ) {}
 }

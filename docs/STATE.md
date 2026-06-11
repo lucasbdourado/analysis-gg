@@ -2,14 +2,44 @@
 
 ## Current Change Context
 
-- Active change: `009-compact-profile-dashboard`
-- Spec path: `docs/changes/009-compact-profile-dashboard/change-spec.md`
+- Active change: `012-reorganize-dashboard-charts`
+- Spec path: `docs/changes/012-reorganize-dashboard-charts/change-spec.md`
 - Open blockers:
-  - Browser-based local UI observation could not be completed in this session.
+  - None
 - Pending decisions:
   - None
 
 ## Change History
+
+### 012 - Reorganize Dashboard Charts
+
+- Spec path: `docs/changes/012-reorganize-dashboard-charts/change-spec.md`
+- Created from: User request, OP.GG/U.GG layout references, and CSS grid layout research
+- Summary: Research and spec for converting Route Performance to a play-count-sorted role list and reorganizing the dashboard widgets into a 2-column grid to prevent squishing.
+- Open blockers:
+  - None
+- Pending decisions:
+  - None
+
+### 011 - Summoner Splits and Role Win Rates
+
+- Spec path: `docs/changes/011-summoner-splits-and-role-win-rates/change-spec.md`
+- Created from: User request, Riot API mapping analysis, and Recharts integration research
+- Summary: Research and development spec for displaying split-by-split past season ranks and a new route performance win rate chart with Clash icons.
+- Open blockers:
+  - None
+- Pending decisions:
+  - None
+
+### 010 - Summoner Icon and Historical Ranks
+
+- Spec path: `docs/changes/010-summoner-icon-and-historical-ranks/change-spec.md`
+- Created from: User request, Riot API client research, and profile component structure analysis
+- Summary: Research and development spec for displaying profile icon, level overlay, and mock past season ranks.
+- Open blockers:
+  - None
+- Pending decisions:
+  - None
 
 ### 009 - Compact Profile Dashboard
 

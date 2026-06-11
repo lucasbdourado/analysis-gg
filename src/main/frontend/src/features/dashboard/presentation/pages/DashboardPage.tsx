@@ -4,40 +4,18 @@ import { DashboardProvider } from '../context/DashboardContext';
 import { MatchRangeFilter } from '../components/MatchRangeFilter';
 import { MatchQueueFilter } from '../components/MatchQueueFilter';
 import { AccountRankedSummary } from '../components/AccountRankedSummary';
+import type { PlayerAnalyticsResponse } from '../../infrastructure/api/PlayerAnalyticsResponse';
 import { RecentMatchHistory } from '../components/RecentMatchHistory';
 import { usePlayerAnalytics } from '../hooks/usePlayerAnalytics';
 import { WeekdayWinRateChart } from '../components/WeekdayWinRateChart';
+import { RouteWinRateChart } from '../components/RouteWinRateChart';
 import { DailyPerformanceGrid } from '../components/DailyPerformanceGrid';
 import { TopChampionsTable } from '../components/TopChampionsTable';
 import { useDashboard } from '../context/DashboardContext';
 import styles from './DashboardPage.module.css';
 
 type DashboardContentProps = {
-  data: {
-    gameName: string;
-    tagLine: string;
-    region: string;
-    rankedQueues: {
-      soloDuo: {
-        queueType: string;
-        tier: string | null;
-        rank: string | null;
-        leaguePoints: number | null;
-        wins: number | null;
-        losses: number | null;
-        winRate: number | null;
-      };
-      flex: {
-        queueType: string;
-        tier: string | null;
-        rank: string | null;
-        leaguePoints: number | null;
-        wins: number | null;
-        losses: number | null;
-        winRate: number | null;
-      };
-    };
-  };
+  data: PlayerAnalyticsResponse;
 };
 
 export const DashboardPage: React.FC = () => {
@@ -126,27 +104,35 @@ const DashboardContent: React.FC<DashboardContentProps> = ({ data }) => {
         </div>
       </header>
 
-      <div data-testid="dashboard-profile">
-        <AccountRankedSummary
-          gameName={data.gameName}
-          tagLine={data.tagLine}
-          region={data.region}
-          rankedQueues={data.rankedQueues}
-        />
+      <div className={styles.dashboardLayout}>
+        <aside className={styles.sidebar} data-testid="dashboard-profile">
+          <AccountRankedSummary
+            gameName={data.gameName}
+            tagLine={data.tagLine}
+            region={data.region}
+            profileIconId={data.profileIconId}
+            summonerLevel={data.summonerLevel}
+            rankedQueues={data.rankedQueues}
+            pastSeasonRanks={data.pastSeasonRanks}
+          />
+        </aside>
+        
+        <main className={styles.mainContent} data-testid="dashboard-analytics">
+          <div className={styles.topWidgetsGrid}>
+            <RouteWinRateChart />
+            <WeekdayWinRateChart />
+            <div className={styles.dailyPerformanceWrapper}>
+              <DailyPerformanceGrid />
+            </div>
+          </div>
+          <div className={styles.bottomWidgetRow}>
+            <TopChampionsTable />
+          </div>
+          <div className={styles.bottomWidgetRow}>
+            <RecentMatchHistory matches={filteredMatches} />
+          </div>
+        </main>
       </div>
-      
-      <main className={styles.mainContent} data-testid="dashboard-analytics">
-        <div className={styles.topWidgetsGrid}>
-          <WeekdayWinRateChart />
-          <DailyPerformanceGrid />
-        </div>
-        <div className={styles.bottomWidgetRow}>
-          <TopChampionsTable />
-        </div>
-        <div className={styles.bottomWidgetRow}>
-          <RecentMatchHistory matches={filteredMatches} />
-        </div>
-      </main>
     </div>
   );
 };

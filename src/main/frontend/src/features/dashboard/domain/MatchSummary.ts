@@ -11,4 +11,5 @@ export interface MatchSummary {
   assists: number;
   totalMinionsKilled: number;
   neutralMinionsKilled: number;
+  teamPosition?: string;
 }
