@@ -85,7 +85,7 @@ class CaffeineCacheAdapterTest {
         Region region = new Region("br1");
         MatchSummary summary = new MatchSummary(
                 matchId, 1800L, 1785984000000L, 420, true,
-                103, "Ahri", 8, 2, 12, 180, 12, "MIDDLE"
+                103, "Ahri", 8, 2, 12, 180, 12, "MIDDLE", java.util.List.of()
         );
 
         adapter.putMatchSummary(matchId, puuid, region, summary);
@@ -101,7 +101,7 @@ class CaffeineCacheAdapterTest {
         Region region = new Region("br1");
         MatchSummary summary = new MatchSummary(
                 matchId, 1800L, 1785984000000L, 420, true,
-                103, "Ahri", 8, 2, 12, 180, 12, "MIDDLE"
+                103, "Ahri", 8, 2, 12, 180, 12, "MIDDLE", java.util.List.of()
         );
 
         adapter.putMatchSummary(matchId, puuid, region, summary);
@@ -123,7 +123,7 @@ class CaffeineCacheAdapterTest {
         Region regionBr = new Region("br1");
         MatchSummary summary = new MatchSummary(
                 matchId, 1800L, 1785984000000L, 420, true,
-                103, "Ahri", 8, 2, 12, 180, 12, "MIDDLE"
+                103, "Ahri", 8, 2, 12, 180, 12, "MIDDLE", java.util.List.of()
         );
         adapter.putMatchSummary(matchId, puuid, regionBr, summary);
 

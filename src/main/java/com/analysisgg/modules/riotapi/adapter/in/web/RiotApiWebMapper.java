@@ -7,6 +7,7 @@ import com.analysisgg.modules.riotapi.domain.model.RankedQueueSummary;
 import com.analysisgg.modules.riotapi.domain.model.RankedQueues;
 import org.springframework.stereotype.Component;
 
+import com.analysisgg.modules.riotapi.domain.model.ParticipantSummary;
 import java.util.Collections;
 import java.util.List;
 
@@ -71,6 +72,10 @@ public class RiotApiWebMapper {
             return null;
         }
 
+        List<ParticipantResponse> participants = domain.participants() != null
+                ? domain.participants().stream().map(this::toParticipantResponse).toList()
+                : Collections.emptyList();
+
         return new MatchResponse(
                 domain.matchId(),
                 domain.gameDuration(),
@@ -84,7 +89,41 @@ public class RiotApiWebMapper {
                 domain.assists(),
                 domain.totalMinionsKilled(),
                 domain.neutralMinionsKilled(),
-                domain.teamPosition()
+                domain.teamPosition(),
+                participants
+        );
+    }
+
+    public ParticipantResponse toParticipantResponse(ParticipantSummary domain) {
+        if (domain == null) {
+            return null;
+        }
+        return new ParticipantResponse(
+                domain.puuid(),
+                domain.gameName(),
+                domain.tagLine(),
+                domain.championId(),
+                domain.championName(),
+                domain.win(),
+                domain.kills(),
+                domain.deaths(),
+                domain.assists(),
+                domain.totalMinionsKilled(),
+                domain.neutralMinionsKilled(),
+                domain.teamPosition(),
+                domain.teamId(),
+                domain.summoner1Id(),
+                domain.summoner2Id(),
+                domain.item0(),
+                domain.item1(),
+                domain.item2(),
+                domain.item3(),
+                domain.item4(),
+                domain.item5(),
+                domain.item6(),
+                domain.primaryStyleId(),
+                domain.subStyleId(),
+                domain.keystoneId()
         );
     }
 

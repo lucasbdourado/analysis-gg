@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.analysisgg.modules.riotapi.application.usecase.SyncPlayerProfileUseCase;
+import com.analysisgg.modules.riotapi.application.usecase.GetMatchDetailUseCase;
 import com.analysisgg.modules.riotapi.domain.exception.*;
 import com.analysisgg.modules.riotapi.domain.model.PlayerAnalytics;
 import com.analysisgg.modules.riotapi.domain.valueobject.Region;
@@ -28,6 +29,9 @@ class RiotApiControllerTest {
 
     @MockBean
     private SyncPlayerProfileUseCase syncPlayerProfileUseCase;
+
+    @MockBean
+    private GetMatchDetailUseCase getMatchDetailUseCase;
 
     @MockBean
     private RiotApiWebMapper mapper;

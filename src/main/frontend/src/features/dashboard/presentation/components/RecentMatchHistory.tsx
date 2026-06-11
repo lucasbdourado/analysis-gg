@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import type { MatchSummary } from '../../domain/MatchSummary';
 import styles from './RecentMatchHistory.module.css';
 
@@ -62,7 +63,12 @@ function isRemake(match: MatchSummary): boolean {
 }
 
 export function RecentMatchHistory({ matches }: RecentMatchHistoryProps) {
+  const [searchParams] = useSearchParams();
   const [visibleCount, setVisibleCount] = useState<number>(5);
+
+  const name = searchParams.get('name') || '';
+  const tag = searchParams.get('tag') || '';
+  const region = searchParams.get('region') || '';
 
   const recentMatches = useMemo(() => {
     return [...matches].sort((a, b) => b.gameCreation - a.gameCreation);
@@ -97,46 +103,50 @@ export function RecentMatchHistory({ matches }: RecentMatchHistoryProps) {
                   ? styles.winRail
                   : styles.lossRail;
 
+              const matchLink = `/match/${encodeURIComponent(match.matchId)}?region=${encodeURIComponent(region)}&name=${encodeURIComponent(name)}&tag=${encodeURIComponent(tag)}`;
+
               return (
                 <li
                   key={match.matchId}
                   className={styles.item}
                   data-testid="recent-match-history-item"
                 >
-                  <div className={`${styles.outcomeRail} ${outcomeRailClass}`} aria-hidden="true" />
-                  <div className={styles.iconFrame}>
-                    <img
-                      className={styles.championIcon}
-                      src={`https://ddragon.leagueoflegends.com/cdn/${CHAMPION_ASSET_VERSION}/img/champion/${match.championName}.png`}
-                      alt={match.championName}
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className={styles.matchCore}>
-                    <div className={styles.matchTopLine}>
-                      <span
-                        className={`${styles.outcomeBadge} ${
-                          matchIsRemake ? styles.remakeBadge : outcomeIsWin ? styles.winBadge : styles.lossBadge
-                        }`}
-                      >
-                        {outcomeLabel}
-                      </span>
-                      <span className={styles.championName}>{match.championName}</span>
+                  <Link to={matchLink} className={styles.itemLink}>
+                    <div className={`${styles.outcomeRail} ${outcomeRailClass}`} aria-hidden="true" />
+                    <div className={styles.iconFrame}>
+                      <img
+                        className={styles.championIcon}
+                        src={`https://ddragon.leagueoflegends.com/cdn/${CHAMPION_ASSET_VERSION}/img/champion/${match.championName}.png`}
+                        alt={match.championName}
+                        loading="lazy"
+                      />
                     </div>
-                    <div className={styles.matchMeta}>
-                      <span title={queueLabel.label}>{queueLabel.shortLabel}</span>
-                      <span>{formatMatchDate(match.gameCreation)}</span>
-                      <span>{formatDuration(match.gameDuration)}</span>
+                    <div className={styles.matchCore}>
+                      <div className={styles.matchTopLine}>
+                        <span
+                          className={`${styles.outcomeBadge} ${
+                            matchIsRemake ? styles.remakeBadge : outcomeIsWin ? styles.winBadge : styles.lossBadge
+                          }`}
+                        >
+                          {outcomeLabel}
+                        </span>
+                        <span className={styles.championName}>{match.championName}</span>
+                      </div>
+                      <div className={styles.matchMeta}>
+                        <span title={queueLabel.label}>{queueLabel.shortLabel}</span>
+                        <span>{formatMatchDate(match.gameCreation)}</span>
+                        <span>{formatDuration(match.gameDuration)}</span>
+                      </div>
                     </div>
-                  </div>
-                  <div className={`${styles.matchStats} ${styles.kdaStats}`}>
-                    <span className={styles.statLabel}>KDA</span>
-                    <strong className={styles.statValue}>{formatKda(match)}</strong>
-                  </div>
-                  <div className={`${styles.matchStats} ${styles.csStats}`}>
-                    <span className={styles.statLabel}>CS</span>
-                    <strong className={styles.statValue}>{formatCs(match)}</strong>
-                  </div>
+                    <div className={`${styles.matchStats} ${styles.kdaStats}`}>
+                      <span className={styles.statLabel}>KDA</span>
+                      <strong className={styles.statValue}>{formatKda(match)}</strong>
+                    </div>
+                    <div className={`${styles.matchStats} ${styles.csStats}`}>
+                      <span className={styles.statLabel}>CS</span>
+                      <strong className={styles.statValue}>{formatCs(match)}</strong>
+                    </div>
+                  </Link>
                 </li>
               );
             })}

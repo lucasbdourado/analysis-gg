@@ -1,0 +1,29 @@
+package com.analysisgg.modules.riotapi.adapter.in.web;
+
+public record ParticipantResponse(
+    String puuid,
+    String gameName,
+    String tagLine,
+    int championId,
+    String championName,
+    boolean win,
+    int kills,
+    int deaths,
+    int assists,
+    int totalMinionsKilled,
+    int neutralMinionsKilled,
+    String teamPosition,
+    int teamId,
+    int summoner1Id,
+    int summoner2Id,
+    int item0,
+    int item1,
+    int item2,
+    int item3,
+    int item4,
+    int item5,
+    int item6,
+    int primaryStyleId,
+    int subStyleId,
+    int keystoneId
+) {}

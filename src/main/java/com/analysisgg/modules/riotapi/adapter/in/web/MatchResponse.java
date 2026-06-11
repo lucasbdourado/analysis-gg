@@ -1,5 +1,7 @@
 package com.analysisgg.modules.riotapi.adapter.in.web;
 
+import java.util.List;
+
 public record MatchResponse(
         String matchId,
         long gameDuration,
@@ -13,6 +15,7 @@ public record MatchResponse(
         int assists,
         int totalMinionsKilled,
         int neutralMinionsKilled,
-        String teamPosition
+        String teamPosition,
+        List<ParticipantResponse> participants
 ) {
 }

@@ -46,8 +46,8 @@ class SyncPlayerProfileUseCaseTest {
         Puuid puuid = new Puuid("faker-puuid");
         RiotAccount cachedAccount = new RiotAccount(puuid.value(), riotId.gameName(), riotId.tagLine(), 1234, 158L);
 
-        MatchSummary match1 = new MatchSummary("KR_1", 1800, 1000, 420, true, 1, "Jax", 5, 2, 5, 200, 20, "TOP");
-        MatchSummary match2 = new MatchSummary("KR_2", 1500, 2000, 440, false, 2, "Ahri", 2, 6, 4, 150, 10, "MIDDLE");
+        MatchSummary match1 = new MatchSummary("KR_1", 1800, 1000, 420, true, 1, "Jax", 5, 2, 5, 200, 20, "TOP", List.of());
+        MatchSummary match2 = new MatchSummary("KR_2", 1500, 2000, 440, false, 2, "Ahri", 2, 6, 4, 150, 10, "MIDDLE", List.of());
 
         when(playerProfileCachePort.getProfile(riotId, region)).thenReturn(Optional.of(cachedAccount));
         when(riotApiClientPort.fetchRankedEntries(puuid, region)).thenReturn(List.of(
@@ -85,7 +85,7 @@ class SyncPlayerProfileUseCaseTest {
         RiotSummonerDto summonerDto = new RiotSummonerDto("id-123", "acc-123", puuid.value(), 1234, 0L, 158L);
         RiotAccount resolvedAccount = new RiotAccount(puuid.value(), riotId.gameName(), riotId.tagLine(), 1234, 158L);
 
-        MatchSummary match1 = new MatchSummary("KR_1", 1800, 1000, 420, true, 1, "Jax", 5, 2, 5, 200, 20, "TOP");
+        MatchSummary match1 = new MatchSummary("KR_1", 1800, 1000, 420, true, 1, "Jax", 5, 2, 5, 200, 20, "TOP", List.of());
 
         when(playerProfileCachePort.getProfile(riotId, region)).thenReturn(Optional.empty());
         when(riotApiClientPort.resolvePuuid(riotId, region)).thenReturn(puuid);
@@ -112,7 +112,7 @@ class SyncPlayerProfileUseCaseTest {
         Puuid puuid = new Puuid("faker-puuid");
         RiotAccount cachedAccount = new RiotAccount(puuid.value(), riotId.gameName(), riotId.tagLine());
 
-        MatchSummary match1 = new MatchSummary("KR_1", 1800, 1000, 420, true, 1, "Jax", 5, 2, 5, 200, 20, "TOP");
+        MatchSummary match1 = new MatchSummary("KR_1", 1800, 1000, 420, true, 1, "Jax", 5, 2, 5, 200, 20, "TOP", List.of());
 
         when(playerProfileCachePort.getProfile(riotId, region)).thenReturn(Optional.of(cachedAccount));
         when(riotApiClientPort.fetchRankedEntries(puuid, region)).thenReturn(List.of());
@@ -137,9 +137,9 @@ class SyncPlayerProfileUseCaseTest {
         Puuid puuid = new Puuid("faker-puuid");
         RiotAccount cachedAccount = new RiotAccount(puuid.value(), riotId.gameName(), riotId.tagLine());
 
-        MatchSummary match1 = new MatchSummary("KR_1", 1800, 1000, 420, true, 1, "Jax", 5, 2, 5, 200, 20, "TOP");
-        MatchSummary match2 = new MatchSummary("KR_2", 1500, 2000, 440, false, 2, "Ahri", 2, 6, 4, 150, 10, "MIDDLE");
-        MatchSummary match3 = new MatchSummary("KR_3", 1600, 3000, 420, true, 3, "Zed", 10, 1, 3, 180, 15, "BOTTOM");
+        MatchSummary match1 = new MatchSummary("KR_1", 1800, 1000, 420, true, 1, "Jax", 5, 2, 5, 200, 20, "TOP", List.of());
+        MatchSummary match2 = new MatchSummary("KR_2", 1500, 2000, 440, false, 2, "Ahri", 2, 6, 4, 150, 10, "MIDDLE", List.of());
+        MatchSummary match3 = new MatchSummary("KR_3", 1600, 3000, 420, true, 3, "Zed", 10, 1, 3, 180, 15, "BOTTOM", List.of());
 
         when(playerProfileCachePort.getProfile(riotId, region)).thenReturn(Optional.of(cachedAccount));
         when(riotApiClientPort.fetchRankedEntries(puuid, region)).thenReturn(List.of());
@@ -179,7 +179,7 @@ class SyncPlayerProfileUseCaseTest {
         RiotAccount cachedAccount = new RiotAccount(puuid.value(), riotId.gameName(), riotId.tagLine());
         Integer queue = 420;
 
-        MatchSummary match1 = new MatchSummary("KR_1", 1800, 1000, 420, true, 1, "Jax", 5, 2, 5, 200, 20, "TOP");
+        MatchSummary match1 = new MatchSummary("KR_1", 1800, 1000, 420, true, 1, "Jax", 5, 2, 5, 200, 20, "TOP", List.of());
 
         when(playerProfileCachePort.getProfile(riotId, region)).thenReturn(Optional.of(cachedAccount));
         when(riotApiClientPort.fetchRankedEntries(puuid, region)).thenReturn(List.of());

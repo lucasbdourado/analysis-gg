@@ -1,5 +1,7 @@
 package com.analysisgg.modules.riotapi.domain.model;
 
+import java.util.List;
+
 public record MatchSummary(
     String matchId,
     long gameDuration,
@@ -13,6 +15,7 @@ public record MatchSummary(
     int assists,
     int totalMinionsKilled,
     int neutralMinionsKilled,
-    String teamPosition
+    String teamPosition,
+    List<ParticipantSummary> participants
 ) {
 }

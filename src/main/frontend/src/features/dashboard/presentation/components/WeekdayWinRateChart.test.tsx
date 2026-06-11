@@ -268,7 +268,7 @@ describe('WeekdayWinRateChart Component Tests', () => {
   describe('Interactivity and Cell Selection', () => {
     it('should select weekday when clicking on cell and toggle off on second click', () => {
       const matches = [createLocalMatch(1, true)]; // Monday match
-      const { container } = render(
+      render(
         <DashboardProvider rawData={matches}>
           <WeekdayWinRateChart />
         </DashboardProvider>

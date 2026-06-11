@@ -64,19 +64,32 @@
 
 .item {
   position: relative;
-  display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr) auto auto;
-  align-items: center;
-  gap: 0.9rem;
   padding: 0.85rem 1rem 0.85rem 0.85rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.015);
   overflow: hidden;
+  transition: background-color var(--duration-fast) var(--ease-standard);
 }
 
 .item:hover {
   background: rgba(255, 255, 255, 0.03);
+}
+
+.itemLink {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.9rem;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  cursor: pointer;
+}
+
+.itemLink:hover {
+  text-decoration: none;
+  color: inherit;
 }
 
 .outcomeRail {
@@ -206,7 +219,7 @@
 }
 
 @media (max-width: 900px) {
-  .item {
+  .itemLink {
     grid-template-columns: auto auto minmax(0, 1fr);
     grid-template-areas:
       'rail icon core'
@@ -242,7 +255,7 @@
     align-items: flex-start;
   }
 
-  .item {
+  .itemLink {
     grid-template-columns: auto 1fr;
     gap: 0.75rem;
   }
@@ -251,13 +264,13 @@
     grid-column: 2 / -1;
   }
 
-    .matchStats {
-      grid-column: 2 / -1;
-      align-items: flex-start;
-      flex-direction: row;
-      justify-content: space-between;
-    }
+  .matchStats {
+    grid-column: 2 / -1;
+    align-items: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
   }
+}
 
 .actionRow {
   display: flex;

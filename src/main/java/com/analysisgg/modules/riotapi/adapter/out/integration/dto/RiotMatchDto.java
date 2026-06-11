@@ -28,6 +28,34 @@ public record RiotMatchDto(
         int assists,
         int totalMinionsKilled,
         int neutralMinionsKilled,
-        String teamPosition
+        String teamPosition,
+        String riotIdGameName,
+        String riotIdTagline,
+        String summonerName,
+        int teamId,
+        int summoner1Id,
+        int summoner2Id,
+        int item0,
+        int item1,
+        int item2,
+        int item3,
+        int item4,
+        int item5,
+        int item6,
+        PerksDto perks
+    ) {}
+
+    public record PerksDto(
+        List<PerkStyleDto> styles
+    ) {}
+
+    public record PerkStyleDto(
+        String description,
+        List<PerkSelectionDto> selections,
+        int style
+    ) {}
+
+    public record PerkSelectionDto(
+        int perk
     ) {}
 }

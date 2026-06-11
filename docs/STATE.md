@@ -2,14 +2,24 @@
 
 ## Current Change Context
 
-- Active change: None
-- Spec path: None
+- Active change: `016-match-details-view`
+- Spec path: `docs/changes/016-match-details-view/change-spec.md`
 - Open blockers:
   - None
 - Pending decisions:
   - None
 
 ## Change History
+
+### 016 - Match Details View
+
+- Spec path: `docs/changes/016-match-details-view/change-spec.md`
+- Created from: User request, Riot API match-v5 integration, and routing layout planning
+- Summary: Research and spec for adding a dedicated match details page (/match/:matchId) and backend REST endpoint (/api/match/{matchId}), utilizing local JSON files for runes/spells metadata.
+- Open blockers:
+  - None
+- Pending decisions:
+  - None
 
 ### 015 - Interactive Daily Performance Filtering and Multi-Select
 
