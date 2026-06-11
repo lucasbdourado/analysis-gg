@@ -12,6 +12,9 @@ describe('MatchQueueFilter Component Tests', () => {
     filteredMatches: [],
     selectedQueues: [],
     toggleQueueFilter: vi.fn(),
+    selectedRole: null,
+    setSelectedRole: vi.fn(),
+    roleFilteredMatches: [],
   };
 
   const renderWithContext = (contextProps: Partial<DashboardContextProps>) => {

@@ -2,14 +2,24 @@
 
 ## Current Change Context
 
-- Active change: `012-reorganize-dashboard-charts`
-- Spec path: `docs/changes/012-reorganize-dashboard-charts/change-spec.md`
+- Active change: `013-interactive-role-filtering-and-ranks-relayout`
+- Spec path: `docs/changes/013-interactive-role-filtering-and-ranks-relayout/change-spec.md`
 - Open blockers:
   - None
 - Pending decisions:
   - None
 
 ## Change History
+
+### 013 - Interactive Role Filtering and Ranks Relayout
+
+- Spec path: `docs/changes/013-interactive-role-filtering-and-ranks-relayout/change-spec.md`
+- Created from: User request, dashboard component research, and context/page/widget interaction design
+- Summary: Research and development spec for moving past ranks below the current rank in the profile panel, and adding click-to-filter role interactions to update downstream widgets.
+- Open blockers:
+  - None
+- Pending decisions:
+  - None
 
 ### 012 - Reorganize Dashboard Charts
 

@@ -44,6 +44,9 @@ describe('DailyPerformanceGrid Component Tests', () => {
       filteredMatches: [],
       selectedQueues: [],
       toggleQueueFilter: vi.fn(),
+      selectedRole: null,
+      setSelectedRole: vi.fn(),
+      roleFilteredMatches: [],
     });
 
     render(<DailyPerformanceGrid />);
@@ -67,6 +70,9 @@ describe('DailyPerformanceGrid Component Tests', () => {
       filteredMatches: matches,
       selectedQueues: [],
       toggleQueueFilter: vi.fn(),
+      selectedRole: null,
+      setSelectedRole: vi.fn(),
+      roleFilteredMatches: matches,
     });
 
     const { container } = render(<DailyPerformanceGrid />);
@@ -103,6 +109,9 @@ describe('DailyPerformanceGrid Component Tests', () => {
       filteredMatches: matches,
       selectedQueues: [],
       toggleQueueFilter: vi.fn(),
+      selectedRole: null,
+      setSelectedRole: vi.fn(),
+      roleFilteredMatches: matches,
     });
 
     const { container } = render(<DailyPerformanceGrid />);
@@ -146,6 +155,9 @@ describe('DailyPerformanceGrid Component Tests', () => {
       filteredMatches: matches,
       selectedQueues: [],
       toggleQueueFilter: vi.fn(),
+      selectedRole: null,
+      setSelectedRole: vi.fn(),
+      roleFilteredMatches: matches,
     });
 
     const { container } = render(<DailyPerformanceGrid />);
@@ -213,6 +225,9 @@ describe('DailyPerformanceGrid Component Tests', () => {
       filteredMatches: matches,
       selectedQueues: [],
       toggleQueueFilter: vi.fn(),
+      selectedRole: null,
+      setSelectedRole: vi.fn(),
+      roleFilteredMatches: matches,
     });
 
     const { container } = render(<DailyPerformanceGrid />);

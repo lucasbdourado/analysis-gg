@@ -136,15 +136,6 @@ export function AccountRankedSummary({
   return (
     <section className={`ds-panel ${styles.summary}`} aria-label="Player profile">
       <div className={styles.profileSection}>
-        {pastSeasonRanks && pastSeasonRanks.length > 0 && (
-          <div className={styles.pastRanks} data-testid="past-ranks">
-            {pastSeasonRanks.map((pr) => (
-              <span key={pr.season} className={styles.pastRankPill}>
-                <strong>{pr.season}</strong> {pr.tier} {pr.rank}
-              </span>
-            ))}
-          </div>
-        )}
         <div className={styles.identity}>
           <div className={styles.avatarContainer}>
             <img
@@ -179,6 +170,15 @@ export function AccountRankedSummary({
         <RankedQueueItem label={QUEUE_LABELS.soloDuo} queue={rankedQueues.soloDuo} />
         <RankedQueueItem label={QUEUE_LABELS.flex} queue={rankedQueues.flex} />
       </div>
+      {pastSeasonRanks && pastSeasonRanks.length > 0 && (
+        <div className={styles.pastRanks} data-testid="past-ranks">
+          {pastSeasonRanks.map((pr) => (
+            <span key={pr.season} className={styles.pastRankPill}>
+              <strong>{pr.season}</strong> {pr.tier} {pr.rank}
+            </span>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

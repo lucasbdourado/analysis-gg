@@ -226,6 +226,7 @@
 @media (min-width: 721px) and (max-width: 1024px) {
   .summary {
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
   }
@@ -234,6 +235,7 @@
     width: auto;
   }
   .pastRanks {
+    width: 100%;
     justify-content: flex-start;
   }
   .identity {

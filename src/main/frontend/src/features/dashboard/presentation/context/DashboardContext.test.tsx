@@ -365,4 +365,100 @@ describe('DashboardContext Unit & Integration Tests', () => {
       expect(matchIds).toEqual(['match-2', 'match-5']);
     });
   });
+
+  describe('Role Filtering Logic', () => {
+    const createRoleMockMatches = (): MatchSummary[] => {
+      // 0: match-0, position: TOP
+      // 1: match-1, position: JUNGLE
+      // 2: match-2, position: MIDDLE
+      // 3: match-3, position: BOTTOM
+      // 4: match-4, position: UTILITY
+      // 5: match-5, position: NONE
+      const positions = ['TOP', 'JUNGLE', 'MIDDLE', 'BOTTOM', 'UTILITY', 'NONE'];
+      return positions.map((pos, i) => ({
+        matchId: `match-${i}`,
+        gameDuration: 1200,
+        gameCreation: Date.now() - i * 1000 * 60 * 30,
+        queueId: 420,
+        win: i % 2 === 0,
+        championId: 1,
+        championName: 'Champion',
+        kills: 5,
+        deaths: 3,
+        assists: 10,
+        totalMinionsKilled: 150,
+        neutralMinionsKilled: 20,
+        teamPosition: pos,
+      }));
+    };
+
+    it('should initialize selectedRole as null and roleFilteredMatches as filteredMatches', () => {
+      let contextVal!: DashboardContextProps;
+      const rawData = createRoleMockMatches();
+      render(
+        <DashboardProvider rawData={rawData}>
+          <ContextConsumer callback={(val) => { contextVal = val; }} />
+        </DashboardProvider>
+      );
+      expect(contextVal.selectedRole).toBeNull();
+      expect(contextVal.roleFilteredMatches).toHaveLength(6);
+    });
+
+    it('should filter matches by selected role and allow clearing it', () => {
+      let contextVal!: DashboardContextProps;
+      const rawData = createRoleMockMatches();
+      render(
+        <DashboardProvider rawData={rawData}>
+          <ContextConsumer callback={(val) => { contextVal = val; }} />
+        </DashboardProvider>
+      );
+
+      // Select 'Top'
+      act(() => {
+        contextVal.setSelectedRole('Top');
+      });
+      expect(contextVal.selectedRole).toBe('Top');
+      expect(contextVal.roleFilteredMatches).toHaveLength(1);
+      expect(contextVal.roleFilteredMatches[0].matchId).toBe('match-0');
+
+      // Select 'Jungle'
+      act(() => {
+        contextVal.setSelectedRole('Jungle');
+      });
+      expect(contextVal.selectedRole).toBe('Jungle');
+      expect(contextVal.roleFilteredMatches).toHaveLength(1);
+      expect(contextVal.roleFilteredMatches[0].matchId).toBe('match-1');
+
+      // Select 'Mid'
+      act(() => {
+        contextVal.setSelectedRole('Mid');
+      });
+      expect(contextVal.selectedRole).toBe('Mid');
+      expect(contextVal.roleFilteredMatches).toHaveLength(1);
+      expect(contextVal.roleFilteredMatches[0].matchId).toBe('match-2');
+
+      // Select 'Bot'
+      act(() => {
+        contextVal.setSelectedRole('Bot');
+      });
+      expect(contextVal.selectedRole).toBe('Bot');
+      expect(contextVal.roleFilteredMatches).toHaveLength(1);
+      expect(contextVal.roleFilteredMatches[0].matchId).toBe('match-3');
+
+      // Select 'Support'
+      act(() => {
+        contextVal.setSelectedRole('Support');
+      });
+      expect(contextVal.selectedRole).toBe('Support');
+      expect(contextVal.roleFilteredMatches).toHaveLength(1);
+      expect(contextVal.roleFilteredMatches[0].matchId).toBe('match-4');
+
+      // Clear selection
+      act(() => {
+        contextVal.setSelectedRole(null);
+      });
+      expect(contextVal.selectedRole).toBeNull();
+      expect(contextVal.roleFilteredMatches).toHaveLength(6);
+    });
+  });
 });

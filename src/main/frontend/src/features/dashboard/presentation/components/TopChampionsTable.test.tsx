@@ -36,6 +36,9 @@ describe('TopChampionsTable Component Tests', () => {
       filteredMatches: [],
       selectedQueues: [],
       toggleQueueFilter: vi.fn(),
+      selectedRole: null,
+      setSelectedRole: vi.fn(),
+      roleFilteredMatches: [],
     });
 
     render(<TopChampionsTable />);
@@ -75,6 +78,9 @@ describe('TopChampionsTable Component Tests', () => {
       filteredMatches: matches,
       selectedQueues: [],
       toggleQueueFilter: vi.fn(),
+      selectedRole: null,
+      setSelectedRole: vi.fn(),
+      roleFilteredMatches: matches,
     });
 
     const { container } = render(<TopChampionsTable />);
@@ -120,6 +126,9 @@ describe('TopChampionsTable Component Tests', () => {
       filteredMatches: matches,
       selectedQueues: [],
       toggleQueueFilter: vi.fn(),
+      selectedRole: null,
+      setSelectedRole: vi.fn(),
+      roleFilteredMatches: matches,
     });
 
     render(<TopChampionsTable />);
@@ -148,6 +157,9 @@ describe('TopChampionsTable Component Tests', () => {
       filteredMatches: matches,
       selectedQueues: [],
       toggleQueueFilter: vi.fn(),
+      selectedRole: null,
+      setSelectedRole: vi.fn(),
+      roleFilteredMatches: matches,
     });
 
     const { container } = render(<TopChampionsTable />);
@@ -268,6 +280,9 @@ describe('TopChampionsTable Component Tests', () => {
       filteredMatches: matches,
       selectedQueues: [],
       toggleQueueFilter: vi.fn(),
+      selectedRole: null,
+      setSelectedRole: vi.fn(),
+      roleFilteredMatches: matches,
     });
 
     const { container } = render(<TopChampionsTable />);
@@ -349,6 +364,9 @@ describe('TopChampionsTable Component Tests', () => {
       filteredMatches: matches,
       selectedQueues: [],
       toggleQueueFilter: vi.fn(),
+      selectedRole: null,
+      setSelectedRole: vi.fn(),
+      roleFilteredMatches: matches,
     });
 
     render(<TopChampionsTable />);
@@ -382,6 +400,9 @@ describe('TopChampionsTable Component Tests', () => {
       filteredMatches: matches,
       selectedQueues: [],
       toggleQueueFilter: vi.fn(),
+      selectedRole: null,
+      setSelectedRole: vi.fn(),
+      roleFilteredMatches: matches,
     });
 
     render(<TopChampionsTable />);
@@ -411,6 +432,9 @@ describe('TopChampionsTable Component Tests', () => {
       filteredMatches: matches,
       selectedQueues: [],
       toggleQueueFilter: vi.fn(),
+      selectedRole: null,
+      setSelectedRole: vi.fn(),
+      roleFilteredMatches: matches,
     });
 
     render(<TopChampionsTable />);

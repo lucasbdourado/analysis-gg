@@ -10,6 +10,9 @@ export interface DashboardContextProps {
   selectedQueues: string[];
   toggleQueueFilter: (queueKey: string) => void;
   clearQueueFilters?: () => void;
+  selectedRole: string | null;
+  setSelectedRole: (role: string | null) => void;
+  roleFilteredMatches: MatchSummary[];
 }
 
 export interface DashboardProviderProps {
@@ -19,6 +22,8 @@ export interface DashboardProviderProps {
   selectedQueues?: string[];
   toggleQueueFilter?: (queueKey: string) => void;
   clearQueueFilters?: () => void;
+  selectedRole?: string | null;
+  setSelectedRole?: (role: string | null) => void;
   children: ReactNode;
 }
 
@@ -32,6 +37,18 @@ const QUEUE_MAP: Record<string, number[]> = {
   CUSTOM: [0]
 };
 
+const isMatchForRole = (match: MatchSummary, role: string) => {
+  const pos = match.teamPosition;
+  if (!pos) return false;
+  const normalizedPos = pos.toUpperCase();
+  if (role === 'Top') return normalizedPos === 'TOP';
+  if (role === 'Jungle') return normalizedPos === 'JUNGLE';
+  if (role === 'Mid') return normalizedPos === 'MIDDLE';
+  if (role === 'Bot') return normalizedPos === 'BOTTOM';
+  if (role === 'Support') return normalizedPos === 'UTILITY';
+  return false;
+};
+
 export const DashboardProvider: React.FC<DashboardProviderProps> = ({ 
   rawData = [], 
   activeRange: propActiveRange,
@@ -39,22 +56,28 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
   selectedQueues: propSelectedQueues,
   toggleQueueFilter: propToggleQueueFilter,
   clearQueueFilters: propClearQueueFilters,
+  selectedRole: propSelectedRole,
+  setSelectedRole: propSetSelectedRole,
   children 
 }) => {
   const [localActiveRange, localSetActiveRange] = useState<number>(20);
   const [localSelectedQueues, setLocalSelectedQueues] = useState<string[]>([]);
+  const [localSelectedRole, setLocalSelectedRole] = useState<string | null>(null);
 
   const activeRange = propActiveRange !== undefined ? propActiveRange : localActiveRange;
   const setActiveRange = propSetActiveRange !== undefined ? propSetActiveRange : localSetActiveRange;
 
   const selectedQueues = propSelectedQueues !== undefined ? propSelectedQueues : localSelectedQueues;
 
+  const selectedRole = propSelectedRole !== undefined ? propSelectedRole : localSelectedRole;
+  const setSelectedRole = propSetSelectedRole !== undefined ? propSetSelectedRole : setLocalSelectedRole;
+
   const toggleQueueFilter = (queueKey: string) => {
     if (propToggleQueueFilter !== undefined) {
       propToggleQueueFilter(queueKey);
     } else {
       setLocalSelectedQueues(prev => 
-        prev.includes(queueKey) 
+         prev.includes(queueKey) 
           ? prev.filter(k => k !== queueKey) 
           : [...prev, queueKey]
       );
@@ -79,6 +102,11 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
     return filtered.slice(0, Math.min(filtered.length, activeRange));
   }, [rawData, activeRange, selectedQueues]);
 
+  const roleFilteredMatches = useMemo(() => {
+    if (!selectedRole) return filteredMatches;
+    return filteredMatches.filter(match => isMatchForRole(match, selectedRole));
+  }, [filteredMatches, selectedRole]);
+
   return (
     <DashboardContext.Provider value={{ 
       rawData: rawData || [], 
@@ -87,7 +115,10 @@ export const DashboardProvider: React.FC<DashboardProviderProps> = ({
       filteredMatches, 
       selectedQueues, 
       toggleQueueFilter,
-      clearQueueFilters
+      clearQueueFilters,
+      selectedRole,
+      setSelectedRole,
+      roleFilteredMatches
     }}>
       {children}
     </DashboardContext.Provider>

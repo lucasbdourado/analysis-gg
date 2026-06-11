@@ -12,7 +12,7 @@ interface DayRecord {
 }
 
 export const DailyPerformanceGrid: React.FC = () => {
-  const { filteredMatches } = useDashboard();
+  const { roleFilteredMatches } = useDashboard();
 
   const getLocalDateString = (timestamp: number) => {
     const d = new Date(timestamp);
@@ -33,12 +33,12 @@ export const DailyPerformanceGrid: React.FC = () => {
   };
 
   const gridData = useMemo((): DayRecord[] => {
-    if (filteredMatches.length === 0) {
+    if (roleFilteredMatches.length === 0) {
       return [];
     }
 
     // Find the min and max timestamps to construct the window
-    const timestamps = filteredMatches.map(m => m.gameCreation);
+    const timestamps = roleFilteredMatches.map(m => m.gameCreation);
     const latestTimestamp = Math.max(...timestamps);
     
     // Generate the last 30 calendar days leading to the latest match
@@ -55,7 +55,7 @@ export const DailyPerformanceGrid: React.FC = () => {
 
     // Aggregate matches by local date string
     const counts: Record<string, { wins: number; losses: number }> = {};
-    filteredMatches.forEach((match: MatchSummary) => {
+    roleFilteredMatches.forEach((match: MatchSummary) => {
       const dateStr = getLocalDateString(match.gameCreation);
       if (!counts[dateStr]) {
         counts[dateStr] = { wins: 0, losses: 0 };
@@ -88,9 +88,9 @@ export const DailyPerformanceGrid: React.FC = () => {
         status,
       };
     });
-  }, [filteredMatches]);
+  }, [roleFilteredMatches]);
 
-  const hasMatches = filteredMatches.length > 0;
+  const hasMatches = roleFilteredMatches.length > 0;
 
   return (
     <div className={`ds-panel ${styles.gridCard}`}>

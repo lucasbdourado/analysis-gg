@@ -27,7 +27,7 @@ interface SortConfig {
 }
 
 export const TopChampionsTable: React.FC = () => {
-  const { filteredMatches } = useDashboard();
+  const { roleFilteredMatches } = useDashboard();
 
   const [sortConfig, setSortConfig] = React.useState<SortConfig>({
     sortKey: 'winRate',
@@ -80,7 +80,7 @@ export const TopChampionsTable: React.FC = () => {
       totalDurationSeconds: number;
     }> = {};
 
-    filteredMatches.forEach((match: MatchSummary) => {
+    roleFilteredMatches.forEach((match: MatchSummary) => {
       const name = match.championName || 'Unknown';
       if (!agg[name]) {
         agg[name] = {
@@ -165,9 +165,9 @@ export const TopChampionsTable: React.FC = () => {
       }
       return a.championName.localeCompare(b.championName);
     });
-  }, [filteredMatches, sortConfig]);
+  }, [roleFilteredMatches, sortConfig]);
 
-  const hasMatches = filteredMatches.length > 0;
+  const hasMatches = roleFilteredMatches.length > 0;
   const visibleChampions = showAll ? championsData : championsData.slice(0, 5);
 
   return (

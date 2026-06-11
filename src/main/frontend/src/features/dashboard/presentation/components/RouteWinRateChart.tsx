@@ -12,7 +12,7 @@ const iconUrls: Record<string, string> = {
 };
 
 export const RouteWinRateChart: React.FC = () => {
-  const { filteredMatches } = useDashboard();
+  const { filteredMatches, selectedRole, setSelectedRole } = useDashboard();
 
   const { activeRoles, hasMatches } = useMemo(() => {
     const rolesMap: Record<string, { wins: number; losses: number }> = {
@@ -87,8 +87,19 @@ export const RouteWinRateChart: React.FC = () => {
             {activeRoles.map(role => {
               const iconUrl = iconUrls[role.roleName];
               const gamesPlayed = role.wins + role.losses;
+              const isActive = selectedRole === role.roleName;
               return (
-                <div key={role.roleName} className={styles.roleItem}>
+                <div
+                  key={role.roleName}
+                  className={`${styles.roleItem} ${isActive ? styles.roleItemActive : ''}`}
+                  onClick={() => {
+                    if (selectedRole === role.roleName) {
+                      setSelectedRole(null);
+                    } else {
+                      setSelectedRole(role.roleName);
+                    }
+                  }}
+                >
                   <div className={styles.roleLeft}>
                     {iconUrl && (
                       <img

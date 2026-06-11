@@ -38,7 +38,7 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label })
 };
 
 export const WeekdayWinRateChart: React.FC = () => {
-  const { filteredMatches } = useDashboard();
+  const { roleFilteredMatches } = useDashboard();
 
   const weekdayData = useMemo(() => {
     const days = [
@@ -51,7 +51,7 @@ export const WeekdayWinRateChart: React.FC = () => {
       { dayName: 'Saturday', wins: 0, losses: 0 },
     ];
 
-    filteredMatches.forEach((match: MatchSummary) => {
+    roleFilteredMatches.forEach((match: MatchSummary) => {
       const date = new Date(match.gameCreation);
       const dayIndex = date.getDay(); // 0 = Sunday, ..., 6 = Saturday
       if (match.win) {
@@ -71,9 +71,9 @@ export const WeekdayWinRateChart: React.FC = () => {
     });
 
     return [...dayDataList.slice(1), dayDataList[0]];
-  }, [filteredMatches]);
+  }, [roleFilteredMatches]);
 
-  const hasMatches = filteredMatches.length > 0;
+  const hasMatches = roleFilteredMatches.length > 0;
 
   return (
     <div className={`ds-panel ${styles.chartCard}`}>

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { RouteWinRateChart } from './RouteWinRateChart';
 import { DashboardProvider } from '../context/DashboardContext';
@@ -167,5 +167,53 @@ describe('RouteWinRateChart Component Tests', () => {
     expect(screen.queryByText('Jungle')).not.toBeInTheDocument();
     expect(screen.queryByText('Bot')).not.toBeInTheDocument();
     expect(screen.queryByText('Support')).not.toBeInTheDocument();
+  });
+
+  it('should toggle role selection and apply active styling when clicked', () => {
+    const matches: MatchSummary[] = [
+      createMockMatch('TOP', true),
+      createMockMatch('JUNGLE', false),
+    ];
+
+    let selectedRole: string | null = null;
+    const setSelectedRoleMock = (role: string | null) => {
+      selectedRole = role;
+    };
+
+    const { rerender } = render(
+      <DashboardProvider
+        rawData={matches}
+        selectedRole={selectedRole}
+        setSelectedRole={setSelectedRoleMock}
+      >
+        <RouteWinRateChart />
+      </DashboardProvider>
+    );
+
+    // Find and click 'Top' row
+    const topText = screen.getByText('Top');
+    fireEvent.click(topText);
+
+    // The callback should have been called with 'Top'
+    expect(selectedRole).toBe('Top');
+
+    // Rerender with the updated selectedRole to check class application
+    rerender(
+      <DashboardProvider
+        rawData={matches}
+        selectedRole={selectedRole}
+        setSelectedRole={setSelectedRoleMock}
+      >
+        <RouteWinRateChart />
+      </DashboardProvider>
+    );
+
+    // The 'Top' container should have the active class
+    const topItem = topText.parentElement?.parentElement?.parentElement;
+    expect(topItem?.className).toContain('roleItemActive');
+
+    // Clicking it again should deselect it (call with null)
+    fireEvent.click(topText);
+    expect(selectedRole).toBeNull();
   });
 });

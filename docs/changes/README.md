@@ -16,4 +16,5 @@ This file indexes the change specs created for the project.
 | 010 | Summoner Icon and Historical Ranks | [change-spec.md](./010-summoner-icon-and-historical-ranks/change-spec.md) |
 | 011 | Summoner Splits and Role Win Rates | [change-spec.md](./011-summoner-splits-and-role-win-rates/change-spec.md) |
 | 012 | Reorganize Dashboard Charts | [change-spec.md](./012-reorganize-dashboard-charts/change-spec.md) |
+| 013 | Interactive Role Filtering and Ranks Relayout | [change-spec.md](./013-interactive-role-filtering-and-ranks-relayout/change-spec.md) |
 
