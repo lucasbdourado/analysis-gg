@@ -1,7 +1,17 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, within, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { DashboardPage } from './DashboardPage';
+
+const mockNavigate = vi.fn();
+
+vi.mock('react-router-dom', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-router-dom')>();
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 class ResizeObserverMock {
   observe() {}
@@ -61,6 +71,10 @@ vi.mock('../hooks/usePlayerAnalytics', () => ({
 }));
 
 describe('DashboardPage', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders filters, player profile, and analytics in that order', () => {
     render(
       <MemoryRouter initialEntries={['/dashboard?name=Ahri&tag=BR1&region=br1']}>
@@ -77,5 +91,19 @@ describe('DashboardPage', () => {
     const historyRegion = screen.getByRole('region', { name: 'Recent match history' });
     expect(historyRegion).toBeInTheDocument();
     expect(within(historyRegion).getByText('Akali')).toBeInTheDocument();
+  });
+
+  it('navigates back to account selection screen when clicking the back button', () => {
+    render(
+      <MemoryRouter initialEntries={['/dashboard?name=Ahri&tag=BR1&region=br1']}>
+        <DashboardPage />
+      </MemoryRouter>
+    );
+
+    const backButton = screen.getByRole('button', { name: /account selection/i });
+    expect(backButton).toBeInTheDocument();
+
+    fireEvent.click(backButton);
+    expect(mockNavigate).toHaveBeenCalledWith('/');
   });
 });

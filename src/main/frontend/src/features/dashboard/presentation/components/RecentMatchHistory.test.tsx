@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
 import { RecentMatchHistory } from './RecentMatchHistory';
 import type { MatchSummary } from '../../domain/MatchSummary';
@@ -31,7 +32,11 @@ describe('RecentMatchHistory', () => {
     });
 
   it('renders an empty state when there are no matches', () => {
-    render(<RecentMatchHistory matches={[]} />);
+    render(
+      <MemoryRouter>
+        <RecentMatchHistory matches={[]} />
+      </MemoryRouter>
+    );
 
     expect(screen.getByRole('region', { name: 'Recent match history' })).toBeInTheDocument();
     expect(screen.getByText('No matches available for the selected filters.')).toBeInTheDocument();
@@ -64,7 +69,11 @@ describe('RecentMatchHistory', () => {
       neutralMinionsKilled: 10,
     });
 
-    const { container } = render(<RecentMatchHistory matches={[oldest, newest]} />);
+    const { container } = render(
+      <MemoryRouter>
+        <RecentMatchHistory matches={[oldest, newest]} />
+      </MemoryRouter>
+    );
 
     const items = Array.from(container.querySelectorAll('[data-testid="recent-match-history-item"]'));
     expect(items).toHaveLength(2);
@@ -86,7 +95,11 @@ describe('RecentMatchHistory', () => {
       gameDuration: 1599,
     });
 
-    render(<RecentMatchHistory matches={[match]} />);
+    render(
+      <MemoryRouter>
+        <RecentMatchHistory matches={[match]} />
+      </MemoryRouter>
+    );
 
     expect(screen.getByText('Win')).toBeInTheDocument();
     expect(screen.getByText('Lux')).toBeInTheDocument();
@@ -109,7 +122,11 @@ describe('RecentMatchHistory', () => {
       gameDuration: 540,
     });
 
-    const { container } = render(<RecentMatchHistory matches={[remake]} />);
+    const { container } = render(
+      <MemoryRouter>
+        <RecentMatchHistory matches={[remake]} />
+      </MemoryRouter>
+    );
     const item = container.querySelector('[data-testid="recent-match-history-item"]');
     const rail = item?.querySelector(`.${styles.outcomeRail}`);
 
@@ -129,7 +146,11 @@ describe('RecentMatchHistory', () => {
       createMatch({ matchId: 'm6', championName: 'Sona', gameCreation: 100 }),
     ];
 
-    const { container } = render(<RecentMatchHistory matches={matches} />);
+    const { container } = render(
+      <MemoryRouter>
+        <RecentMatchHistory matches={matches} />
+      </MemoryRouter>
+    );
 
     // Initially, only 5 matches are shown
     const itemsBefore = container.querySelectorAll('[data-testid="recent-match-history-item"]');

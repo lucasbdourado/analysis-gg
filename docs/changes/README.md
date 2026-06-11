@@ -20,3 +20,6 @@ This file indexes the change specs created for the project.
 | 014 | Interactive Weekday Filtering | [change-spec.md](./014-interactive-weekday-filtering/change-spec.md) |
 | 015 | Interactive Daily Performance Filtering and Multi-Select | [change-spec.md](./015-interactive-daily-performance-filtering-and-multi-select/change-spec.md) |
 | 016 | Match Details View | [change-spec.md](./016-match-details-view/change-spec.md) |
+| 017 | Match Overview Layout Fixes | [change-spec.md](./017-match-overview-layout-fixes/change-spec.md) |
+| 018 | Match Detail Overview Layout Fixes | [change-spec.md](./018-match-detail-overview-layout-fixes/change-spec.md) |
+| 019 | Back to Account Selection | [change-spec.md](./019-back-to-account-selection/change-spec.md) |

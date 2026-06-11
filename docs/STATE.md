@@ -2,14 +2,34 @@
 
 ## Current Change Context
 
-- Active change: `016-match-details-view`
-- Spec path: `docs/changes/016-match-details-view/change-spec.md`
+- Active change: `019-back-to-account-selection`
+- Spec path: `docs/changes/019-back-to-account-selection/change-spec.md`
 - Open blockers:
   - None
 - Pending decisions:
   - None
 
 ## Change History
+
+### 019 - Back to Account Selection
+
+- Spec path: `docs/changes/019-back-to-account-selection/change-spec.md`
+- Created from: User request, visual consistency design options, and layout research
+- Summary: Research and spec for adding a sticky Top Bar at the top of the dashboard containing a "Back to Account Selection" button, identical in design to the Match Detail Page.
+- Open blockers:
+  - None
+- Pending decisions:
+  - None
+
+### 018 - Match Detail Overview Layout Fixes
+
+- Spec path: `docs/changes/018-match-detail-overview-layout-fixes/change-spec.md`
+- Created from: User request, Playwright MCP observation, and match detail page code research
+- Summary: Research and development spec for fixing the match detail overview layout so participant rows stay readable, item slots render cleanly, and the stacked layout begins at 1024px.
+- Open blockers:
+  - None
+- Pending decisions:
+  - None
 
 ### 016 - Match Details View
 

@@ -94,44 +94,62 @@ export const DashboardPage: React.FC = () => {
 
 const DashboardContent: React.FC<DashboardContentProps> = ({ data }) => {
   const { combinedFilteredMatches } = useDashboard();
+  const navigate = useNavigate();
+
+  const handleBackToSearch = () => {
+    navigate('/');
+  };
 
   return (
-    <div className={`ds-container ds-section ds-stack-lg ${styles.dashboardContainer}`} data-testid="dashboard-success">
-      <header className={styles.header}>
-        <div className={styles.filtersSection} data-testid="dashboard-filters">
-          <MatchQueueFilter />
-          <MatchRangeFilter />
-        </div>
-      </header>
+    <div className={styles.pageWrapper}>
+      <div className={styles.topBar}>
+        <button
+          className={styles.backButton}
+          onClick={handleBackToSearch}
+          type="button"
+          id="back-to-search"
+        >
+          <span className={styles.backArrow}>←</span> Account Selection
+        </button>
+      </div>
 
-      <div className={styles.dashboardLayout}>
-        <aside className={styles.sidebar} data-testid="dashboard-profile">
-          <AccountRankedSummary
-            gameName={data.gameName}
-            tagLine={data.tagLine}
-            region={data.region}
-            profileIconId={data.profileIconId}
-            summonerLevel={data.summonerLevel}
-            rankedQueues={data.rankedQueues}
-            pastSeasonRanks={data.pastSeasonRanks}
-          />
-        </aside>
-        
-        <main className={styles.mainContent} data-testid="dashboard-analytics">
-          <div className={styles.topWidgetsGrid}>
-            <RouteWinRateChart />
-            <WeekdayWinRateChart />
-            <div className={styles.dailyPerformanceWrapper}>
-              <DailyPerformanceGrid />
+      <div className={`ds-container ds-section ds-stack-lg ${styles.dashboardContainer}`} data-testid="dashboard-success">
+        <header className={styles.header}>
+          <div className={styles.filtersSection} data-testid="dashboard-filters">
+            <MatchQueueFilter />
+            <MatchRangeFilter />
+          </div>
+        </header>
+
+        <div className={styles.dashboardLayout}>
+          <aside className={styles.sidebar} data-testid="dashboard-profile">
+            <AccountRankedSummary
+              gameName={data.gameName}
+              tagLine={data.tagLine}
+              region={data.region}
+              profileIconId={data.profileIconId}
+              summonerLevel={data.summonerLevel}
+              rankedQueues={data.rankedQueues}
+              pastSeasonRanks={data.pastSeasonRanks}
+            />
+          </aside>
+          
+          <main className={styles.mainContent} data-testid="dashboard-analytics">
+            <div className={styles.topWidgetsGrid}>
+              <RouteWinRateChart />
+              <WeekdayWinRateChart />
+              <div className={styles.dailyPerformanceWrapper}>
+                <DailyPerformanceGrid />
+              </div>
             </div>
-          </div>
-          <div className={styles.bottomWidgetRow}>
-            <TopChampionsTable />
-          </div>
-          <div className={styles.bottomWidgetRow}>
-            <RecentMatchHistory matches={combinedFilteredMatches} />
-          </div>
-        </main>
+            <div className={styles.bottomWidgetRow}>
+              <TopChampionsTable />
+            </div>
+            <div className={styles.bottomWidgetRow}>
+              <RecentMatchHistory matches={combinedFilteredMatches} />
+            </div>
+          </main>
+        </div>
       </div>
     </div>
   );

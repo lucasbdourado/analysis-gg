@@ -81,7 +81,13 @@ function calcCsPerMin(totalCs: number, durationSeconds: number): string {
 
 function ItemSlot({ itemId, isTrinket }: { itemId: number; isTrinket?: boolean }) {
   if (itemId === 0) {
-    return <div className={`${styles.emptyItem} ${isTrinket ? styles.trinketItem : ''}`} />;
+    return (
+      <div
+        className={`${styles.emptyItem} ${isTrinket ? styles.trinketItem : ''}`}
+        aria-hidden="true"
+        data-testid="empty-item-slot"
+      />
+    );
   }
   return (
     <img
@@ -104,7 +110,7 @@ type ParticipantRowProps = {
 function ParticipantRow({ participant, isSearchedPlayer, gameDuration }: ParticipantRowProps) {
   const p = participant;
   const totalCs = (p.totalMinionsKilled || 0) + (p.neutralMinionsKilled || 0);
-  const items = [p.item0, p.item1, p.item2, p.item3, p.item4, p.item5];
+  const items = [p.item0, p.item1, p.item2, p.item3, p.item4, p.item5, p.item6];
 
   return (
     <div
@@ -177,11 +183,10 @@ function ParticipantRow({ participant, isSearchedPlayer, gameDuration }: Partici
       </div>
 
       {/* Items */}
-      <div className={styles.itemsCell}>
+      <div className={styles.itemsCell} data-testid="participant-items">
         {items.map((id, i) => (
-          <ItemSlot key={i} itemId={id} />
+          <ItemSlot key={i} itemId={id} isTrinket={i === items.length - 1} />
         ))}
-        <ItemSlot itemId={p.item6} isTrinket />
       </div>
     </div>
   );

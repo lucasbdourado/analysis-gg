@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
 import { MatchDetailPage } from './MatchDetailPage';
@@ -148,6 +148,40 @@ describe('MatchDetailPage', () => {
       'src',
       expect.stringContaining('/img/item/6655.png')
     );
+
+    await waitFor(() => {
+      expect(fetchMatchDetailMock).toHaveBeenCalledWith('BR1_3250888251', 'br1', 'Joeyzenhu', 'br1');
+    });
+  });
+
+  it('renders all seven participant item slots and preserves empty placeholders', async () => {
+    fetchMatchDetailMock.mockResolvedValueOnce(
+      createMatchDetail({
+        participants: [
+          createParticipant({
+            puuid: 'searched-player',
+            gameName: 'Joeyzenhu',
+            tagLine: 'br1',
+            item4: 0,
+            item5: 0,
+          }),
+        ],
+      })
+    );
+
+    render(
+      <MemoryRouter initialEntries={['/match/BR1_3250888251?region=br1&name=Joeyzenhu&tag=br1']}>
+        <Routes>
+          <Route path="/match/:matchId" element={<MatchDetailPage />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const row = await screen.findByTestId('participant-row');
+    const itemsCell = within(row).getByTestId('participant-items');
+
+    expect(within(itemsCell).getAllByAltText(/^Item \d+$/)).toHaveLength(5);
+    expect(within(itemsCell).getAllByTestId('empty-item-slot')).toHaveLength(2);
 
     await waitFor(() => {
       expect(fetchMatchDetailMock).toHaveBeenCalledWith('BR1_3250888251', 'br1', 'Joeyzenhu', 'br1');
