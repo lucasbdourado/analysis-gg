@@ -2,14 +2,34 @@
 
 ## Current Change Context
 
-- Active change: `019-back-to-account-selection`
-- Spec path: `docs/changes/019-back-to-account-selection/change-spec.md`
+- Active change: `021-i18n-support`
+- Spec path: `docs/changes/021-i18n-support/change-spec.md`
 - Open blockers:
   - None
 - Pending decisions:
   - None
 
 ## Change History
+
+### 021 - Internationalization (i18n) Support
+
+- Spec path: `docs/changes/021-i18n-support/change-spec.md`
+- Created from: User request, lightweight custom React Context architecture, and floating language switcher layout.
+- Summary: Research and spec for adding multi-language support (PT and EN) dynamically using a custom context/hook without external dependencies, defaulting to EN to keep all 82 existing unit tests passing automatically.
+- Open blockers:
+  - None
+- Pending decisions:
+  - None
+
+### 020 - Session Review Component
+
+- Spec path: `docs/changes/020-session-review-component/change-spec.md`
+- Created from: User request, metrics calculations clarification, and dashboard state integration.
+- Summary: Research and spec for introducing a reactive Session Review widget on the dashboard that aggregates matches from the dashboard's cross-filtered state in-memory and shows win rate, best champion, worst game, and a custom recommendation, requiring at least 5 matches.
+- Open blockers:
+  - None
+- Pending decisions:
+  - None
 
 ### 019 - Back to Account Selection
 

@@ -23,3 +23,7 @@ This file indexes the change specs created for the project.
 | 017 | Match Overview Layout Fixes | [change-spec.md](./017-match-overview-layout-fixes/change-spec.md) |
 | 018 | Match Detail Overview Layout Fixes | [change-spec.md](./018-match-detail-overview-layout-fixes/change-spec.md) |
 | 019 | Back to Account Selection | [change-spec.md](./019-back-to-account-selection/change-spec.md) |
+| 020 | Session Review Component | [change-spec.md](./020-session-review-component/change-spec.md) |
+| 021 | Internationalization (i18n) Support | [change-spec.md](./021-i18n-support/change-spec.md) |
+
+
