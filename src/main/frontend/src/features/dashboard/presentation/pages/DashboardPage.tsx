@@ -12,6 +12,7 @@ import { RouteWinRateChart } from '../components/RouteWinRateChart';
 import { DailyPerformanceGrid } from '../components/DailyPerformanceGrid';
 import { TopChampionsTable } from '../components/TopChampionsTable';
 import { SessionReview } from '../components/SessionReview';
+import { BestSelfComparison } from '../components/BestSelfComparison';
 import { useDashboard } from '../context/DashboardContext';
 import styles from './DashboardPage.module.css';
 
@@ -142,6 +143,9 @@ const DashboardContent: React.FC<DashboardContentProps> = ({ data }) => {
               <div className={styles.dailyPerformanceWrapper}>
                 <DailyPerformanceGrid />
               </div>
+            </div>
+            <div className={styles.bottomWidgetRow}>
+              <BestSelfComparison matches={combinedFilteredMatches} />
             </div>
             <div className={styles.bottomWidgetRow}>
               <SessionReview />

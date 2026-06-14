@@ -2,8 +2,8 @@
 
 ## Current Change Context
 
-- Active change: `021-i18n-support`
-- Spec path: `docs/changes/021-i18n-support/change-spec.md`
+- Active change: `022-best-self-comparison`
+- Spec path: `docs/changes/022-best-self-comparison/change-spec.md`
 - Open blockers:
   - None
 - Pending decisions:
@@ -16,6 +16,16 @@
 - Spec path: `docs/changes/021-i18n-support/change-spec.md`
 - Created from: User request, lightweight custom React Context architecture, and floating language switcher layout.
 - Summary: Research and spec for adding multi-language support (PT and EN) dynamically using a custom context/hook without external dependencies, defaulting to EN to keep all 82 existing unit tests passing automatically.
+- Open blockers:
+  - None
+- Pending decisions:
+  - None
+
+### 022 - Best Self Comparison
+
+- Spec path: `docs/changes/022-best-self-comparison/change-spec.md`
+- Created from: User request, product direction research, dashboard state research, and match summary contract review.
+- Summary: Research and spec for an isolated dashboard widget that compares wins versus losses from the already filtered match list, gates analysis below 5 matches, and highlights one or two simple differences using existing metrics only.
 - Open blockers:
   - None
 - Pending decisions:

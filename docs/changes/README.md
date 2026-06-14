@@ -25,5 +25,6 @@ This file indexes the change specs created for the project.
 | 019 | Back to Account Selection | [change-spec.md](./019-back-to-account-selection/change-spec.md) |
 | 020 | Session Review Component | [change-spec.md](./020-session-review-component/change-spec.md) |
 | 021 | Internationalization (i18n) Support | [change-spec.md](./021-i18n-support/change-spec.md) |
+| 022 | Best Self Comparison | [change-spec.md](./022-best-self-comparison/change-spec.md) |
 
 

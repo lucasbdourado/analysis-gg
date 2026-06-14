@@ -90,6 +90,7 @@ describe('DashboardPage', () => {
     expect(profile.compareDocumentPosition(analytics) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     const historyRegion = screen.getByRole('region', { name: 'Recent match history' });
     expect(historyRegion).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: /best self comparison/i })).toBeInTheDocument();
     expect(within(historyRegion).getByText('Akali')).toBeInTheDocument();
   });
 
